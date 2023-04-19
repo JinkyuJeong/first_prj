@@ -1,20 +1,5 @@
 package model;
-/*
-CREATE TABLE board1 (
-	  no INT AUTO_INCREMENT PRIMARY KEY,
-	  title VARCHAR(255),
-	  nickname VARCHAR(255),
-	  content TEXT,
-	  file1 VARCHAR(255),
-	  boardType INT,
-	  regdate DATETIME DEFAULT NOW(),
-	  hit INT DEFAULT 0,
-	  recommend INT DEFAULT 0,
-	  pub INT DEFAULT 1
-	);
-	
-	boardType : 1은 자유게시판글 2는 질문게시판글 3은 후기게시판글 4는 공지사항
-	*/
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +11,7 @@ public class BoardDao {
 	public boolean insert(Board b) {
 		Connection con = DBConnection.getConnection();
 		
-		String sql = "INSERT INTO board1 "
+		String sql = "INSERT INTO board "
 				+ "(title, nickname, content, file1, boardType) "
 				+ "values (?,?,?,?,?)";
 		
@@ -75,7 +60,7 @@ public class BoardDao {
 
 	public List<Board> list(String boardType, int pageNum, int limit) {
 		Connection con = DBConnection.getConnection();
-		String sql = "SELECT * FROM BOARD  WHERE BOARDTYPE=? ORDER BY NO DESC LIMIT ?,?";
+		String sql = "SELECT * FROM BOARD  WHERE BOARDTYPE=? and PUB=1 ORDER BY NO DESC LIMIT ?,?";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<Board> list = new ArrayList<>();
@@ -96,7 +81,6 @@ public class BoardDao {
 				b.setRegdate(rs.getTimestamp("regdate"));
 				b.setHit(rs.getInt("hit"));
 				b.setRecommend(rs.getInt("recommend"));
-				b.getPub();
 				
 				list.add(b);
 			}

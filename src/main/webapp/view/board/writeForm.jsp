@@ -48,12 +48,12 @@
       <table class="table table-hover">
       
         <tr>
-          <th>제목</th>
+          <th class="table-light">제목</th>
           <td><input type="text" name="title" class="form-control" class="w3-input" placeholder="제목을 입력하세요."></td>
         </tr>
 
         <tr>
-          <th>내용</th>
+          <th class="table-light">내용</th>
           <td><textarea rows="15" name="content" class="form-control" class="w3-input" id="content"></textarea></td>
          <script>
 	        CKEDITOR.editorConfig = function( config ) {
@@ -81,7 +81,7 @@
         </tr>
 
         <tr>
-          <th>첨부파일</th>
+          <th class="table-light">첨부파일</th>
           <td><input class="form-control" type="file" name="file1"></td>
         </tr>
 

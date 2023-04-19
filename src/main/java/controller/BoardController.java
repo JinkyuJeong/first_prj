@@ -46,25 +46,18 @@ public class BoardController extends MskimRequestMapping{
 		String boardType = request.getParameter("boardType");
 		String login = (String)request.getSession().getAttribute("login");
 		if(boardType == null || boardType.equals("")) boardType = "1";
-		
-		if(boardType.equals("4") && login == null) {
-			request.setAttribute("msg", "일반회원은 공지사항 게시글은 작성이 불가능합니다.");
-			request.setAttribute("url", "list");
-			return "alert";	
-		}
+		request.getSession().setAttribute("boardType", boardType);
 		
 //		if(login == null) {	// 로그인 상태가 아닐 때
 //			request.setAttribute("msg", "비회원은 게시글 작성이 불가능합니다.");
 //			request.setAttribute("url", "list?boardType="+boardType);
 //			return "alert";		
 //		}else if(boardType.equals("4") && !login.equals("admin")){	// 공지사항 글쓰기로 들어왔는데 admin이 아닐 경우 
-//			request.setAttribute("msg", "운영자만 작성 가능합니다.");
+//			request.setAttribute("msg", "일반회원은 공지사항 게시글은 작성이 불가능합니다.");
 //			request.setAttribute("url", "list?boardType="+boardType);
 //			return "alert";
 //		}
-		System.out.println(boardType);
 		String boardName = boardName(boardType);
-		System.out.println(boardName);
 		request.setAttribute("boardName", boardName);
 		
 		return "board/writeForm";
@@ -72,17 +65,10 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("write")
 	public String write(HttpServletRequest request, HttpServletResponse response) {
-		// writeForm에서 글쓰기 버튼을 클릭하면 현재 세션에 있는 정보들을 저장함
 		String nickname = (String)request.getSession().getAttribute("nickname");
+		if(nickname == null) nickname = "테스트계정";
 		String boardType = (String)request.getSession().getAttribute("boardType");
 		if(boardType == null) boardType = "1";
-//		
-//		String login = (String)request.getSession().getAttribute("login");
-//		if(login == null) {	// 로그인 상태가 아닐 때
-//			request.setAttribute("msg", "비회원은 게시글 작성이 불가능합니다.");
-//			request.setAttribute("url", "list?boardType="+boardType);
-//			return "alert";		
-//		}
 		
 		String uploadPath = request.getServletContext().getRealPath("/") + "/upload/board"; // 절대경로
 		File f = new File(uploadPath);

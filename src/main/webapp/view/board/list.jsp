@@ -34,6 +34,7 @@
   tr th:nth-child(6) {width: 5vw;}
   #profile{width: 16px; height: 16px; border-radius: 50%;}
   .notice{background-color:lightgray;}
+  #cnt{padding:0px; font-family: 'Dongle', sans-serif; font-size:25px;}
   /* ************************************ */
 </style>
 </head>
@@ -44,7 +45,8 @@
 
     <div style="display: flex; justify-content: space-between; margin-bottom: -7px;">
 
-      <div>
+      <div id="cnt">
+      	전체 게시물 <span style="color:red">${boardCnt }</span>개
       </div>
 
       <form class="table-form">
@@ -105,13 +107,25 @@
 		          	<c:if test="${!empty b.file1 }">
 		          		<i class="fa fa-image"></i>
 		          	</c:if>
-		          	<a href="">안녕?</a> <span class="orange">[5]</span>
+		          	<!-- 댓글 조건처리 하기 -->
+		          	<a href="detail?no=${b.no }">${b.title }</a> <span class="orange">[5]</span>
 		          </td>
 		          <td>
+		          <!-- 이미지 조건처리 하기-->
 		          	<img id="profile" src="${path}/images/basic-profile.JPG">
-		          	고현빈
+		          	${b.nickname }
 		          </td>
-		          <td>${b.regdate}</td>
+		          
+		          <fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
+							<fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
+							
+							<c:if test="${t eq r}">
+								<td><fmt:formatDate value="${b.regdate }" pattern="HH:mm:ss"/></td>
+							</c:if>
+							<c:if test="${t != r}">
+								<td><fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd"/></td>
+							</c:if>
+							
 		          <td>${b.hit}</td>
 		          <td>${b.recommend}</td>
 		        </tr>
@@ -121,20 +135,40 @@
 
     </table>
 
-    <div align="right"><button id="write" type="button" class="btn btn-dark" onclick="location.href='writeForm'">글쓰기</button></div>
+    <div align="right"><button id="write" type="button" class="btn btn-dark" onclick="goWriteForm()">글쓰기</button></div>
+    <script type="text/javascript">
+    	function goWriteForm() {
+				location.href="writeForm?boardType=${sessionScope.boardType}" 
+			}
+    </script>
 
     <!-- Pagination -->
-    <div class="w3-center w3-padding-32">
-      <div class="w3-bar">
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">&laquo;</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">1</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">5</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">&raquo;</a>
-      </div>
-    </div>
+      <!-- paging -->
+		  
+		  <div class="w3-center w3-padding-32">
+		    <div class="w3-bar">
+			    <c:if test="${startPage <= 1}">
+						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('이전 페이지가 없습니다.');">&laquo;</a>
+					</c:if>
+					<c:if test="${startPage > 1}">
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage-1}">&laquo;</a>
+					</c:if>
+					
+					<c:forEach var="a" begin="${startPage}" end="${endPage}">
+						<c:if test="${a <= maxPage}">
+							<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="list?pageNum=${a}">${a}</a>
+						</c:if>
+					</c:forEach>
+						
+					<c:if test="${startPage+4 >= maxPage}">
+						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('다음 페이지가 없습니다.');">&raquo;</a>
+					</c:if>
+					<c:if test="${startPage+4 < maxPage}">
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage+5}">&raquo;</a>
+					</c:if>
+		    </div>
+		  </div>
+    
   </div>
 </body>
 </html>
