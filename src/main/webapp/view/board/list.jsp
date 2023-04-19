@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -39,7 +40,7 @@
 <body>
 	 <!-- About Section -->
   <div class="container">
-    <h1 id="title">자유게시판</h1>
+    <h1 id="title">${boardName }</h1>
 
     <div style="display: flex; justify-content: space-between; margin-bottom: -7px;">
 
@@ -59,7 +60,7 @@
     </div>
 
     <table class="table table-hover">
-
+			
       <thead>
         <tr class="table-dark">
           <th scope="col">번호</th>
@@ -70,9 +71,10 @@
           <th scope="col">추천</th>
         </tr>
       </thead>
-
+			
       <tbody>
-        <tr class="notice">
+      	<!-- 공지사항 고정글 1개 + 이벤트 당첨글 1개 -->
+      	<tr class="notice">
           <th class="fw-bold"><span class="blue">공지</span></th>
           <td class="fw-bold"><a href="">게시판 규정을 지켜주세요.</a></td>
           <td class="fw-bold"><img id="profile" src="${path }/images/basic-profile.JPG"> 운영자</td>
@@ -80,14 +82,41 @@
           <td>100</td>
           <td>10</td>
         </tr>
-        <tr>
-          <td scope="row">1</td>
-          <td><i class="fa fa-image"></i> <a href="">안녕?</a> <span class="orange">[5]</span></td>
-          <td><img id="profile" src="${path }/images/basic-profile.JPG"> 고현빈</td>
+        <tr class="notice">
+          <th class="fw-bold"><span class="blue">공지</span></th>
+          <td class="fw-bold"><a href="">4월 셋째 주 이벤트 당첨자</a></td>
+          <td class="fw-bold"><img id="profile" src="${path }/images/basic-profile.JPG"> 운영자</td>
           <td>2023/04/16</td>
           <td>100</td>
           <td>10</td>
         </tr>
+        
+        <!-- 게시판 글이 없을 때 -->
+	      <c:if test="${boardCnt <= 0}">
+					<tr><td colspan="7">등록된 게시글이 없습니다.</td></tr>
+				</c:if>
+				
+				<!-- 게시판 글이 있을 때 -->
+				<c:if test="${boardCnt > 0}">
+					<c:forEach var="b" items="${list }">
+		        <tr>
+		          <td scope="row">${boardNum}</td>	<c:set var="boardNum" value="${boardNum-1 }"/>
+		          <td>
+		          	<c:if test="${!empty b.file1 }">
+		          		<i class="fa fa-image"></i>
+		          	</c:if>
+		          	<a href="">안녕?</a> <span class="orange">[5]</span>
+		          </td>
+		          <td>
+		          	<img id="profile" src="${path}/images/basic-profile.JPG">
+		          	고현빈
+		          </td>
+		          <td>${b.regdate}</td>
+		          <td>${b.hit}</td>
+		          <td>${b.recommend}</td>
+		        </tr>
+	        </c:forEach>
+        </c:if>
       </tbody>
 
     </table>

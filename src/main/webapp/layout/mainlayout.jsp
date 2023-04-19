@@ -80,7 +80,7 @@
     <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">&#9776;</div>
     <c:if test="${!empty sessionScope.login}">
     	<div class="w3-right w3-padding-16"><a href="${path}/member/logout">로그아웃</a></div>
-	    <div class="w3-right w3-padding-16"><a href="${path}/member/myPage">마이페이지</a>&nbsp;&nbsp;</div>
+	    <div class="w3-right w3-padding-16"><a href="${path}/member/myPage?email=${sessionScope.login}">마이페이지</a>&nbsp;&nbsp;</div>
     </c:if>
     <c:if test="${empty sessionScope.login}">
 	    <div class="w3-right w3-padding-16"><a href="${path}/member/joinForm">회원가입</a></div>

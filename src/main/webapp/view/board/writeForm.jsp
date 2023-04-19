@@ -23,18 +23,19 @@
 </style>
 <script>
  function inputcheck(){
-
+	 
    if(document.f.title.value.trim() == ""){
      alert("제목을 입력하세요");
-     document.f.name.focus();
+     document.f.title.focus();
      return;
    }
 
-   if(document.f.content.value.trim() == ""){
+   if(CKEDITOR.instances.content.getData().trim() == ""){
      alert("내용을 입력하세요");
-     document.f.name.focus();
+     CKEDITOR.instances.content.focus();
      return;
-   } 
+		}
+   
    document.f.submit();
  }
 </script>
@@ -42,7 +43,7 @@
 <body>
 	 <form method="post" action="write" enctype="multipart/form-data" name="f" >
     <div class="container">
-      <h2 id="title">자유게시판 게시글 작성</h2>
+      <h2 id="title">${boardName} 게시글 작성</h2>
     
       <table class="table table-hover">
       
@@ -54,11 +55,29 @@
         <tr>
           <th>내용</th>
           <td><textarea rows="15" name="content" class="form-control" class="w3-input" id="content"></textarea></td>
-          <script>
-            CKEDITOR.replace("content",{
-              filebrowserImageUploadUrl : "imgupload"
-            })
-          </script>
+         <script>
+	        CKEDITOR.editorConfig = function( config ) {
+					  config.htmlFilter = CKEDITOR.filter.disallowAll();
+					};
+				  CKEDITOR.replace("content",{
+				    filebrowserImageUploadUrl : "imgupload",
+				    // 툴바 구성 변경
+				    toolbar: [
+				      { name: 'document', items: [ 'Source','-','Save','NewPage','Preview','-','Templates' ] },
+				      { name: 'clipboard', items: [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+				      { name: 'insert', items: [ 'Image','Table','HorizontalRule','SpecialChar' ] },
+				      '/',
+				      { name: 'styles', items: [ 'Styles','Format','Font','FontSize' ] },
+				      { name: 'basicstyles', items: [ 'Bold','Italic','Strike','-','RemoveFormat' ] }
+				    ],
+				    // 스킨 변경
+				    skin: 'moono',
+				    // 기타 옵션
+				    language: 'ko',
+				    height: 300,
+				    resize_enabled: false
+				  });
+				</script>
         </tr>
 
         <tr>
