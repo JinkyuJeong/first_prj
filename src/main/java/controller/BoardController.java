@@ -35,6 +35,7 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("writeForm")
 	public String writeForm(HttpServletRequest request, HttpServletResponse response) {
+		request.getSession().setAttribute("login", "admin");
 		/*
 		 * 1. list를 거쳐서 들어오는거 말고 그냥 들어왔을 때는 세션에 boardType이 저장되어 있지않음
 		 * 2. 하지만 null일 때 1로 설정해서 자유게시판으로 글 쓰는건 가능함
@@ -102,6 +103,7 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("list")
 	public String list(HttpServletRequest request, HttpServletResponse response) {
+		request.getSession().setAttribute("login", "admin");
 		/*
 			1. 한 페이지당 10건의 게시물을 출력하기
 					pageNum 파라미터값을 저장 => 없는 경우는 1로 설정하기
@@ -136,6 +138,7 @@ public class BoardController extends MskimRequestMapping{
 		
 		// 현재 페이지에 보여질 게시물 목록
 		List<Board> list = dao.list(boardType, pageNum, limit);	// (문자열, 정수, 정수)
+		List<Board> nList = dao.nList();
 		/*
 			maxPage : 필요한 페이지 갯수
 			게시물 건 수		|		필요한 페이지
@@ -153,6 +156,8 @@ public class BoardController extends MskimRequestMapping{
 		int boardNum = boardCnt-(pageNum-1) * limit;
 		
 		request.setAttribute("list", list);
+		request.setAttribute("nList", nList);
+		request.setAttribute("nCnt", nList.size());
 		request.setAttribute("boardNum", boardNum);
 		request.setAttribute("boardCnt", boardCnt);
 		request.setAttribute("boardType", boardType);

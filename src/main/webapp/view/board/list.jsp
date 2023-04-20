@@ -50,9 +50,9 @@
       </div>
 
       <form class="table-form">
-        <select id="sel" class="form-select" name="f">
+        <select id="sel" class="form-select" name="t">
           <option selected value="title">제목</option>
-          <option value="writerId">작성자</option>
+          <option value="nickname">작성자</option>
         </select>
         <div class="input-group mb-3 ms-1">
           <input type="text" class="form-control" name="q" placeholder="검색어">
@@ -75,23 +75,44 @@
       </thead>
 			
       <tbody>
+      
       	<!-- 공지사항 고정글 1개 + 이벤트 당첨글 1개 -->
-      	<tr class="notice">
-          <th class="fw-bold"><span class="blue">공지</span></th>
-          <td class="fw-bold"><a href="">게시판 규정을 지켜주세요.</a></td>
-          <td class="fw-bold"><img id="profile" src="${path }/images/basic-profile.JPG"> 운영자</td>
-          <td>2023/04/16</td>
-          <td>100</td>
-          <td>10</td>
-        </tr>
-        <tr class="notice">
-          <th class="fw-bold"><span class="blue">공지</span></th>
-          <td class="fw-bold"><a href="">4월 셋째 주 이벤트 당첨자</a></td>
-          <td class="fw-bold"><img id="profile" src="${path }/images/basic-profile.JPG"> 운영자</td>
-          <td>2023/04/16</td>
-          <td>100</td>
-          <td>10</td>
-        </tr>
+      	<!-- 공지 글이 없을 때 -->
+      	<c:if test="${boardType != 4 }">
+		      <c:if test="${nCnt <= 0}">
+						<tr><td colspan="7">등록된 공지사항이 없습니다.</td></tr>
+					</c:if>
+					<!-- 게시판 글이 있을 때 -->
+					
+					<fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
+
+					<c:if test="${nCnt > 0}">
+						<c:forEach var="n" items="${nList}" begin="0" end="${nCnt }">
+			      	<tr class="notice">
+			          <th class="fw-bold"><span class="blue">공지</span></th>
+			          <td class="fw-bold"><a href="">${n.title}</a></td>
+			          <td class="fw-bold">
+			          	<img id="profile" src="${path }/images/basic-profile.JPG">
+			          	<c:if test="${sessionScope.login eq 'admin' }">
+			          		운영자
+			          	</c:if> 
+		          	</td>
+		          	
+		          	<fmt:formatDate value="${n.regdate }" pattern="yyyy-MM-dd" var="r2"/>
+			          <c:if test="${t eq r2}">
+									<td><fmt:formatDate value="${n.regdate }" pattern="HH:mm:ss"/></td>
+								</c:if>
+								<c:if test="${t != r2}">
+									<td><fmt:formatDate value="${n.regdate }" pattern="yyyy-MM-dd"/></td>
+								</c:if>
+							
+			          <td>${n.hit }</td>
+			          <td>0</td>
+			        </tr>
+			        <c:if test="${nCnt==1}"></c:if>
+			        </c:forEach>
+	        </c:if>
+        </c:if>
         
         <!-- 게시판 글이 없을 때 -->
 	      <c:if test="${boardCnt <= 0}">
@@ -116,9 +137,7 @@
 		          	${b.nickname }
 		          </td>
 		          
-		          <fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
-							<fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
-							
+		          <fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
 							<c:if test="${t eq r}">
 								<td><fmt:formatDate value="${b.regdate }" pattern="HH:mm:ss"/></td>
 							</c:if>

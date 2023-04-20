@@ -11,7 +11,7 @@ public class BoardDao {
 	public boolean insert(Board b) {
 		Connection con = DBConnection.getConnection();
 		
-		String sql = "INSERT INTO board "
+		String sql = "INSERT INTO board1 "
 				+ "(title, nickname, content, file1, boardType) "
 				+ "values (?,?,?,?,?)";
 		
@@ -39,7 +39,7 @@ public class BoardDao {
 	public int boardCount(String boardType) {
 		Connection con = DBConnection.getConnection();
 		
-		String sql = "SELECT COUNT(*) FROM BOARD WHERE BOARDTYPE=?";
+		String sql = "SELECT COUNT(*) FROM BOARD1 WHERE BOARDTYPE=?";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -60,7 +60,7 @@ public class BoardDao {
 
 	public List<Board> list(String boardType, int pageNum, int limit) {
 		Connection con = DBConnection.getConnection();
-		String sql = "SELECT * FROM BOARD  WHERE BOARDTYPE=? and PUB=1 ORDER BY NO DESC LIMIT ?,?";
+		String sql = "SELECT * FROM BOARD1  WHERE BOARDTYPE=? and PUB=1 ORDER BY NO DESC LIMIT ?,?";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<Board> list = new ArrayList<>();
@@ -90,6 +90,54 @@ public class BoardDao {
 			e.printStackTrace();
 		}finally {
 			DBConnection.close(con, pstmt, rs);
+		}
+	
+		return null;
+	}
+	
+	public List<Board> nList() {
+		Connection con = DBConnection.getConnection();
+		String sql1 = "SELECT * FROM BOARD1 WHERE BOARDTYPE=4 and PUB=1 ORDER BY regdate DESC LIMIT 1";
+		String sql2 = "SELECT * FROM board1 WHERE boardType=4 and PUB=1 ORDER BY regdate ASC LIMIT 1;";
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
+		List<Board> list = new ArrayList<>();
+		
+		try {
+			pstmt2 = con.prepareStatement(sql2);
+			rs2 = pstmt2.executeQuery();
+			
+			if(rs2.next()) {
+				Board b = new Board();
+				b.setTitle(rs2.getString("title"));
+				b.setFile1(rs2.getString("file1"));
+				b.setRegdate(rs2.getTimestamp("regdate"));
+				b.setHit(rs2.getInt("hit"));
+				
+				list.add(b);
+			}
+			
+			pstmt1 = con.prepareStatement(sql1);
+			rs1 = pstmt1.executeQuery();
+			
+			if(rs1.next()) {
+				Board b = new Board();
+				b.setTitle(rs1.getString("title"));
+				b.setFile1(rs1.getString("file1"));
+				b.setRegdate(rs1.getTimestamp("regdate"));
+				b.setHit(rs1.getInt("hit"));
+				
+				list.add(b);
+			}
+			
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBConnection.close(con, pstmt1, rs1);
+			DBConnection.close(con, pstmt2, rs2);
 		}
 	
 		return null;

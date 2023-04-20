@@ -119,7 +119,7 @@
                 <td width="7%"><a class="btn btn-dark" href="">삭제</a></td>
               </tr>
               <tr>
-                <td width="15%"><img id="prof" src="${path }/images/basic-profile.JPG"> 고현빈</td>
+                <td width="15%">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;<img id="prof" src="${path }/images/basic-profile.JPG"> 고현빈</td>
                 <td width="100vw" align="left">ㅈㄴ재밌네</td>
                 <td width="5%"><font size="1">2023/04/16</font></td>
                 <td width="10%"><button class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 24px;"></i>&nbsp;10</td>
