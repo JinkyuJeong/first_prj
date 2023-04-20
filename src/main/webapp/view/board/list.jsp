@@ -46,11 +46,11 @@
     <div style="display: flex; justify-content: space-between; margin-bottom: -7px;">
 
       <div id="cnt">
-      	전체 게시물 <span style="color:red">${boardCnt }</span>개
+      	전체 게시물 <span style="color:red">${empty boardCnt? 0 : boardCnt}</span>개
       </div>
 
       <form class="table-form">
-        <select id="sel" class="form-select" name="t">
+        <select id="sel" class="form-select" name="f">
           <option selected value="title">제목</option>
           <option value="nickname">작성자</option>
         </select>
@@ -87,7 +87,8 @@
 					<fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
 
 					<c:if test="${nCnt > 0}">
-						<c:forEach var="n" items="${nList}" begin="0" end="${nCnt }">
+						<c:set var="cnt" value="${nCnt==1? 0:nCnt }"/>
+						<c:forEach var="n" items="${nList}" begin="0" end="${cnt}">
 			      	<tr class="notice">
 			          <th class="fw-bold"><span class="blue">공지</span></th>
 			          <td class="fw-bold"><a href="">${n.title}</a></td>
@@ -128,11 +129,11 @@
 		          	<c:if test="${!empty b.file1 }">
 		          		<i class="fa fa-image"></i>
 		          	</c:if>
-		          	<!-- 댓글 조건처리 하기 -->
+		          	<!-- 댓글 조건처리 하기구현해야함 -->
 		          	<a href="detail?no=${b.no }">${b.title }</a> <span class="orange">[5]</span>
 		          </td>
 		          <td>
-		          <!-- 이미지 조건처리 하기-->
+		          <!-- 이미지 조건처리 하기구현해야함-->
 		          	<img id="profile" src="${path}/images/basic-profile.JPG">
 		          	${b.nickname }
 		          </td>
@@ -170,12 +171,12 @@
 						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('이전 페이지가 없습니다.');">&laquo;</a>
 					</c:if>
 					<c:if test="${startPage > 1}">
-						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage-1}">&laquo;</a>
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage-1}&f=${param.f}&q=${param.q}">&laquo;</a>
 					</c:if>
 					
 					<c:forEach var="a" begin="${startPage}" end="${endPage}">
 						<c:if test="${a <= maxPage}">
-							<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="list?pageNum=${a}">${a}</a>
+							<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="list?pageNum=${a}&f=${param.f}&q=${param.q}">${a}</a>
 						</c:if>
 					</c:forEach>
 						
@@ -183,7 +184,7 @@
 						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('다음 페이지가 없습니다.');">&raquo;</a>
 					</c:if>
 					<c:if test="${startPage+4 < maxPage}">
-						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage+5}">&raquo;</a>
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage+5}&f=${param.f}&q=${param.q}">&raquo;</a>
 					</c:if>
 		    </div>
 		  </div>

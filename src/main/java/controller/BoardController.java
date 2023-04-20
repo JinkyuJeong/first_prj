@@ -103,7 +103,7 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("list")
 	public String list(HttpServletRequest request, HttpServletResponse response) {
-		request.getSession().setAttribute("login", "admin");
+		request.getSession().setAttribute("login", "admin");		// 임시테스트 운영자로 세션저장
 		/*
 			1. 한 페이지당 10건의 게시물을 출력하기
 					pageNum 파라미터값을 저장 => 없는 경우는 1로 설정하기
@@ -126,10 +126,21 @@ public class BoardController extends MskimRequestMapping{
 			boardType = "1";
 			request.getSession().setAttribute("boardType", boardType);
 		}
+		String pageNum_ = request.getParameter("pageNum");
+		String field_ = request.getParameter("f");
+		String query_ = request.getParameter("q");
+		
 		int pageNum = 1;
-		try{
-			pageNum = Integer.parseInt(request.getParameter("pageNum"));
-		}catch (NumberFormatException e) {}
+		String field = "title";
+		String query = "";
+		
+		if(field_ != null && !field_.equals("")) field = field_;
+		if(query_ != null && !query_.equals("")) query = query_;
+		if(pageNum_ != null && !pageNum_.equals("")) {
+			try{
+				pageNum = Integer.parseInt("pageNum");
+			}catch (Exception e) {e.printStackTrace();}
+		}
 		
 		int limit = 10;	// 한 페이지에 보여질 게시물 건 수
 		
@@ -137,7 +148,7 @@ public class BoardController extends MskimRequestMapping{
 		int boardCnt = dao.boardCount(boardType);
 		
 		// 현재 페이지에 보여질 게시물 목록
-		List<Board> list = dao.list(boardType, pageNum, limit);	// (문자열, 정수, 정수)
+		List<Board> list = dao.list(boardType, pageNum, limit, field, query);	// (문자열, 정수, 정수)
 		List<Board> nList = dao.nList();
 		/*
 			maxPage : 필요한 페이지 갯수
@@ -155,6 +166,7 @@ public class BoardController extends MskimRequestMapping{
 		
 		int boardNum = boardCnt-(pageNum-1) * limit;
 		
+		System.out.println(boardCnt);
 		request.setAttribute("list", list);
 		request.setAttribute("nList", nList);
 		request.setAttribute("nCnt", nList.size());

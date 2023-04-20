@@ -58,9 +58,9 @@ public class BoardDao {
 		return 0;
 	}
 
-	public List<Board> list(String boardType, int pageNum, int limit) {
+	public List<Board> list(String boardType, int pageNum, int limit, String filed, String query) {
 		Connection con = DBConnection.getConnection();
-		String sql = "SELECT * FROM BOARD1  WHERE BOARDTYPE=? and PUB=1 ORDER BY NO DESC LIMIT ?,?";
+		String sql = "SELECT * FROM BOARD1  WHERE BOARDTYPE=? and " + filed +" like ? ORDER BY NO DESC LIMIT ?,?";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<Board> list = new ArrayList<>();
@@ -68,8 +68,9 @@ public class BoardDao {
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, boardType);
-			pstmt.setInt(2, (pageNum -1) * limit);
-			pstmt.setInt(3, limit);
+			pstmt.setString(2, "%"+ query +"%");
+			pstmt.setInt(3, (pageNum -1) * limit);
+			pstmt.setInt(4, limit);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -81,6 +82,7 @@ public class BoardDao {
 				b.setRegdate(rs.getTimestamp("regdate"));
 				b.setHit(rs.getInt("hit"));
 				b.setRecommend(rs.getInt("recommend"));
+				b.setPub(rs.getInt("pub"));
 				
 				list.add(b);
 			}
@@ -131,6 +133,8 @@ public class BoardDao {
 				
 				list.add(b);
 			}
+			// 공지사항이 1개일 경우
+			if(list.get(0).getNo() == list.get(1).getNo()) list.remove(1);
 			
 			return list;
 		} catch (Exception e) {
