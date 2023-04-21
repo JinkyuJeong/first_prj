@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -38,7 +39,12 @@
     <!-- 왼쪽 사진등록 구역 -->
     <div class="be-light">
       <input type="hidden" name="picture" value="">
-      <img src="${path}/images/basic-profile.JPG" width="200" height="200" id="pic"><br>
+      <c:if test="${mem.picture=='basic-profile.JPG' }">
+      <img src="${path }/images/basic-profile.JPG" width="200" height="200" id="pic"><br>
+      </c:if>
+      <c:if test="${mem.picture != 'basic-profile.JPG' }">
+      	<img src="/first_prj/upload/member/${mem.picture}" width="200" height="200" id="pic"><br>
+      </c:if>      
     </div>
     <!-- 오른쪽 아이디/비번/닉네임 입력구역-->
     <div>
@@ -46,9 +52,11 @@
       <div class="form-group mb-3">
         <label class="mb-1" for="email">이메일</label>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="email1" readonly value="khb">
+          <c:set var="email" value="${mem.emailaddress}" />
+          <c:set var="split" value="@" />
+          <input type="text" class="form-control" name="email1" readonly value="${fn:substringBefore(email,split) }">
           <span class="input-group-text">@</span>
-          <input type="text" class="form-control" name="email2" readonly value="naver.com" >
+          <input type="text" class="form-control" name="email2" readonly value="${fn:substringAfter(email,split) }" >
         </div>
       </div>
       
@@ -56,11 +64,11 @@
       <div class="form-group">
         <label class="mb-1" for="nickname">닉네임</label>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="nickname" id="nickname" readonly value="고현빈">
+          <input type="text" class="form-control" name="nickname" id="nickname" readonly value="${mem.nickname }">
         </div>
       </div>
       
-      <h4 class="mt-4">가입일자 : 2023-04-16 00:00:00</h4>
+      <h4 class="mt-4">가입일자 : ${mem.regdate}</h4>
 
       <div class="mt-3">
         <a class="btn" href="myBoardList?email1="><font size="5">게시글 : 10개</font></a>
@@ -73,7 +81,7 @@
   <br>
   <!-- 회원가입 / 초기화 -->
   <div class="container mt-3" align="center">
-    <a class="btn" href="updateForm?email1=">수정</a>
+    <a class="btn" href="updateForm?email=${sessionScope.login }">수정</a>
     <a class="btn ms-2" href="deleteForm?email1=">회원탈퇴</a>
   </div>
 

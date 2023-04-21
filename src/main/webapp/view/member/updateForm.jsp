@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
     font-family: 'Dongle', sans-serif; 
     text-align: center; 
     font-size: 5em;
-    margin-bottom: 4vh;
+    margin-bottom: 7vh;
   }
   .container{width: 70vw;}
   .container.form{ 
@@ -44,7 +45,7 @@
 	}
 	
 	function win_upload(){
-		let op = "width=500, height=500, left=50, top=150";
+		let op = "width=600, height=500, left=50, top=150";
 		open("pictureForm","",op);
 	}
 	
@@ -69,7 +70,12 @@
       <!-- 왼쪽 사진등록 구역 -->
       <div class="be-light">
         <input type="hidden" name="picture" value="${mem.picture}">
-        <img src="${path }/images/basic-profile.JPG" width="200" height="200" id="pic"><br>
+        <c:if test="${mem.picture=='basic-profile.JPG' }">
+      		<img src="${path }/images/basic-profile.JPG" width="200" height="200" id="pic"><br>
+      	</c:if>
+      	<c:if test="${mem.picture != 'basic-profile.JPG' }">
+      		<img src="/first_prj/upload/member/${mem.picture}" width="200" height="200" id="pic"><br>
+      	</c:if>
         <div align="center"><font size="1"><a href="javascript:win_upload()">사진등록</a></font></div>
       </div>
       <!-- 오른쪽 아이디/비번/닉네임 입력구역-->
@@ -78,9 +84,11 @@
         <div class="form-group mb-3">
           <label class="mb-1" for="email">이메일</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="email1" readonly value="khb">
+          	<c:set var="email" value="${mem.emailaddress}" />
+          	<c:set var="split" value="@" />
+            <input type="text" class="form-control" name="email1" readonly value="${fn:substringBefore(email,split) }">
             <span class="input-group-text">@</span>
-            <input type="text" class="form-control" name="email2" readonly value="naver.com" >
+            <input type="text" class="form-control" name="email2" readonly value="${fn:substringAfter(email,split) }" >
           </div>
         </div>
 
@@ -94,7 +102,7 @@
         <div class="form-group">
           <label class="mb-1" for="pwd">닉네임</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="nickname" id="nickname" value="현재 닉네임">
+            <input type="text" class="form-control" name="nickname" id="nickname" value="${mem.nickname }">
             <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="win_nickChk()">중복검사</button>
           </div>
         </div>

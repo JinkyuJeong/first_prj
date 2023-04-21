@@ -18,19 +18,28 @@
 </head>
 <body>
   <div id="form">
-    <form action="emailForm" name="f" onsubmit="return inchk(this)">
+    <form action="nickChk" name="f" onsubmit="return inchk(this)">
       <div class="container">
         <h2>닉네임 중복체크</h2>
 
         <div class="form-group">
-          <!-- 
-            중복이 아닐 때
-            <span style="color:blue">아이디 ${param.nickname }는 사용 가능합니다.</span> <br><br>
+        	<c:if test="${empty mem }">
+        		<script>
+    				opener.document.f.nicknamechkchk.value="nicknamechecked";
+				</script>
+        		<span style="color:blue">아이디 ${param.nickname }는 사용 가능합니다.</span> <br><br>
 					  <button type="button" class="btn btn-dark" onclick="self.close()">적용하기</button> 
-        -->
-        <!-- 중복일 때 -->
-          <span style="color:red">아이디 ${param.id }는 중복입니다.</span> <br><br>
+        	</c:if>
+        	
+        	<c:if test="${!empty mem }">
+        		<script>
+    				opener.document.f.nickname.value="";
+				</script>
+        		<span style="color:red">닉네임 ${param.nickname }는 중복입니다.</span> <br><br>
 					<button type="button" class="btn btn-dark" onclick="nickClear()">닫기</button>
+        	</c:if>
+          
+          
         </div>
       </div>
     </form>

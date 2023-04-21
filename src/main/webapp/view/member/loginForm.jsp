@@ -36,7 +36,7 @@
 		  return true;
 		}
 		
-		function win_open(page){
+		function win_open(page){		
 	    let op = "width=500, height=450, left=50, top=150";
 	    open(page,"",op);
 	  }
@@ -62,7 +62,7 @@
         <br><br>
         <p class="mb-2">비밀번호를 찾으실려면 아래 버튼을 눌러주세요.</p>
         <button type="button" class="btn  px-0 fw-bold" onclick="win_open('emailForm2')">비밀번호 찾기</button>
-
+		<input type="hidden" name="emailchkchk" value="emailunchecked">
   		</div>
   		
   	</div>

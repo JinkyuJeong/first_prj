@@ -36,6 +36,7 @@ public class BoardDao {
 		return false;
 	}
 
+	// 검색기능에 따른 게시물 카운트 수정해야함
 	public int boardCount(String boardType) {
 		Connection con = DBConnection.getConnection();
 		
@@ -133,8 +134,9 @@ public class BoardDao {
 				
 				list.add(b);
 			}
+			
 			// 공지사항이 1개일 경우
-			if(list.get(0).getNo() == list.get(1).getNo()) list.remove(1);
+			if(list.size() == 1 && list.get(0).getNo() == list.get(1).getNo()) list.remove(1);
 			
 			return list;
 		} catch (Exception e) {

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 이거는 비밀번호 찾기에서 들어오는 이메일인증폼임 --%>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,26 +16,34 @@
     h2{margin-bottom: 30px;}
   </style>
    <script>
-		function inchk(f){
-			if(f.email1.value.trim() === ""){
-				alert("이메일을 입력하세요");
-	      f.pass.focus();
+	function inchk(f){
+		let email1 = document.f.email1.value;
+		let email2 = document.f.email2.value;
+		let email = email1 + "@" + email2;
+		document.f.email.value = email;
+		
+		if(f.email1.value.trim() === ""){
+			alert("이메일을 입력하세요");
+	      	f.email1.focus();
 	      return false;
 			}
 
-      if(f.email2.value.trim() === ""){
+      	if(f.email2.value.trim() === ""){
 				alert("이메일을 입력하세요");
-	      f.pass.focus();
+	      f.email2.focus();
 	      return false;
 			}
-	    return true;
+      	
+      	window.location.href="emailForm?email="+email;
+      	f.submit();
 	  }
 </script>
 </head>
 <body>
-   <form action="emailForm" name="f" onsubmit="return inchk(this)">
+   <form action="emailForm" name="f" id="f" onsubmit="return inchk(this)">
      <div class="container">
-     
+     <input type="hidden" name="email" id="email">
+     <input type="hidden" name="pwchg" id="pwchg" value="pwchgUnable">
        <h2>이메일 인증</h2>
        
        <div class="form-group">
@@ -42,11 +51,18 @@
          <div class="input-group mb-3">
            <input type="text" class="form-control" name="email1" placeholder="아이디" aria-label="Username">
            <span class="input-group-text">@</span>
-           <input type="text" class="form-control" name="email2" placeholder="Example.com" aria-label="Server">
+           <select class="form-select" name="email2">
+            	<option value="naver.com">naver.com</option>
+            	<option value="nate.com">nate.com</option>
+            	<option value="gmail.com">gmail.com</option>
+            	<option value="hanmail.net">hanmail.net</option>
+            	<option value="daum.net">daum.net</option>
+            </select>
+<!--          <input type="text" class="form-control" name="email2" placeholder="Example.com" aria-label="Server"> -->   
          </div>
        </div>
        <div class="form-group">
-         <button type="submit" class="btn btn-dark">이메일인증</button>
+         <button type="submit" class="btn btn-dark" id="btn">이메일인증</button>
        </div>
      </div>
    </form>

@@ -62,7 +62,7 @@
         <tr>
           <td scope="row">khb@naver.com</td>
           <td><img id="profile" src="./images/basic-profile.JPG"></td>
-          <td>고현빈</td>
+          <td><a href="myPage?email1=">고현빈</a></td>
           <td>2023/04/16</td>
           <td>
             <a class="btn btn-dark" href="updateForm?id=${mem.email1 }">수정</a>

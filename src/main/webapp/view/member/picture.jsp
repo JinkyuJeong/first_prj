@@ -8,7 +8,7 @@
 
 <script>
 	const img = opener.document.getElementById("pic");
-	img.src = "/first_prj/picture/${fname}";
+	img.src = "/first_prj/upload/member/${fname}";
 	opener.document.f.picture.value="${fname}";
 	self.close();
 </script>

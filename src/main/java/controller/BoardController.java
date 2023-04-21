@@ -166,10 +166,11 @@ public class BoardController extends MskimRequestMapping{
 		
 		int boardNum = boardCnt-(pageNum-1) * limit;
 		
-		System.out.println(boardCnt);
+		int nCnt = nList.size();
+		System.out.println(nCnt);
 		request.setAttribute("list", list);
 		request.setAttribute("nList", nList);
-		request.setAttribute("nCnt", nList.size());
+		request.setAttribute("nCnt", nCnt);
 		request.setAttribute("boardNum", boardNum);
 		request.setAttribute("boardCnt", boardCnt);
 		request.setAttribute("boardType", boardType);

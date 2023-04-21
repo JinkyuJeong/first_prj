@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- 여기는 이메일을 입력하고 인증번호 입력하러 오는곳임 --%>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,16 +17,48 @@
   </style>
 </head>
 <body>
+<form action="emailchk" name="f">
+	<input type="hidden" name="emailchkchk" value="emailunchecked">
+	<input type="hidden" name="email1" value="${email1 }">
+	<input type="hidden" name="email2" value="${email2 }">
     <div class="container">
       <h2>이메일 인증</h2>
       <!-- 인증번호-->
       <div class="form-group">
         <label class="mb-1" for="authNum">인증번호</label>
-        <input type="text" class="form-control mb-4" id="authNum" name="authNum">
+        <input type="text" class="form-control mb-4" id="autoNum" name="autoNum">
       </div>
       <div class="form-group">
-        <button type="button" class="btn btn-dark" onclick="location.href='pwChgForm'">확인</button>
+      	<button type="submit" class="btn btn-dark">확인</button>
+      	<c:choose>
+      		<c:when test="${able && ! empty sessionScope.fromEmail2}">
+      			<script>
+        			location.href="pwChgForm";
+        		</script>
+      		</c:when>
+      		<c:when test="${able }">
+      			<script>
+        			opener.document.f.emailchkchk.value="emailchecked";        		
+        			self.close();
+        			opener.document.getElementById("authMsg").innerHTML="인증 되었습니다.";
+        	</script>
+      		</c:when>
+      	</c:choose>
+ <!--        <c:if test="${able }">
+        	<c:if test="${pwchg==pwchgAble && able }">
+        		<script>
+        			location.href="pwChgForm";
+        		</script>
+        	</c:if>
+        	<script>
+        		opener.document.f.emailchkchk.value="emailchecked";        		
+        		self.close();
+        		opener.document.getElementById("authMsg").innerHTML="인증 되었습니다.";
+        	</script>
+        </c:if>--> 
+        
       </div>
     </div>
+</form>
 </body>
 </html>
