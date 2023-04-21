@@ -103,7 +103,6 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("list")
 	public String list(HttpServletRequest request, HttpServletResponse response) {
-		request.getSession().setAttribute("login", "admin");		// 임시테스트 운영자로 세션저장
 		/*
 			1. 한 페이지당 10건의 게시물을 출력하기
 					pageNum 파라미터값을 저장 => 없는 경우는 1로 설정하기
