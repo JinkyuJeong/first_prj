@@ -11,7 +11,7 @@ public class BoardDao {
 	public boolean insert(Board b) {
 		Connection con = DBConnection.getConnection();
 		
-		String sql = "INSERT INTO board1 "
+		String sql = "INSERT INTO board "
 				+ "(title, nickname, content, file1, boardType) "
 				+ "values (?,?,?,?,?)";
 		
@@ -40,7 +40,7 @@ public class BoardDao {
 	public int boardCount(String boardType) {
 		Connection con = DBConnection.getConnection();
 		
-		String sql = "SELECT COUNT(*) FROM BOARD1 WHERE BOARDTYPE=?";
+		String sql = "SELECT COUNT(*) FROM BOARD WHERE BOARDTYPE=?";
 		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -61,7 +61,7 @@ public class BoardDao {
 
 	public List<Board> list(String boardType, int pageNum, int limit, String filed, String query) {
 		Connection con = DBConnection.getConnection();
-		String sql = "SELECT * FROM BOARD1  WHERE BOARDTYPE=? and " + filed +" like ? ORDER BY NO DESC LIMIT ?,?";
+		String sql = "SELECT * FROM BOARD  WHERE BOARDTYPE=? and " + filed +" like ? ORDER BY NO DESC LIMIT ?,?";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<Board> list = new ArrayList<>();
@@ -100,8 +100,8 @@ public class BoardDao {
 	
 	public List<Board> nList() {
 		Connection con = DBConnection.getConnection();
-		String sql1 = "SELECT * FROM BOARD1 WHERE BOARDTYPE=4 and PUB=1 ORDER BY regdate DESC LIMIT 1";
-		String sql2 = "SELECT * FROM board1 WHERE boardType=4 and PUB=1 ORDER BY regdate ASC LIMIT 1;";
+		String sql1 = "SELECT * FROM BOARD WHERE BOARDTYPE=4 and PUB=1 ORDER BY regdate DESC LIMIT 1";
+		String sql2 = "SELECT * FROM board WHERE boardType=4 and PUB=1 ORDER BY regdate ASC LIMIT 1;";
 		PreparedStatement pstmt1 = null;
 		PreparedStatement pstmt2 = null;
 		ResultSet rs1 = null;

@@ -2,13 +2,16 @@ package model;
 /*
 CREATE TABLE comment (
 	  no INT NOT NULL,
-	  seq INT NOT NULL AUTO_INCREMENT,
+	  seq INT NOT NULL,
 	  nickname VARCHAR(50) NOT NULL,
 	  content TEXT,
 	  regdate DATETIME DEFAULT NOW(),
 	  recommend INT DEFAULT 0,
-	  PRIMARY KEY (seq),
-	  FOREIGN KEY (no) REFERENCES board(no) ON DELETE CASCADE,
+	  PRIMARY KEY (no,seq),
+	  grp INT,
+	  grpLevel INT,
+	  grpStep INT,
+	  FOREIGN KEY (NO) REFERENCES board(no) ON DELETE CASCADE,
 	  FOREIGN KEY (nickname) REFERENCES member(nickname) ON DELETE CASCADE
 );
 */

@@ -10,7 +10,7 @@ public class MemberDao {
 	public boolean insert(Member mem) {
 		Connection con = DBConnection.getConnection();
 		PreparedStatement pstmt = null;
-		String sql = "insert into member1 (emailaddress, password, nickname, picture, regdate) values (?,?,?,?,now())";
+		String sql = "insert into member (emailaddress, password, nickname, picture, regdate) values (?,?,?,?,now())";
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, mem.getEmailaddress());
@@ -31,7 +31,7 @@ public class MemberDao {
 		Connection con = DBConnection.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "select * from member1 where nickname=?";
+		String sql = "select * from member where nickname=?";
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, nickname);
@@ -58,7 +58,7 @@ public class MemberDao {
 		Connection con = DBConnection.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "select * from member1 where emailaddress=?";
+		String sql = "select * from member where emailaddress=?";
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, email);
@@ -83,7 +83,7 @@ public class MemberDao {
 	public boolean update(Member mem) {
 		Connection con = DBConnection.getConnection();
 		PreparedStatement pstmt = null;
-		String sql = "update member1 set nickname=?, picture=? where emailaddress=?";
+		String sql = "update member set nickname=?, picture=? where emailaddress=?";
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, mem.getNickname());

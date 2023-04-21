@@ -6,7 +6,6 @@ CREATE TABLE member(
 	nickname varchar(50) unique,
 	picture varchar(100),
 	regdate TIMESTAMP DEFAULT NOW(),
-	able int
 );
 */
 import java.util.Date;
