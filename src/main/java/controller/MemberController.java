@@ -83,15 +83,15 @@ public class MemberController extends MskimRequestMapping{
 		//인증번호 랜덤 생성
 	    String randomkey = authCodeMaker();
 		// 발신자 정보
-		String sender = "zxc2289@naver.com";
-		String password = "slfflflakaqh";
+		String sender = "";
+		String password = "";
 		
 		// 메일 받을 주소
 		String recipient = inputedEmail;
 		System.out.println("inputedEmail : " + inputedEmail);
 		Properties prop = new Properties();
 		   try {
-			   FileInputStream fis = new FileInputStream("C:\\java_workspace_kookbi\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+			   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prjj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 			   prop.load(fis);
 			   prop.put("mail.smtp.user", sender);
 			   System.out.println(prop);

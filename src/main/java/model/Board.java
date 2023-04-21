@@ -22,6 +22,7 @@ import lombok.Data;
 public class Board {
 	private int no;
 	private String nickname;
+	private String picture;
 	private String title;
 	private String content;
 	private String file1;

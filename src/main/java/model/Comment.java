@@ -27,4 +27,7 @@ public class Comment {
 	private String content;
 	private Date regdate;
 	private int recommend;
+	private int grp;
+	private int grpLevel;
+	private int grpStep;
 }

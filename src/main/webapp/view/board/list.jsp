@@ -22,7 +22,7 @@
   .blue{color:blue;}
   #write{width:70px; height: 30px; font-size: 16px; padding: 0; font-family: 'Dongle', sans-serif;}
   .table-form {display: flex;}
-  .table-form #sel{width: 90px; height: 30px; font-size: 12px;}
+  .table-form #sel{width: 130px; height: 30px; font-size: 12px;}
   .table-form .input-group * {height: 30px; font-size: 12px;}
   tr th{text-align: center;}
   tr td:not(:nth-child(2)){text-align: center;}
@@ -51,11 +51,11 @@
 
       <form class="table-form">
         <select id="sel" class="form-select" name="f">
-          <option selected value="title">제목</option>
-          <option value="nickname">작성자</option>
+          <option ${(param.f == "title+content") ? "selected" : ""} value="title+content">제목+내용</option>
+          <option ${(param.f == "nickname") ? "selected" : ""} value="nickname">작성자</option>
         </select>
         <div class="input-group mb-3 ms-1">
-          <input type="text" class="form-control" name="q" placeholder="검색어">
+          <input type="text" class="form-control" name="q" placeholder="검색어" value="${param.q }">
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
         </div>
       </form>
@@ -93,7 +93,12 @@
 			          <th class="fw-bold"><span class="blue">공지</span></th>
 			          <td class="fw-bold"><a href="">${n.title}</a></td>
 			          <td class="fw-bold">
-			          	<img id="profile" src="${path }/images/basic-profile.JPG">
+			          	<c:if test="${b.picture == null }">
+			          		<img id="profile" src="${path }/images/basic-profile.JPG">
+			          	</c:if>
+			          	<c:if test="${b.picture != null }">
+			          		<img id="profile" src="/first_prj/upload/member/${b.picture}">
+			          	</c:if>
 			          	<c:if test="${sessionScope.login eq 'admin' }">
 			          		운영자
 			          	</c:if> 
@@ -134,7 +139,12 @@
 		          </td>
 		          <td>
 		          <!-- 이미지 조건처리 하기구현해야함-->
-		          	<img id="profile" src="${path}/images/basic-profile.JPG">
+		          	<c:if test="${b.picture == null }">
+		          		<img id="profile" src="${path }/images/basic-profile.JPG">
+		          	</c:if>
+		          	<c:if test="${b.picture != null }">
+		          		<img id="profile" src="/first_prj/upload/member/${b.picture}">
+		          	</c:if>
 		          	${b.nickname }
 		          </td>
 		          
@@ -155,11 +165,22 @@
 
     </table>
 
-    <div align="right"><button id="write" type="button" class="btn btn-dark" onclick="goWriteForm()">글쓰기</button></div>
+		<!-- 공지사항으로 들어오면 글 못쓰는데 어드민이면 공지글쓰기 가능 -->
+    <div align="right">
+    	<c:if test="${sessionScope.boardType != 4}">
+    		<button id="write" type="button" class="btn btn-dark" onclick="goWriteForm()">글쓰기</button>
+    	</c:if>
+    	<c:if test="${sessionScope.login == 'admin'}">
+    		<button id="write" type="button" class="btn btn-dark" onclick="goWriteNoticeForm()">공지사항 작성</button>
+    	</c:if>
+    </div>
     <script type="text/javascript">
     	function goWriteForm() {
 				location.href="writeForm?boardType=${sessionScope.boardType}" 
 			}
+    	function goWriteNoticeForm() {
+			location.href="writeForm?boardType=4" 
+		}
     </script>
 
     <!-- Pagination -->

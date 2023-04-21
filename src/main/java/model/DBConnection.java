@@ -14,11 +14,11 @@ public class DBConnection {
 	static Connection getConnection() {
 		Connection con = null;
 		
-		String url = "jdbc:mariadb://localhost:3306/gdudb";
+		String url = "jdbc:mariadb://goodee.ddns.net:20000/gdudb2";
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			con = DriverManager.getConnection(url,"gdu","1234");
+			con = DriverManager.getConnection(url,"gdu2","0113");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

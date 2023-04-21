@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +16,13 @@ import com.oreilly.servlet.MultipartRequest;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.Board;
-import model.BoardDao;
+import model.BoardMybatisDao;
 
 @WebServlet(urlPatterns = {"/board/*"},
 initParams = {@WebInitParam(name="view", value="/view/")}
 		)
 public class BoardController extends MskimRequestMapping{
-	private BoardDao dao = new BoardDao();
+	private BoardMybatisDao dao = new BoardMybatisDao();
 	private static String boardName(String boardType) {
 		String boardName = "";
 		switch (boardType){
@@ -36,28 +37,20 @@ public class BoardController extends MskimRequestMapping{
 	@RequestMapping("writeForm")
 	public String writeForm(HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().setAttribute("login", "admin");
-		/*
-		 * 1. list를 거쳐서 들어오는거 말고 그냥 들어왔을 때는 세션에 boardType이 저장되어 있지않음
-		 * 2. 하지만 null일 때 1로 설정해서 자유게시판으로 글 쓰는건 가능함
-		 * 3. 그러면 boardName으로 넘기는값이 항상 자유게시판임
-		 * 4. 사용자는 boardType=2 로 들어가서 질문게시판으로 바로 갈 수도 있음
-		 * 5. 그러면 자유게시판 글쓰기로 가니깐 파라미터로 초기화 하는거임
-		 * 6. 공지사항 폼 체크도 했음 공지사항타입4로 들어왔을 때 운영자가 아니면 아웃!
-		 * */
 		String boardType = request.getParameter("boardType");
 		String login = (String)request.getSession().getAttribute("login");
 		if(boardType == null || boardType.equals("")) boardType = "1";
 		request.getSession().setAttribute("boardType", boardType);
 		
-//		if(login == null) {	// 로그인 상태가 아닐 때
-//			request.setAttribute("msg", "비회원은 게시글 작성이 불가능합니다.");
-//			request.setAttribute("url", "list?boardType="+boardType);
-//			return "alert";		
-//		}else if(boardType.equals("4") && !login.equals("admin")){	// 공지사항 글쓰기로 들어왔는데 admin이 아닐 경우 
-//			request.setAttribute("msg", "일반회원은 공지사항 게시글은 작성이 불가능합니다.");
-//			request.setAttribute("url", "list?boardType="+boardType);
-//			return "alert";
-//		}
+		if(login == null) {	// 로그인 상태가 아닐 때
+			request.setAttribute("msg", "비회원은 게시글 작성이 불가능합니다.");
+			request.setAttribute("url", "list?boardType="+boardType);
+			return "alert";		
+		}else if(boardType.equals("4") && !login.equals("admin")){	// 공지사항 글쓰기로 들어왔는데 admin이 아닐 경우 
+			request.setAttribute("msg", "일반회원은 공지사항 게시글은 작성이 불가능합니다.");
+			request.setAttribute("url", "list?boardType="+boardType);
+			return "alert";
+		}
 		String boardName = boardName(boardType);
 		request.setAttribute("boardName", boardName);
 		
@@ -130,7 +123,7 @@ public class BoardController extends MskimRequestMapping{
 		String query_ = request.getParameter("q");
 		
 		int pageNum = 1;
-		String field = "title";
+		String field = "title+content";
 		String query = "";
 		
 		if(field_ != null && !field_.equals("")) field = field_;
@@ -144,20 +137,21 @@ public class BoardController extends MskimRequestMapping{
 		int limit = 10;	// 한 페이지에 보여질 게시물 건 수
 		
 		// 게시판 종류별 전체 게시물 등록 건 수
-		int boardCnt = dao.boardCount(boardType);
+		int boardCnt = dao.boardCount(boardType, field, query);
 		
 		// 현재 페이지에 보여질 게시물 목록
 		List<Board> list = dao.list(boardType, pageNum, limit, field, query);	// (문자열, 정수, 정수)
+		
+		// 맨 위 상단 공지글 2개
 		List<Board> nList = dao.nList();
-		/*
-			maxPage : 필요한 페이지 갯수
-			게시물 건 수		|		필요한 페이지
-					3								1 // 3.0/10 => 0.3+0.95 => (int)1.25 => 1
-					10							1 // 10.0/10 => 1+0.95 => (int)1.95 => 1
-					11							2 // 11.0/10 => 1.1+0.95 => (int)2.05 => 2
-					500							50 // 500.0/10 => 50.0+0.95 => (int)50.95 => 50
-					501							51 // 501.0/10 => 50.1+0.95 => (int)51.05 => 51
-		*/
+		if(nList != null) {
+			int nCnt = nList.size();
+			request.setAttribute("nList", nList);
+			request.setAttribute("nCnt", nCnt);
+		}
+		
+		List<String> userPicList = new ArrayList<>();
+		
 		int maxPage = (int)((double)boardCnt/limit +0.95);
 		int startPage = pageNum-(pageNum-1)%5;
 		int endPage = startPage + 4;
@@ -165,11 +159,7 @@ public class BoardController extends MskimRequestMapping{
 		
 		int boardNum = boardCnt-(pageNum-1) * limit;
 		
-		int nCnt = nList.size();
-		System.out.println(nCnt);
 		request.setAttribute("list", list);
-		request.setAttribute("nList", nList);
-		request.setAttribute("nCnt", nCnt);
 		request.setAttribute("boardNum", boardNum);
 		request.setAttribute("boardCnt", boardCnt);
 		request.setAttribute("boardType", boardType);
