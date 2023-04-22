@@ -5,8 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import model.Board;
+import model.BoardDetailView;
+import model.BoardListView;
 
 public interface BoardMapper {
 	
@@ -15,15 +18,15 @@ public interface BoardMapper {
 
 	String sqlField = " and ( ${field1} like '%${query}%' " + " <if test='field2 != null'> or ${field2} like '%${query}%' </if> ";
 	@Select("<script>"
-			+ " SELECT * FROM (SELECT b.*, m.picture from board b, member m WHERE b.nickname = m.nickname) b "
+			+ " SELECT * FROM boardListView "
 			+ " WHERE BOARDTYPE=#{boardType} "
 			+ sqlField
-			+ " ) ORDER BY NO DESC LIMIT #{start}, #{limit} "
+			+ " ) ORDER BY regdate DESC LIMIT #{start}, #{limit} "
 			+ " </script>")
-	List<Board> list(Map<String, Object> map);
+	List<BoardListView> list(Map<String, Object> map);
 
 	@Select("<script>"
-			+ " SELECT COUNT(*) FROM (SELECT b.*, m.picture from board b, member m WHERE b.nickname = m.nickname) b "
+			+ " SELECT COUNT(*) FROM boardListView "
 			+ " WHERE BOARDTYPE=#{boardType} "
 			+ sqlField
 			+ " ) </script>")
@@ -31,7 +34,31 @@ public interface BoardMapper {
 
 	@Select("SELECT * FROM board WHERE BOARDTYPE=4 and PUB=1 ORDER BY regdate DESC LIMIT 1")
 	Board getRecentBoard();
-
 	@Select("SELECT * FROM board WHERE boardType=4 and PUB=1 ORDER BY regdate ASC LIMIT 1")
 	Board getOldestBoard();
+
+	@Update("update board set pub=1 where no in ${value}")
+	int updateOpen(String sqlOpen);
+	@Update("update board set pub=0 where no in ${value}")
+	int updateClose(String sqlClose);
+
+	@Update("update board set hit=hit+1 where no=#{value}")
+	void HitAdd(int no);
+
+	@Select("select * from boardDetailView where no=#{value}")
+	BoardDetailView selectOne(int no);
+
+	@Select("SELECT * FROM ("
+							+ " SELECT * FROM boardDetailView "
+							+ " WHERE boardType=#{boardType} and pub=1 order by regdate DESC) b "
+				+ " WHERE NO > #{no} LIMIT 1")
+	BoardDetailView selectNext(BoardDetailView b);
+
+	@Select("SELECT * "
+			+ " FROM (SELECT * "
+			+ "      FROM boardDetailView "
+			+ "      WHERE boardType=#{boardType} and pub=1 and regdate < (SELECT regdate FROM boardDetailView WHERE NO=#{no}) "
+			+ "      order by regdate DESC) b "
+			+ "LIMIT 1")
+	BoardDetailView selectPrevious(BoardDetailView b);
 }

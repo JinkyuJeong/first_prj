@@ -3,6 +3,7 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,11 @@ import com.oreilly.servlet.MultipartRequest;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.Board;
+import model.BoardDetailView;
+import model.BoardListView;
 import model.BoardMybatisDao;
+import model.Member;
+import model.MemberDao;
 
 @WebServlet(urlPatterns = {"/board/*"},
 initParams = {@WebInitParam(name="view", value="/view/")}
@@ -36,7 +41,6 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("writeForm")
 	public String writeForm(HttpServletRequest request, HttpServletResponse response) {
-		request.getSession().setAttribute("login", "admin");
 		String boardType = request.getParameter("boardType");
 		String login = (String)request.getSession().getAttribute("login");
 		if(boardType == null || boardType.equals("")) boardType = "1";
@@ -60,7 +64,6 @@ public class BoardController extends MskimRequestMapping{
 	@RequestMapping("write")
 	public String write(HttpServletRequest request, HttpServletResponse response) {
 		String nickname = (String)request.getSession().getAttribute("nickname");
-		if(nickname == null) nickname = "테스트계정";
 		String boardType = (String)request.getSession().getAttribute("boardType");
 		if(boardType == null) boardType = "1";
 		
@@ -140,7 +143,7 @@ public class BoardController extends MskimRequestMapping{
 		int boardCnt = dao.boardCount(boardType, field, query);
 		
 		// 현재 페이지에 보여질 게시물 목록
-		List<Board> list = dao.list(boardType, pageNum, limit, field, query);	// (문자열, 정수, 정수)
+		List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query);	// (문자열, 정수, 정수)
 		
 		// 맨 위 상단 공지글 2개
 		List<Board> nList = dao.nList();
@@ -150,7 +153,9 @@ public class BoardController extends MskimRequestMapping{
 			request.setAttribute("nCnt", nCnt);
 		}
 		
-		List<String> userPicList = new ArrayList<>();
+		// 운영자 프사등록
+		Member admin = new MemberDao().selectOneNick("운영자");
+		request.setAttribute("adminPicture", admin.getPicture());
 		
 		int maxPage = (int)((double)boardCnt/limit +0.95);
 		int startPage = pageNum-(pageNum-1)%5;
@@ -171,5 +176,81 @@ public class BoardController extends MskimRequestMapping{
 		request.setAttribute("today", new Date());
 		
 		return "board/list";
+	}
+	
+	// 공개여부
+	@RequestMapping("public")
+	public String pub(HttpServletRequest request, HttpServletResponse response) {
+		String login = (String)request.getSession().getAttribute("login");
+		
+		if(login == null || !login.equals("admin")) {	// 로그인 상태가 아니거나 운영자가 아닐 때
+			request.setAttribute("msg", "잘못된 접근입니다.");
+			request.setAttribute("url", "list");
+			return "alert";		
+		}
+		
+		String[] openNos = request.getParameterValues("noChks");	// 해당 페이지 게시글 번호
+		String nos_ = request.getParameter("nos");	// 해당 페이지 체크(공개)된 게시글 번호
+		String[] nos = nos_.trim().split(" ");	// 공백단위로 잘라서 집어넣음
+		
+		List<String> oids = Arrays.asList(openNos);		// 공개된 게시글번호
+		
+		List<String> cids = new ArrayList(Arrays.asList(nos));		
+		cids.removeAll(oids);		// cids : 비공개 게시글 번호
+		
+		if(dao.pubBoardAll(oids, cids)) {
+			return "redirect:list";
+		}
+		
+		request.setAttribute("msg", "공개여부 과정에서 문제가 생겼습니다.");
+		request.setAttribute("url", "list");
+		return "alert";	
+	}
+	
+	//상세페이지
+	@RequestMapping("detail")
+	public String detail(HttpServletRequest request, HttpServletResponse response) {
+		String nickname = (String)request.getSession().getAttribute("nickname");
+		int no = Integer.parseInt(request.getParameter("no"));
+		/*
+		String readcnt = request.getParameter("readcnt");
+		if(readcnt == null || !readcnt.equals("f")) {
+		}
+		이건 댓글처리 때 조회수 처리할려고함
+		*/
+		
+		dao.HitAdd(no);
+		BoardDetailView b = dao.selectOne(no);
+		BoardDetailView bNext = dao.selectNext(b);
+		BoardDetailView bPrevious = dao.selectPrevious(b);
+		String boardName = boardName(b.getBoardType());
+		
+		request.setAttribute("boardName", boardName);
+		request.setAttribute("b", b);
+		request.setAttribute("bNext", bNext);
+		request.setAttribute("bPrevious", bPrevious);
+		request.setAttribute("nickname", nickname);	// 게시글 삭제와 수정은 본인만 가능하게 할려고 보내는거
+//		request.setAttribute("no", no); 댓글 때 등록때 param.no으로 보낼려고함
+		
+		return "board/detail";
+	}
+	
+	@RequestMapping("imgupload")
+	public String imgupload(HttpServletRequest request, HttpServletResponse response) {
+		String uploadPath = request.getServletContext().getRealPath("/") + "/upload/imgfile/"; // 절대경로
+		File f = new File(uploadPath);
+		if(!f.exists()) f.mkdirs();
+		int size = 1024*1024*10;
+		MultipartRequest multi = null;
+		try {
+			multi = new MultipartRequest(request, uploadPath, size, "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String fileName = multi.getFilesystemName("upload");
+		request.setAttribute("fileName", fileName);
+		
+		return "ckeditor";
 	}
 }

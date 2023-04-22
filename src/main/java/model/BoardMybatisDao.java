@@ -55,7 +55,7 @@ public class BoardMybatisDao {
 		return 0;
 	}
 
-	public List<Board> list(String boardType, int pageNum, int limit, String field, String query) {
+	public List<BoardListView> list(String boardType, int pageNum, int limit, String field, String query) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
 			map.clear();
@@ -98,6 +98,86 @@ public class BoardMybatisDao {
 			MybatisConnection.close(session);
 		}
 	
+		return null;
+	}
+
+	public boolean pubBoardAll(List<String> oids, List<String> cids) {
+		SqlSession session = MybatisConnection.getConnection();
+		
+		int result = 0;
+		String sqlOpen = String.format("(%s)", String.join(",", oids));
+		String sqlClose = String.format("(%s)",String.join(",", cids));
+		
+		try {
+			if(!sqlOpen.equals("()")) 
+				result += session.getMapper(cls).updateOpen(sqlOpen);
+			if(!sqlClose.equals("()")) 
+				result += session.getMapper(cls).updateClose(sqlClose);
+			return result > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			MybatisConnection.close(session);
+		}
+		
+		return false;
+	}
+
+	// 조회수 증가
+	public void HitAdd(int no) {
+		SqlSession session = MybatisConnection.getConnection();
+		
+		try {
+			session.getMapper(cls).HitAdd(no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			MybatisConnection.close(session);
+		}
+	}
+
+	// 상세보기 조회
+	public BoardDetailView selectOne(int no) {
+		SqlSession session = MybatisConnection.getConnection();
+		
+		try {
+			return session.getMapper(cls).selectOne(no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			MybatisConnection.close(session);
+		}
+		
+		return null;
+	}
+	
+	// 다음글 조회
+	public BoardDetailView selectNext(BoardDetailView b) {
+		SqlSession session = MybatisConnection.getConnection();
+		
+		try {
+			return session.getMapper(cls).selectNext(b);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			MybatisConnection.close(session);
+		}
+		
+		return null;
+	}
+	
+	// 이전글 조회
+	public BoardDetailView selectPrevious(BoardDetailView b) {
+		SqlSession session = MybatisConnection.getConnection();
+		
+		try {
+			return session.getMapper(cls).selectPrevious(b);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			MybatisConnection.close(session);
+		}
+		
 		return null;
 	}
 }		

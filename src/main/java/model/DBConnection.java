@@ -14,7 +14,7 @@ public class DBConnection {
 	static Connection getConnection() {
 		Connection con = null;
 		
-		String url = "jdbc:mariadb://goodee.ddns.net:20000/gdudb2";
+		String url = "jdbc:mariadb://130.162.144.171:3306/gdudb2";
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");

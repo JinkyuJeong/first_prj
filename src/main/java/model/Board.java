@@ -16,13 +16,9 @@ CREATE TABLE board1 (
 	*/
 import java.util.Date;
 
-import lombok.Data;
-
-@Data
 public class Board {
 	private int no;
 	private String nickname;
-	private String picture;
 	private String title;
 	private String content;
 	private String file1;
@@ -31,4 +27,72 @@ public class Board {
 	private int hit;
 	private int recommend;
 	private int pub;
+	public int getNo() {
+		return no;
+	}
+	public void setNo(int no) {
+		this.no = no;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getFile1() {
+		return file1;
+	}
+	public void setFile1(String file1) {
+		this.file1 = file1;
+	}
+	public Date getRegdate() {
+		return regdate;
+	}
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
+	}
+	public String getBoardType() {
+		return boardType;
+	}
+	public void setBoardType(String boardType) {
+		this.boardType = boardType;
+	}
+	public int getHit() {
+		return hit;
+	}
+	public void setHit(int hit) {
+		this.hit = hit;
+	}
+	public int getRecommend() {
+		return recommend;
+	}
+	public void setRecommend(int recommend) {
+		this.recommend = recommend;
+	}
+	public int getPub() {
+		return pub;
+	}
+	public void setPub(int pub) {
+		this.pub = pub;
+	}
+	@Override
+	public String toString() {
+		return "Board [no=" + no + ", nickname=" + nickname + ", title=" + title + ", content=" + content + ", file1="
+				+ file1 + ", regdate=" + regdate + ", boardType=" + boardType + ", hit=" + hit + ", recommend="
+				+ recommend + ", pub=" + pub + "]";
+	}
+	
+	
 }

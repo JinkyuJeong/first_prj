@@ -28,7 +28,7 @@
     <p class="lead mb-4">
       신발을 좋아하는 사람들의 커뮤니티 사이트입니다. <br>
     </p>
-    <a class="btn btn-primary btn-lg" href="board/list" role="button">바로가기</a>
+    <a class="btn btn-primary btn-lg" href="board/list?boardType=1" role="button">바로가기</a>
   </div>
 </body>
 </html>
