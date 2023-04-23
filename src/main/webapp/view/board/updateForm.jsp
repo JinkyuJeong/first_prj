@@ -49,7 +49,7 @@
 </script>
 </head>
 <body>
-	 <form method="post" action="write" enctype="multipart/form-data" name="f" >
+	 <form method="post" action="update" enctype="multipart/form-data" name="f" >
 	 	<input type="hidden" name="no" value="${b.no }">
 	 	<input type="hidden" name="file2" value="${b.file1}">
     <div class="container">

@@ -180,4 +180,19 @@ public class BoardMybatisDao {
 		
 		return null;
 	}
+	
+	// 게시물 수정
+	public boolean update(Board b) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			int cnt = session.getMapper(cls).update(b);
+			return cnt>0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		
+		return false;
+	}
 }		

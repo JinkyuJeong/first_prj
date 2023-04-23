@@ -59,4 +59,7 @@ public interface BoardMapper {
 			+ " WHERE NO = (SELECT NO FROM boardDetailView  "
 			+ "				 WHERE boardType=#{boardType} AND pub=#{pub} AND regdate < (SELECT regdate FROM boardDetailView WHERE NO=#{no}) order by regdate desc LIMIT 1)")
 	BoardDetailView selectPrevious(BoardDetailView b);
+
+	@Update("update board set title=#{title}, content=#{content}, file1=#{file1} where no=#{no}")
+	int update(Board b);
 }

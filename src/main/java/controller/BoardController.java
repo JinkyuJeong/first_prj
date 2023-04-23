@@ -282,4 +282,40 @@ public class BoardController extends MskimRequestMapping{
 		
 		return "board/updateForm";
 	}
+	
+	@RequestMapping("update")
+	public String update(HttpServletRequest request, HttpServletResponse response) {
+		String path = request.getServletContext().getRealPath("/") + "/upload/board"; // 절대경로
+		File f = new File(path);
+		int size = 1024*1024*10;
+		MultipartRequest multi = null;
+		try {
+			multi = new MultipartRequest(request, path, size, "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Board b = new Board();
+		b.setNo(Integer.parseInt(multi.getParameter("no")));
+		b.setTitle(multi.getParameter("title"));
+		b.setContent(multi.getParameter("content"));
+		b.setFile1(multi.getFilesystemName("file1"));
+		if(b.getFile1()==null || b.getFile1().equals("")){
+			b.setFile1(multi.getFilesystemName("file2"));
+		}
+		
+		String msg = "";
+		String url = "detail?no=" + b.getNo();
+		
+		if(dao.update(b)){
+			msg = "게시물 수정 완료";
+		} else{
+			msg = "게시물 수정 실패";
+			url = "updateForm?no="+b.getNo();
+		}
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("url", url);
+		return "alert";
+	}
 }
