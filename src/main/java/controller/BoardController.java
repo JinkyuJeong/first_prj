@@ -22,6 +22,8 @@ import model.BoardDetailView;
 import model.BoardListView;
 import model.BoardMybatisDao;
 import model.Comment;
+import model.CommentListView;
+import model.CommentMybatisDao;
 import model.Member;
 import model.MemberMybatisDao;
 
@@ -30,31 +32,7 @@ initParams = {@WebInitParam(name="view", value="/view/")}
 		)
 public class BoardController extends MskimRequestMapping{
 	private BoardMybatisDao dao = new BoardMybatisDao();
-	
-//	@RequestMapping("comment")
-//	public String comment(HttpServletRequest request, HttpServletResponse response) {
-//		try {
-//			request.setCharacterEncoding("UTF-8");
-//		} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		int no = Integer.parseInt(request.getParameter("no"));
-//		String url = "detail?no=" + no+"&readcnt=f";
-//		Comment comm = new Comment();
-//		comm.setNum(num);
-//		comm.setWriter(request.getParameter("writer"));
-//		comm.setContent(request.getParameter("content"));
-//		int seq = cdao.maxseq(num);
-//		comm.setSeq(++seq);
-//		if(cdao.insert(comm)) {
-//			return "redirect:" + url; 
-//		}
-//		request.setAttribute("msg", "답글 등록시 오류 발생");
-//		request.setAttribute("url", url);
-//		return "alert";
-//	}
-	
+	private CommentMybatisDao cDao = new CommentMybatisDao();
 	private static String boardName(String boardType) {
 		String boardName = "";
 		switch (boardType){
@@ -64,6 +42,32 @@ public class BoardController extends MskimRequestMapping{
 			case "4" : boardName = "공지사항"; break;
 		}
 		return boardName;
+	}
+	
+	@RequestMapping("comment")
+	public String comment(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		String url = "detail?no=" + no+"&hit=f";
+		Comment comm = new Comment();
+		comm.setNo(no);
+		comm.setNickname(request.getParameter("nickname"));
+		comm.setContent(request.getParameter("content"));
+		int seq = cDao.maxSeq(no);
+		comm.setSeq(++seq);
+		comm.setGrp(seq);
+		
+		if(cDao.insert(comm)) {
+			return "redirect:" + url; 
+		}
+		request.setAttribute("msg", "댓글 등록실패");
+		request.setAttribute("url", url);
+		return "alert";
 	}
 	
 	@RequestMapping("writeForm")
@@ -241,26 +245,31 @@ public class BoardController extends MskimRequestMapping{
 	public String detail(HttpServletRequest request, HttpServletResponse response) {
 		String nickname = (String)request.getSession().getAttribute("nickname");
 		int no = Integer.parseInt(request.getParameter("no"));
-		/*
-		String readcnt = request.getParameter("readcnt");
-		if(readcnt == null || !readcnt.equals("f")) {
-		}
-		이건 댓글처리 때 조회수 처리할려고함
-		*/
 		
+		String hit = request.getParameter("hit");
+		
+		// 리로드 조회수 늘어나기 방지용
+		if(hit == null || !hit.equals("f")) 
+			dao.HitAdd(no);
+	
 		Member mem = new MemberMybatisDao().selectOneNick(nickname);
 		
-		dao.HitAdd(no);
 		BoardDetailView b = dao.selectOne(no);
 		BoardDetailView bNext = dao.selectNext(b);
 		BoardDetailView bPrevious = dao.selectPrevious(b);
 		String boardName = boardName(b.getBoardType());
+		
+		List<CommentListView> commList = cDao.list(no);
+		int commCnt = cDao.commCnt(no);
 		
 		request.setAttribute("boardName", boardName);
 		request.setAttribute("b", b);
 		request.setAttribute("bNext", bNext);
 		request.setAttribute("bPrevious", bPrevious);
 		request.setAttribute("mem", mem);
+		request.setAttribute("commList", commList);
+		request.setAttribute("commCnt", commCnt);
+		request.setAttribute("today", new Date());
 		
 		return "board/detail";
 	}

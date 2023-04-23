@@ -92,7 +92,7 @@
 </div>
   
 
-<div class="w3-main w3-content w3-padding" style="max-width:100vw;margin-top:50px;min-height:100vh;">
+<div class="w3-main w3-content w3-padding" style="max-width:120vw;margin-top:50px;min-height:100vh;">
   <hr id="about">
 
   <sitemesh:write property='body'/>

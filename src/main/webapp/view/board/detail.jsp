@@ -33,6 +33,7 @@
   #comment{border-top: 2px solid; border-bottom: 2px solid;}
   td .btn{font-family: 'Dongle', sans-serif; font-size: 20px;}
   td .btn:hover {color: lightgray;}
+  .btn.btn-dark.comm{font-size:12px;}
   /* ************************************ */
 </style>
 </head>
@@ -50,6 +51,19 @@
        <tr>
          <th class="table-dark">조회수</th>
          <td>${b.hit}</td>
+       </tr>
+       
+       <fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
+       
+       <tr>
+       	<th class="table-dark">작성일</th>
+       	<fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
+        <c:if test="${t eq r}">
+					<td><fmt:formatDate value="${b.regdate }" pattern="HH:mm"/></td>
+				</c:if>
+				<c:if test="${t != r}">
+					<td><fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd"/></td>
+				</c:if>
        </tr>
 
        <tr>
@@ -158,7 +172,7 @@
       
       <div style="display: flex; justify-content: space-between; margin: 15px auto;">
           <div>
-            전체 댓글 <span style="color:red">${boardCnt }2</span>개
+            전체 댓글 <span style="color:red">${commCnt }</span>개
           </div>
           <div></div>
         </div>
@@ -167,21 +181,53 @@
         <div id="comment">
           <table  class="table table-hover align-middle">
             <tbody>
+            
+            <c:if test="${commCnt <= 0 }">
+            	<tr><td>등록된 댓글이 없습니다.</td></tr>
+            </c:if>
+            
+            <c:forEach var="comm" items="${commList }">
               <tr>
-                <td width="15%"><img id="prof" src="${path }/images/basic-profile.JPG"> 고현빈</td>
-                <td width="100vw" align="left">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</td>
-                <td width="10%"><font size="1">2023/04/16</font></td>
-                <td width="9%"><button class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 24px;"></i>&nbsp;10</td>
-                <td width="7%"><a class="btn btn-dark" href="">삭제</a></td>
+              
+                <td width="15%">
+                	<c:if test="${comm.picture == 'basic-profile.JPG'}">
+				           	<img id="prof" src="${path }/images/basic-profile.JPG">
+				           </c:if>
+				           <c:if test="${comm.picture != 'basic-profile.JPG'}">
+				           	<img id="prof" src="/first_prj/upload/member/${comm.picture}">
+				           </c:if>
+				           &nbsp;${comm.nickname }
+                </td>
+                
+                <td width="100vw" align="left">${comm.content }</td>
+                
+                <fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd" var="r2"/>
+                <c:if test="${t eq r2}">
+									<td width="10%">
+										<font size="1"><fmt:formatDate value="${comm.regdate }" pattern="HH:mm"/></font>
+									</td>
+								</c:if>
+								<c:if test="${t != r2}">
+									<td width="10%">
+										<font size="1"><fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd"/></font>
+									</td>
+								</c:if>
+                
+                <td width="9%"><button class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 24px;"></i>&nbsp;${comm.recommend }</button></td>
+                
+                <td width="10%">
+                	<c:if test="${comm.nickname == mem.nickname || sessionScope.login == 'admin'}">
+                		<a class="btn btn-dark comm" href="">삭제</a>
+                	</c:if>
+                	<c:if test="${comm.grpLevel <=1 }">
+                		<a class="btn btn-dark comm" href="">댓글작성</a>
+                	</c:if>
+                </td>
+                
               </tr>
-              <!-- 대댓글 -->
-              <tr>
-                <td width="15%">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;<img id="prof" src="${path }/images/basic-profile.JPG"> 고현빈</td>
-                <td width="100vw" align="left">재밌네</td>
-                <td width="5%"><font size="1">2023/04/16</font></td>
-                <td width="10%"><button class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 24px;"></i>&nbsp;10</td>
-                <td width="10%"><a class="btn btn-dark" href="">삭제</a></td>
-              </tr>
+              </c:forEach>
+              <!-- &nbsp;&nbsp;&#10551;&nbsp;&nbsp; -->
+              
             </tbody>
           </table>
         </div>
@@ -213,7 +259,7 @@
       }
     </script>
     
-    <c:if test="${!empty sessionScope}">
+    <c:if test="${!empty sessionScope.login}">
 	    <form action="comment" method="post" name="f" onsubmit="return inputcheck(this)">
 	    	<input type="hidden" name="no" value="${b.no }">
 	      <table class="table align-middle table-borderless">
@@ -226,7 +272,7 @@
 	           		<img id="prof" src="/first_prj/upload/member/${mem.picture}">
 	           	</c:if>
 	           	&nbsp;${mem.nickname }
-	           	<input type="hidden" value="${mem.nickname }"> 
+	           	<input type="hidden" name="nickname" value="${mem.nickname }"> 
 	          	</th>
 	          <td><input type="text" name="content" class="form-control"></td>
 	        </tr>

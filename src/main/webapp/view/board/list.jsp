@@ -184,8 +184,6 @@
 		          	<c:if test="${b.commCnt != 0}"> 
 		          		<a href="detail?no=${b.no }#comment" class="orange">[${b.commCnt }]</a>
 		          	</c:if>
-		          	<!-- 임시방편 보여주기용 -->
-		          	<a href="detail?no=${b.no }#comment" class="orange">[2]</a>
 		          </td>
 		          <td>
 		          	<c:if test="${b.picture == 'basic-profile.JPG' }">
