@@ -47,17 +47,11 @@
   	function goWriteNoticeForm() {
 			location.href="writeForm?boardType=4" 
 		}
-  	 function allchkbox(chk) {
-  	   if(chk.checked) {
-           document.querySelectorAll(".noChk").forEach((noChk)=>{
-        	   noChk.setAttribute("checked","checked")
-           })
-  	   } else {
-           document.querySelectorAll(".noChk").forEach((noChk)=>{
-  	    	  noChk.removeAttribute("checked")
-           })
-         }  
-     }
+	 $(function(){
+			$('#allChk').click(function(){
+				$('.noChk').prop('checked', $(this).is(':checked'));
+			});
+		}); 
 </script>
 </head>
 <body>
@@ -99,7 +93,7 @@
           <th scope="col">추천</th>
           
           <c:if test="${sessionScope.login == 'admin'}">
-          	<th scope="col"><input type="checkbox" class="form-check-input" name="allchk"  onchange="allchkbox(this)"></th>
+          	<th scope="col"><input type="checkbox" class="form-check-input" name="allChk"  id="allChk"></th>
           </c:if>
         </tr>
       </thead>
@@ -177,7 +171,7 @@
 								</c:if>
 		          	
 		          	<c:if test="${b.recommend >= 5}">
-		          		<a id="best" href="detail?no=${b.no }">[Best] ${title }</a>  <!--  👍 -->
+		          		<a id="best" href="detail?no=${b.no }"><span class="badge rounded-pill bg-success">Best</span> ${title }</a>  <!--  👍 -->
 		          	</c:if>
 		          	<c:if test="${b.recommend < 5}">
 		          		<a href="detail?no=${b.no }">${title }</a>
