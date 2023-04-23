@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,8 +57,14 @@
 				    	<h1>${rc.agentsite }</h1>
 				      <a href="https://www.luck-d.com/release/product/${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
 				      <a href="https://www.luck-d.com/release/product/${rc.no }"><h3>${rc.productName }</h3></a>
+				      
+				      <c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
+				      
 				      <p>
-					      ${rc.additionalInfo } <br>
+					      <c:forEach var="n" items="${infos }">
+					      	<span class="badge rounded-pill bg-info text-dark">${n} </span>
+					      </c:forEach> 
+					      <br>
 					      ${rc.releaseTime}
 				      </p>
 				    </div>
@@ -70,8 +77,13 @@
 				    	<h1>${rc.agentsite }</h1>
 				      <a href="https://www.luck-d.com/release/product/${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
 				      <a href="https://www.luck-d.com/release/product/${rc.no }"><h3>${rc.productName }</h3></a>
+				     	<c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
+				      
 				      <p>
-					      ${rc.additionalInfo } <br>
+					      <c:forEach var="n" items="${infos }">
+					      	<span class="badge rounded-pill bg-info text-dark">${n} </span>
+					      </c:forEach> 
+					      <br>
 					      ${rc.releaseTime}
 				      </p>
 				    </div>

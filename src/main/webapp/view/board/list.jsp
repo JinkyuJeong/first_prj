@@ -18,7 +18,7 @@
     margin-bottom: 7vh;
   }
   a{text-decoration: none;}
-  .container{width: 73vw;}
+  .container{width: 75vw;}
   .orange{color:rgb(255, 102, 0);}
   .blue{color:blue;}
   #write{width:70px; height: 30px; font-size: 16px; padding: 0; font-family: 'Dongle', sans-serif;}
@@ -29,7 +29,7 @@
   tr td:not(:nth-child(2)){text-align: center;}
   tr th:nth-child(1) {width: 5vw;}
   tr th:nth-child(2) {width: 30vw;}
-  tr th:nth-child(3) {width: 8vw;}
+  tr th:nth-child(3) {width: 10vw;}
   tr th:nth-child(4) {width: 6vw;}
   tr th:nth-child(5) {width: 5vw;}
   tr th:nth-child(6) {width: 5vw;}
@@ -121,7 +121,13 @@
 						<c:forEach var="n" items="${nList}" begin="0" end="${cnt}">
 			      	<tr class="notice">
 			          <th class="fw-bold"><span class="blue">공지</span></th>
-			          <td class="fw-bold"><a href="detail?no=${n.no }">${n.title}</a></td>
+			          
+			          <c:set var="title" value="${n.title }" />
+			          <c:if test="${fn:length(b.title) >= 35 }">
+								  <c:set var="title" value="${fn:substring(n.title, 0, 35)}..." />
+								</c:if>
+			          
+			          <td class="fw-bold"><a href="detail?no=${n.no }">${title}</a></td>
 			          <td class="fw-bold">
 			          	<c:if test="${adminPicture == null }">
 			          		<img id="profile" src="${path }/images/basic-profile.JPG">
@@ -165,9 +171,9 @@
 		          <td scope="row">${boardNum}</td>	<c:set var="boardNum" value="${boardNum-1 }"/>
 		          <td>
 		          	
-		          	<c:set var="title" value="${b.title }"></c:set>
+		          	<c:set var="title" value="${b.title }" />
 			          <c:if test="${fn:length(b.title) >= 35 }">
-								  <c:set var="title" value="${fn:substring(b.title, 0, 35)}..."></c:set>
+								  <c:set var="title" value="${fn:substring(b.title, 0, 35)}..." />
 								</c:if>
 		          	
 		          	<c:if test="${b.recommend >= 5}">
