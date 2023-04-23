@@ -201,7 +201,7 @@ public class BoardController extends MskimRequestMapping{
 		}
 		
 		request.setAttribute("msg", "공개여부 과정에서 문제가 생겼습니다.");
-		request.s)etAttribute("url", "list");
+		request.setAttribute("url", "list");
 		return "alert";	
 	}
 	
