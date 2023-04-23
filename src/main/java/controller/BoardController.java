@@ -133,7 +133,7 @@ public class BoardController extends MskimRequestMapping{
 		if(query_ != null && !query_.equals("")) query = query_;
 		if(pageNum_ != null && !pageNum_.equals("")) {
 			try{
-				pageNum = Integer.parseInt("pageNum");
+				pageNum = Integer.parseInt(pageNum_);
 			}catch (Exception e) {e.printStackTrace();}
 		}
 		
