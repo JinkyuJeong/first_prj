@@ -28,8 +28,7 @@ public class BoardMybatisDao {
 		return false;
 	}
 
-	// 검색기능에 따른 게시물 카운트 수정해야함
-	public int boardCount(String boardType, String field, String query) {
+	public int boardCount(String boardType, String field, String query, boolean adminList) {
 		SqlSession session = MybatisConnection.getConnection();
 		
 		try {
@@ -45,6 +44,9 @@ public class BoardMybatisDao {
 			}
 			map.put("query",query);
 			
+			if(!adminList)
+				map.put("pub", 1);
+			
 			return session.getMapper(cls).boardCount(map);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -55,7 +57,7 @@ public class BoardMybatisDao {
 		return 0;
 	}
 
-	public List<BoardListView> list(String boardType, int pageNum, int limit, String field, String query) {
+	public List<BoardListView> list(String boardType, int pageNum, int limit, String field, String query, boolean adminList) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
 			map.clear();
@@ -71,6 +73,9 @@ public class BoardMybatisDao {
 			map.put("query", query);
 			map.put("start", (pageNum -1) * limit);
 			map.put("limit", limit);
+			
+			if(!adminList)
+				map.put("pub", 1);
 			
 			return session.getMapper(cls).list(map);
 		} catch (Exception e) {
@@ -195,4 +200,5 @@ public class BoardMybatisDao {
 		
 		return false;
 	}
+
 }		

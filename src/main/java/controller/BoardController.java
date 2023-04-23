@@ -99,16 +99,8 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("list")
 	public String list(HttpServletRequest request, HttpServletResponse response) {
-		/*
-			1. 한 페이지당 10건의 게시물을 출력하기
-					pageNum 파라미터값을 저장 => 없는 경우는 1로 설정하기
-			2. 최근 등록된 게시물이 가장 위에 배치함
-			3. db에서 해당 페이지에 출력될 내용을 조회하여 화면에 출력.
-					게시물 출력부분
-					페이지 구분 출력부분
-			4. 페이지별 게시물번호 출력하기
-			5. 파일유무
-		*/
+		String login = (String)request.getSession().getAttribute("login");
+		if(login == null) login = "";
 		if(request.getParameter("boardType") != null){
 			// session에 게시판종류 정보등록
 			request.getSession().setAttribute("boardType", request.getParameter("boardType"));
@@ -138,12 +130,20 @@ public class BoardController extends MskimRequestMapping{
 		}
 		
 		int limit = 10;	// 한 페이지에 보여질 게시물 건 수
+		int boardCnt = 0;
 		
-		// 게시판 종류별 전체 게시물 등록 건 수
-		int boardCnt = dao.boardCount(boardType, field, query);
-		
-		// 현재 페이지에 보여질 게시물 목록
-		List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query);	// (문자열, 정수, 정수)
+		// 운영자리스트 / 일반회원 리스트
+		if(login.equals("admin")) {
+			boardCnt = dao.boardCount(boardType, field, query, true);
+			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, true);	// (문자열, 정수, 정수)
+			request.setAttribute("boardCnt", boardCnt);
+			request.setAttribute("list", list);
+		}else {
+			boardCnt = dao.boardCount(boardType, field, query, false);
+			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, false);	// (문자열, 정수, 정수)
+			request.setAttribute("boardCnt", boardCnt);
+			request.setAttribute("list", list);
+		}
 		
 		// 맨 위 상단 공지글 2개
 		List<Board> nList = dao.nList();
@@ -164,9 +164,7 @@ public class BoardController extends MskimRequestMapping{
 		
 		int boardNum = boardCnt-(pageNum-1) * limit;
 		
-		request.setAttribute("list", list);
 		request.setAttribute("boardNum", boardNum);
-		request.setAttribute("boardCnt", boardCnt);
 		request.setAttribute("boardType", boardType);
 		request.setAttribute("boardName", boardName(boardType));
 		request.setAttribute("pageNum", pageNum);
@@ -203,7 +201,7 @@ public class BoardController extends MskimRequestMapping{
 		}
 		
 		request.setAttribute("msg", "공개여부 과정에서 문제가 생겼습니다.");
-		request.setAttribute("url", "list");
+		request.s)etAttribute("url", "list");
 		return "alert";	
 	}
 	

@@ -16,7 +16,8 @@ public interface BoardMapper {
 	@Insert("insert into board (title, nickname, content, file1, boardType) values (#{title}, #{nickname}, #{content}, #{file1}, #{boardType})")
 	int insert(Board b);
 
-	String sqlField = " and ( ${field1} like '%${query}%' " + " <if test='field2 != null'> or ${field2} like '%${query}%' </if> ";
+	String sqlField = " <if test='pub != null'> and pub=#{pub} </if> " +
+			" and ( ${field1} like '%${query}%' " + " <if test='field2 != null'> or ${field2} like '%${query}%' </if> ";
 	@Select("<script>"
 			+ " SELECT * FROM boardListView "
 			+ " WHERE BOARDTYPE=#{boardType} "
