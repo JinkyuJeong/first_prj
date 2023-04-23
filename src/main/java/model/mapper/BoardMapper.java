@@ -18,6 +18,7 @@ public interface BoardMapper {
 	int insert(Board b);
 
 	String sqlField = " <if test='pub != null'> and pub=#{pub} </if> " +
+							  " <if test='recomm != null'> and recommend>=#{recomm} </if> " +
 			" and ( ${field1} like '%${query}%' " + " <if test='field2 != null'> or ${field2} like '%${query}%' </if> ";
 	@Select("<script>"
 			+ " SELECT * FROM boardListView "

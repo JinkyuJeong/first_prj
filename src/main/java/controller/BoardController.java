@@ -107,7 +107,11 @@ public class BoardController extends MskimRequestMapping{
 			request.getSession().setAttribute("pageNum", "1");	// 현재 페이지 정보
 		}
 
-		// 초기화작업
+		// 전체글 / 추천게시글
+		String excep_mode = "";
+		String excep_mode_ = request.getParameter("excep_mode");
+		if(excep_mode_!= null && !excep_mode_.equals("")) excep_mode = excep_mode_;
+		
 		String boardType = (String)request.getSession().getAttribute("boardType");
 		if(boardType == null) {
 			boardType = "1";
@@ -134,13 +138,13 @@ public class BoardController extends MskimRequestMapping{
 		
 		// 운영자리스트 / 일반회원 리스트
 		if(login.equals("admin")) {
-			boardCnt = dao.boardCount(boardType, field, query, true);
-			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, true);	// (문자열, 정수, 정수)
+			boardCnt = dao.boardCount(boardType, field, query, true, excep_mode);
+			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, true, excep_mode);	// (문자열, 정수, 정수)
 			request.setAttribute("boardCnt", boardCnt);
 			request.setAttribute("list", list);
 		}else {
-			boardCnt = dao.boardCount(boardType, field, query, false);
-			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, false);	// (문자열, 정수, 정수)
+			boardCnt = dao.boardCount(boardType, field, query, false, excep_mode);
+			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, false, excep_mode);	// (문자열, 정수, 정수)
 			request.setAttribute("boardCnt", boardCnt);
 			request.setAttribute("list", list);
 		}

@@ -68,10 +68,13 @@
     <div style="display: flex; justify-content: space-between; margin-bottom: -7px;">
 
       <div id="cnt">
-      	<span style="color:red">${empty boardCnt? 0 : boardCnt}</span>개의 글
+      	<%-- <span style="color:red">${empty boardCnt? 0 : boardCnt}</span>개의 글 --%>
+     		<a type="button" href="list" class="btn btn-success">전체글</a>
+     		<a type="button" href="list?excep_mode=recomm" class="btn btn-success">추천글</a>
       </div>
 
       <form class="table-form">
+      	<input type="hidden" name="excep_mode" value="${param.excep_mode}">
         <select id="sel" class="form-select" name="f">
           <option ${(param.f == "title+content") ? "selected" : ""} value="title+content">제목+내용</option>
           <option ${(param.f == "nickname") ? "selected" : ""} value="nickname">작성자</option>
@@ -236,12 +239,12 @@
 						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('이전 페이지가 없습니다.');">&laquo;</a>
 					</c:if>
 					<c:if test="${startPage > 1}">
-						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage-1}&f=${param.f}&q=${param.q}">&laquo;</a>
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage-1}&f=${param.f}&q=${param.q}&excep_mode=${param.excep_mode}">&laquo;</a>
 					</c:if>
 					
 					<c:forEach var="a" begin="${startPage}" end="${endPage}">
 						<c:if test="${a <= maxPage}">
-							<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="list?pageNum=${a}&f=${param.f}&q=${param.q}">${a}</a>
+							<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="list?pageNum=${a}&f=${param.f}&q=${param.q}&excep_mode=${param.excep_mode}">${a}</a>
 						</c:if>
 					</c:forEach>
 						
@@ -249,7 +252,7 @@
 						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('다음 페이지가 없습니다.');">&raquo;</a>
 					</c:if>
 					<c:if test="${startPage+4 < maxPage}">
-						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage+5}&f=${param.f}&q=${param.q}">&raquo;</a>
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage+5}&f=${param.f}&q=${param.q}&excep_mode=${param.excep_mode}">&raquo;</a>
 					</c:if>
 		    </div>
 		  </div>

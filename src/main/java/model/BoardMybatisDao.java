@@ -28,7 +28,7 @@ public class BoardMybatisDao {
 		return false;
 	}
 
-	public int boardCount(String boardType, String field, String query, boolean adminList) {
+	public int boardCount(String boardType, String field, String query, boolean adminList, String excep_mode) {
 		SqlSession session = MybatisConnection.getConnection();
 		
 		try {
@@ -46,6 +46,8 @@ public class BoardMybatisDao {
 			
 			if(!adminList)
 				map.put("pub", 1);
+			if(!excep_mode.equals(""))
+				map.put("recomm", 5);
 			
 			return session.getMapper(cls).boardCount(map);
 		} catch (Exception e) {
@@ -57,7 +59,7 @@ public class BoardMybatisDao {
 		return 0;
 	}
 
-	public List<BoardListView> list(String boardType, int pageNum, int limit, String field, String query, boolean adminList) {
+	public List<BoardListView> list(String boardType, int pageNum, int limit, String field, String query, boolean adminList, String excep_mode) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
 			map.clear();
@@ -76,6 +78,8 @@ public class BoardMybatisDao {
 			
 			if(!adminList)
 				map.put("pub", 1);
+			if(!excep_mode.equals(""))
+				map.put("recomm", 5);
 			
 			return session.getMapper(cls).list(map);
 		} catch (Exception e) {
