@@ -8,10 +8,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>게시물보기</title>
+<title>${boardName}</title>
 <style type="text/css">
 	/* detail.jsp에 들어갈 css속성임 */
-  .container{width: 75vw; overflow-x : auto;}
+  .container{width: 85vw; overflow-x : auto;}
   #title{
     font-family: 'Dongle', sans-serif; 
     text-align: center; 

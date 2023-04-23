@@ -48,17 +48,15 @@ public interface BoardMapper {
 	@Select("select * from boardDetailView where no=#{value}")
 	BoardDetailView selectOne(int no);
 
-	@Select("SELECT * FROM ("
-							+ " SELECT * FROM boardDetailView "
-							+ " WHERE boardType=#{boardType} and pub=1 order by regdate DESC) b "
-				+ " WHERE NO > #{no} LIMIT 1")
+	@Select("SELECT * "
+			+ " FROM boardDetailView "
+			+ " WHERE NO = (SELECT NO FROM boardDetailView "
+			+ "				 WHERE boardType=#{boardType} AND pub=#{pub} AND regdate > (SELECT regdate FROM boardDetailView WHERE no=#{no} ) LIMIT 1)")
 	BoardDetailView selectNext(BoardDetailView b);
 
 	@Select("SELECT * "
-			+ " FROM (SELECT * "
-			+ "      FROM boardDetailView "
-			+ "      WHERE boardType=#{boardType} and pub=1 and regdate < (SELECT regdate FROM boardDetailView WHERE NO=#{no}) "
-			+ "      order by regdate DESC) b "
-			+ "LIMIT 1")
+			+ " FROM boardDetailView "
+			+ " WHERE NO = (SELECT NO FROM boardDetailView  "
+			+ "				 WHERE boardType=#{boardType} AND pub=#{pub} AND regdate < (SELECT regdate FROM boardDetailView WHERE NO=#{no}) order by regdate desc LIMIT 1)")
 	BoardDetailView selectPrevious(BoardDetailView b);
 }

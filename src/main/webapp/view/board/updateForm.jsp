@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${boardName} 게시글 작성</title>
+<title>${boardName} 게시글 수정</title>
 <style type="text/css">
-	/* writeForm.jsp에 들어갈 css속성임 */
+	/* updateForm.jsp에 들어갈 css속성임 */
   .container{width: 75vw;}
   #title{
     font-family: 'Dongle', sans-serif; 
@@ -19,9 +20,16 @@
     text-align: center;
     width: 10vw;
   }
+  td .btn{font-family: 'Dongle', sans-serif; font-size: 20px;}
+  td .btn:hover {color: lightgray;}
   /* ************************************ */
 </style>
 <script>
+	function file_delete() {
+		document.f.file2.value="";
+		file_desc.style.display = "none";
+	}
+	
  function inputcheck(){
 	 
    if(document.f.title.value.trim() == ""){
@@ -42,19 +50,21 @@
 </head>
 <body>
 	 <form method="post" action="write" enctype="multipart/form-data" name="f" >
+	 	<input type="hidden" name="no" value="${b.no }">
+	 	<input type="hidden" name="file2" value="${b.file1}">
     <div class="container">
-      <h2 id="title">${boardName} 게시글 작성</h2>
+      <h2 id="title">${boardName} 게시글 수정</h2>
     
       <table class="table table-hover">
       
         <tr>
           <th class="table-light">제목</th>
-          <td><input type="text" name="title" class="form-control" class="w3-input" placeholder="제목을 입력하세요."></td>
+          <td><input type="text" name="title" class="form-control"  placeholder="제목을 입력하세요." value="${b.title }"></td>
         </tr>
 
         <tr>
           <th class="table-light">내용</th>
-          <td><textarea rows="15" name="content" class="form-control" class="w3-input" id="content"></textarea></td>
+          <td><textarea rows="15" name="content" class="form-control"  id="content">${b.content }</textarea></td>
          <script>
 	        CKEDITOR.editorConfig = function( config ) {
 					  config.htmlFilter = CKEDITOR.filter.disallowAll();
@@ -82,13 +92,22 @@
 
         <tr>
           <th class="table-light">첨부파일</th>
-          <td><input class="form-control" type="file" name="file1"></td>
+          
+          <td>
+          	<c:if test="${!empty b.file1 }">
+							<div id="file_desc">
+								${b.file1}
+								<a class="btn" href="javascript:file_delete()">[첨부파일 삭제]</a>
+							</div>
+						</c:if>
+						<input class="form-control" type="file" name="file1">
+        	</td>
         </tr>
 
         <tr>
-          <td colspan="2" align="center"><a class="btn btn-dark" href="javascript:inputcheck()">등록하기</a></td>
+          <td colspan="2" align="center"><a class="btn btn-dark" href="javascript:inputcheck()">수정하기</a></td>
         </tr>
-
+			
       </table>
     </div>
   </form>

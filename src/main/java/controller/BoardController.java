@@ -253,4 +253,33 @@ public class BoardController extends MskimRequestMapping{
 		
 		return "ckeditor";
 	}
+	
+	@RequestMapping("updateForm")
+	public String updateForm(HttpServletRequest request, HttpServletResponse response) {
+		String nickname = (String)request.getSession().getAttribute("nickname");
+		String login = (String)request.getSession().getAttribute("login");
+		String boardType = (String)request.getSession().getAttribute("boardType");
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		BoardDetailView b = dao.selectOne(no);
+		
+		if(login == null) {
+			request.setAttribute("msg", "잘못된 접근입니다.");
+			request.setAttribute("url", "list?boardType="+boardType);
+			return "alert";		
+		}else if(b.getBoardType().equals("4") && !login.equals("admin")) {
+			request.setAttribute("msg", "공지사항은 운영자만 수정 가능합니다.");
+			request.setAttribute("url", "detail?no="+b.getNo());
+			return "alert";		
+		}else if(!login.equals("admin") && !nickname.equals(b.getNickname())) {
+			request.setAttribute("msg", "본인이 작성한 글만 수정이 가능합니다.");
+			request.setAttribute("url", "detail?no="+b.getNo());
+			return "alert";	
+		}
+		
+		request.setAttribute("boardName", boardName(b.getBoardType()));
+		request.setAttribute("b", b);
+		
+		return "board/updateForm";
+	}
 }

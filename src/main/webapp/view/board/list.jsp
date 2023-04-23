@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>자유게시판</title>
+<title>${boardName }</title>
 <style type="text/css">
  	body{font-size: 12px;}
   #title{
@@ -168,7 +168,7 @@
 								</c:if>
 		          	
 		          	<c:if test="${b.recommend >= 5}">
-		          		<a id="best" href="detail?no=${b.no }">[👍 Best] ${title }</a> 
+		          		<a id="best" href="detail?no=${b.no }">[Best] ${title }</a>  <!--  👍 -->
 		          	</c:if>
 		          	<c:if test="${b.recommend < 5}">
 		          		<a href="detail?no=${b.no }">${title }</a>
