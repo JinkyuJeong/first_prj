@@ -93,7 +93,7 @@
      
      <!-- 버튼들 -->
      <div align="center">
-     	<c:if test="${sessionScope.login == 'admin' || b.nickname == nickname }">
+     	<c:if test="${sessionScope.login == 'admin' || b.nickname == mem.nickname }">
         <a class="btn btn-dark" href="updateForm?no=${b.no}">수정</a>
         <%-- <a class="btn btn-dark" href="deleteForm?no=${b.no}">삭제</a> --%>
         <!-- Button trigger modal -->
@@ -212,19 +212,32 @@
         return true;
       }
     </script>
-    <form action="comment" method="post" name="f" onsubmit="return inputcheck(this)">
-    	<input type="hidden" name="no" value="${b.no }">
-      <table class="table align-middle table-borderless">
-        <tr>
-          <th class="table-light"><img id="prof" src="${path }/images/basic-profile.JPG"> 고현빈</th>
-          <td><input type="text" name="content" class="form-control"></td>
-        </tr>
-        <tr>
-          <td colspan="2" align="right"><button type="submit" class="btn btn-dark">댓글등록</button></td>
-        </tr>
-      </table>
-		</form>
-
+    
+    <c:if test="${!empty sessionScope}">
+	    <form action="comment" method="post" name="f" onsubmit="return inputcheck(this)">
+	    	<input type="hidden" name="no" value="${b.no }">
+	      <table class="table align-middle table-borderless">
+	        <tr>
+	          <th class="table-light">
+	          	<c:if test="${mem.picture == 'basic-profile.JPG'}">
+	           		<img id="prof" src="${path }/images/basic-profile.JPG">
+	           	</c:if>
+	           	<c:if test="${mem.picture != 'basic-profile.JPG'}">
+	           		<img id="prof" src="/first_prj/upload/member/${mem.picture}">
+	           	</c:if>
+	           	&nbsp;${mem.nickname }
+	           	<input type="hidden" value="${mem.nickname }"> 
+	          	</th>
+	          <td><input type="text" name="content" class="form-control"></td>
+	        </tr>
+	        <tr>
+	          <td colspan="2" align="right"><button type="submit" class="btn btn-dark">댓글등록</button></td>
+	        </tr>
+	      </table>
+			</form>
+		</c:if>
+		
   </div>
+  
 </body>
 </html>

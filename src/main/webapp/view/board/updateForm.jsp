@@ -105,7 +105,31 @@
         </tr>
 
         <tr>
-          <td colspan="2" align="center"><a class="btn btn-dark" href="javascript:inputcheck()">수정하기</a></td>
+          <td colspan="2" align="center">
+          	<a type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+						 	수정하기
+						</a>
+						
+						<!-- Modal -->
+						<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="staticBackdropLabel">게시물 수정</h5>
+						        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						      </div>
+						      <div class="modal-body">
+						        변경되기 전 내용은 복구 불가능합니다. 정말 수정 하시겠습니까?
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						        <a type="button" class="btn btn-primary"  href="javascript:inputcheck()" >수정</a>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+						
+         	</td>
         </tr>
 			
       </table>

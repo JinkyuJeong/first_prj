@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,6 +21,7 @@ import model.Board;
 import model.BoardDetailView;
 import model.BoardListView;
 import model.BoardMybatisDao;
+import model.Comment;
 import model.Member;
 import model.MemberMybatisDao;
 
@@ -28,6 +30,31 @@ initParams = {@WebInitParam(name="view", value="/view/")}
 		)
 public class BoardController extends MskimRequestMapping{
 	private BoardMybatisDao dao = new BoardMybatisDao();
+	
+//	@RequestMapping("comment")
+//	public String comment(HttpServletRequest request, HttpServletResponse response) {
+//		try {
+//			request.setCharacterEncoding("UTF-8");
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		int no = Integer.parseInt(request.getParameter("no"));
+//		String url = "detail?no=" + no+"&readcnt=f";
+//		Comment comm = new Comment();
+//		comm.setNum(num);
+//		comm.setWriter(request.getParameter("writer"));
+//		comm.setContent(request.getParameter("content"));
+//		int seq = cdao.maxseq(num);
+//		comm.setSeq(++seq);
+//		if(cdao.insert(comm)) {
+//			return "redirect:" + url; 
+//		}
+//		request.setAttribute("msg", "답글 등록시 오류 발생");
+//		request.setAttribute("url", url);
+//		return "alert";
+//	}
+	
 	private static String boardName(String boardType) {
 		String boardName = "";
 		switch (boardType){
@@ -221,6 +248,8 @@ public class BoardController extends MskimRequestMapping{
 		이건 댓글처리 때 조회수 처리할려고함
 		*/
 		
+		Member mem = new MemberMybatisDao().selectOneNick(nickname);
+		
 		dao.HitAdd(no);
 		BoardDetailView b = dao.selectOne(no);
 		BoardDetailView bNext = dao.selectNext(b);
@@ -231,8 +260,7 @@ public class BoardController extends MskimRequestMapping{
 		request.setAttribute("b", b);
 		request.setAttribute("bNext", bNext);
 		request.setAttribute("bPrevious", bPrevious);
-		request.setAttribute("nickname", nickname);	// 게시글 삭제와 수정은 본인만 가능하게 할려고 보내는거
-//		request.setAttribute("no", no); 댓글 때 등록때 param.no으로 보낼려고함
+		request.setAttribute("mem", mem);
 		
 		return "board/detail";
 	}
