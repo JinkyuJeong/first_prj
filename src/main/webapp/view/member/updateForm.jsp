@@ -40,8 +40,11 @@
 	}
 	
 	function win_passChg(){
+		let email1 = document.f.email1.value;
+		let email2 = document.f.email2.value;
+		let email = email1+"@"+email2;
 		let op = "width=500, height=450, left=50, top=150";
-		open("pwChgUpdateForm","",op);
+		open("pwChgUpdateForm?email="+email,"",op);
 	}
 	
 	function win_upload(){

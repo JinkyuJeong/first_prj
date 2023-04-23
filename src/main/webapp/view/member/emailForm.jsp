@@ -33,7 +33,7 @@
       	<c:choose>
       		<c:when test="${able && ! empty sessionScope.fromEmail2}">
       			<script>
-        			location.href="pwChgForm";
+        			location.href="pwChgForm?email=${email1}@${email2}";
         		</script>
       		</c:when>
       		<c:when test="${able }">

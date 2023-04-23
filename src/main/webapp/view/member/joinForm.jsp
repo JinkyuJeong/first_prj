@@ -67,6 +67,10 @@
 		alert("비밀번호를 확인 해주세요.");
 		return false;
 	  }
+	  if(f.corpwchk.value != "pwchecked") {
+			alert("비밀번호를 확인 해주세요.");
+			return false;
+		  }
 	  if(f.nicknamechkchk.value != "nicknamechecked") {
 		alert("닉네임 중복검사를 해주세요.");
 		return false;
@@ -111,14 +115,21 @@
 		let password = document.getElementById("pwd").value;
 		let password2 = document.getElementById("pwd2").value;
 		let pwMsg = document.getElementById("pwMsg");
-		if(password == password2) {
-			pwMsg.innerHTML="비밀번호가 일치합니다.";
-			pwMsg.style.color = "blue";
-			document.getElementById("pwchkchk").value = "pwchecked";
-		} else {
-			pwMsg.innerHTML="비밀번호가 일치하지않습니다.";
+		let corPw = document.getElementById("corpwchk").value;
+		if(corPw == "pwunchecked" || password==null || password=="") {
+			pwMsg.innerHTML="8~16자리 영대소문자/숫자 조합의 비밀번호를 입력해주세요.";
 			pwMsg.style.color = "red";
-		}
+		} else {
+			if(password == password2) {
+				pwMsg.innerHTML="비밀번호가 일치합니다.";
+				pwMsg.style.color = "blue";
+				document.getElementById("pwchkchk").value = "pwchecked";
+			} else {
+				pwMsg.innerHTML="비밀번호가 일치하지않습니다.";
+				pwMsg.style.color = "red";
+				document.getElementById("pwchkchk").value = "pwunchecked";
+			}
+		}		
 	}
 	function correctPwChk() {
 		let password = document.getElementById("pwd").value;
@@ -127,9 +138,11 @@
 		if(!pwPattern.test(password)) {
 			crPwMsg.innerHTML="유효하지 않은 비밀번호 입니다.";
 			crPwMsg.style.color = "red";
+			document.getElementById("corpwchk").value = "pwunchecked";
 		} else {
 			crPwMsg.innerHTML="사용가능한 비밀번호 입니다.";
 			crPwMsg.style.color = "blue";
+			document.getElementById("corpwchk").value = "pwchecked";
 		}
 	}
 </script>
@@ -173,6 +186,7 @@
           <label class="mb-1" for="pwd">비밀번호</label>
           <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
           <span id="crPwMsg"></span>
+          <input type="hidden" id="corpwchk" value="pwunchecked"> 
         </div>
         <!-- 비밀번호 재입력 -->
         <div id="cor2" class="form-group">

@@ -35,7 +35,7 @@
         		<script>
     				opener.document.f.nickname.value="";
 				</script>
-        		<span style="color:red">닉네임 ${param.nickname }는 중복입니다.</span> <br><br>
+        		<span style="color:red">닉네임 ${param.nickname }은(는) 중복입니다.</span> <br><br>
 					<button type="button" class="btn btn-dark" onclick="nickClear()">닫기</button>
         	</c:if>
           

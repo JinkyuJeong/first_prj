@@ -44,6 +44,7 @@
      <div class="container">
      <input type="hidden" name="email" id="email">
      <input type="hidden" name="pwchg" id="pwchg" value="pwchgUnable">
+     <input type="hidden" name="fromEmail2" value="fromEmail2">
        <h2>이메일 인증</h2>
        
        <div class="form-group">

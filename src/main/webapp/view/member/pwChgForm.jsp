@@ -14,6 +14,8 @@
     h2{margin-bottom: 30px;}
     .container .form-group{position: relative;}
     #minMsg{position: absolute; bottom: 5vh; left: 0; color: red;}
+    #cor1, #cor2{position:relative;}
+  	#pwMsg, #crPwMsg{font-size:10px; margin-top:-2vh; position:absolute; bottom:0; left:0;}
   </style>
   <script>
 		function inchk(f){
@@ -28,33 +30,71 @@
 	      f.pass2.focus();
 	      return false;
 			}
-			
-	    if(f.pass.value.trim() !== f.pass2.value.trim()){
-	      alert("변경 비밀번호와 변경 재입력 비밀번호가 일치하지 않습니다.");
-	      f.pass2.value = "";
-	      f.pass2.focus();
-	      return false;
-	    }
+	    if(f.pwchkchk.value != "pwchecked") {
+			alert("비밀번호를 확인 해주세요.");
+			return false;
+		  }
+		  if(f.corpwchk.value != "pwchecked") {
+				alert("비밀번호를 확인 해주세요.");
+				return false;
+			  }
 	    return true;
 	  }
+	function correctPwChk() {
+		let password = document.getElementById("pwd").value;
+		let pwPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
+		let crPwMsg = document.getElementById("crPwMsg");
+		if(!pwPattern.test(password)) {
+			crPwMsg.innerHTML="유효하지 않은 비밀번호 입니다.";
+			crPwMsg.style.color = "red";
+			document.getElementById("corpwchk").value = "pwunchecked";
+		} else {
+			crPwMsg.innerHTML="사용가능한 비밀번호 입니다.";
+			crPwMsg.style.color = "blue";
+			document.getElementById("corpwchk").value = "pwchecked";
+		}
+	}
+	function checkPasswords() {
+		let password = document.getElementById("pwd").value;
+		let password2 = document.getElementById("pwd2").value;
+		let pwMsg = document.getElementById("pwMsg");
+		let corPw = document.getElementById("corpwchk").value;
+		if(corPw == "pwunchecked" || password==null || password=="") {
+			pwMsg.innerHTML="8~16자리 영대소문자/숫자 조합의 비밀번호를 입력해주세요.";
+			pwMsg.style.color = "red";
+		} else {
+			if(password == password2) {
+				pwMsg.innerHTML="비밀번호가 일치합니다.";
+				pwMsg.style.color = "blue";
+				document.getElementById("pwchkchk").value = "pwchecked";
+			} else {
+				pwMsg.innerHTML="비밀번호가 일치하지않습니다.";
+				pwMsg.style.color = "red";
+				document.getElementById("pwchkchk").value = "pwunchecked";
+			}
+		}		
+	}
 </script>
 </head>
 <body>
-   <form action="password"  method="post" name="f" onsubmit="return inchk(this)" >
+   <form action="password1"  method="post" name="f" onsubmit="return inchk(this)" >
      <div class="container">
      <input type="hidden" name="email1" value="${mem.email1}">
        <h2>비밀번호 변경</h2>
        <!-- 비밀번호-->
-       <div class="form-group">
+       <div id="cor1" class="form-group">
          <label class="mb-1" for="pwd">변경 비밀번호</label>
-         <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가">
+         <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가"  onkeyup="correctPwChk()">
+         <span id="crPwMsg"></span>
+         <input type="hidden" id="corpwchk" value="pwunchecked"> 
        </div>
        <!-- 비밀번호 재입력 -->
-       <div class="form-group">
+       <div id="cor2" class="form-group">
          <label class="mb-1" for="pwd">변경 비밀번호 재입력</label>
-         <input type="password" class="form-control mb-3" id="pwd2" name="pass2">
+         <input type="password" class="form-control mb-3" id="pwd2" name="pass2"  onkeyup="checkPasswords()">
          <br>
-         <span id="minMsg"><font size="1">비밀번호를 다시 입력하세요.</font></span>
+         <span id="pwMsg"></span>     
+         <input type="hidden" id="pwchkchk" value="pwunchecked"> 
        </div>
 
        <div class="form-group">

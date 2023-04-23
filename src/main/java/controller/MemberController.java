@@ -25,14 +25,14 @@ import com.oreilly.servlet.MultipartRequest;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.Member;
-import model.MemberDao;
+import model.MemberMybatisDao;
 
 // /member/ 이후의 어떤 요청이 들어와도 MemberController가 요청됨
 @WebServlet(urlPatterns = {"/member/*"},
 						initParams = {@WebInitParam(name="view", value="/view/")}
 		)
 public class MemberController extends MskimRequestMapping{
-	private MemberDao dao = new MemberDao();
+	private MemberMybatisDao dao = new MemberMybatisDao();
 	
 	@RequestMapping("joinForm")
 	public String joinForm(HttpServletRequest request, HttpServletResponse response) {
@@ -71,27 +71,92 @@ public class MemberController extends MskimRequestMapping{
 		request.getSession().setAttribute("fromEmail2", "fromEmail2");
 		return "member/emailForm2";
 	}
-	@RequestMapping("emailForm") //가입 시 이메일 인증
+	@RequestMapping("emailForm") //이메일 인증
 	public String emailForm(HttpServletRequest request, HttpServletResponse respnose) {
 		try {
 			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		//비밀번호 찾기 할 때, 가입되어있는지 확인
+		String from = (String)request.getSession().getAttribute("fromEmail2");
+		System.out.println(from);
+		String email = request.getParameter("email");
+		boolean able = false;
+		if(from == null) from = "";
+		if(from.equals("fromEmail2")) {			
+			if(dao.selectOneEmail(email)==null) {
+				request.setAttribute("msg", "가입되지 않은 이메일입니다.");
+				request.getSession().removeAttribute("fromEmail2");
+				return "self_close";
+			} else {
+				//비밀번호 찾을 때
+				String inputedEmail = request.getParameter("email");
+				//인증번호 랜덤 생성
+			    String randomkey = authCodeMaker();
+				// 발신자 정보
+				String sender = "zxc2289@naver.com";
+				String password = "slfflflakaqh";
+				
+				// 메일 받을 주소
+				String recipient = inputedEmail;
+				System.out.println("inputedEmail : " + inputedEmail);
+				Properties prop = new Properties();
+				   try {
+					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   prop.load(fis);
+					   prop.put("mail.smtp.user", sender);
+					   System.out.println(prop);
+				   } catch(IOException e) {
+					   e.printStackTrace();
+				   }
+				Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(sender, password);
+					}
+				});
+				MimeMessage msg = new MimeMessage(session);
+					
+					// email 전송
+				try {
+					try {
+							msg.setFrom(new InternetAddress(sender,"SHOERACE 인증센터","UTF-8"));
+						} catch (UnsupportedEncodingException e) {
+							e.printStackTrace();
+						}
+						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+
+						// 메일 제목
+						msg.setSubject("이메일 인증");
+						// 메일 내용
+						msg.setText(randomkey);
+						Transport.send(msg);
+						System.out.println("이메일 전송 : " + randomkey);
+
+					} catch (AddressException e) { 
+						e.printStackTrace(); 
+					} catch (MessagingException e) { 
+						e.printStackTrace(); 
+					}
+				request.getSession().setAttribute("randomkey", randomkey);
+				return "member/emailForm";
+			}
+		} else {
 		
+		//회원가입 할 때
 		String inputedEmail = request.getParameter("email");
 		//인증번호 랜덤 생성
 	    String randomkey = authCodeMaker();
 		// 발신자 정보
-		String sender = "";
-		String password = "";
+		String sender = "zxc2289@naver.com";
+		String password = "slfflflakaqh";
 		
 		// 메일 받을 주소
 		String recipient = inputedEmail;
 		System.out.println("inputedEmail : " + inputedEmail);
 		Properties prop = new Properties();
 		   try {
-			   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prjj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+			   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 			   prop.load(fis);
 			   prop.put("mail.smtp.user", sender);
 			   System.out.println(prop);
@@ -128,6 +193,7 @@ public class MemberController extends MskimRequestMapping{
 			}
 		request.getSession().setAttribute("randomkey", randomkey);
 		return "member/emailForm";
+		}
 	}
 	
 	 //인증번호 생성 함수
@@ -297,6 +363,67 @@ public class MemberController extends MskimRequestMapping{
 			   } else {
 				   request.setAttribute("msg", "회원정보 수정 실패");
 				   request.setAttribute("url", "updateForm?email="+mem.getEmailaddress());
+				   return "alert";
+			   }
+		   }
+	   }
+	   
+	   @RequestMapping("delete")
+	   public String delete(HttpServletRequest request, HttpServletResponse response) {
+		   String pass = request.getParameter("pass");
+		   String email = request.getParameter("email");
+		   System.out.println(email);
+		   Member dbMem = dao.selectOneEmail(email);
+		   if(!dbMem.getPassword().equals(pass)) {
+			   request.setAttribute("msg", "비밀번호가 다릅니다.");
+			   request.setAttribute("url", "deleteForm?email="+email);
+			   return "alert";
+		   } else {
+			   if(dao.delete(email)) {
+				   request.setAttribute("msg", "회원탈퇴 완료");
+				   request.setAttribute("url", "/first_prj/index");
+				   return "alert";
+			   } else {
+				   request.setAttribute("msg", "회원탈퇴 실패");
+				   request.setAttribute("url", "/first_prj/index");
+				   return "alert";
+			   }
+		   }
+	   }
+	   
+	   //비밀번호 찾기(loginForm) 
+	   @RequestMapping("password1")
+	   public String password1(HttpServletRequest request, HttpServletResponse response) {
+		   String pass = request.getParameter("pass");	
+		   String email = request.getParameter("email");
+		   if(dao.updatePass(email,pass)) {
+			   request.setAttribute("msg", "비밀번호가 수정되었습니다.");
+			   return "self_close";
+		   } else {
+			   request.setAttribute("msg", "비밀번호 수정 실패.");
+			   request.setAttribute("url", "pwChgForm");
+			   return "alert";
+		   }
+	   }
+	   
+	   //비밀번호 수정 updateForm
+	   @RequestMapping("password2")
+	   public String password2(HttpServletRequest request, HttpServletResponse response) {
+		   String pass = request.getParameter("pass");
+		   String currentPass = request.getParameter("currentPass");
+		   String email = (String)request.getSession().getAttribute("login");
+		   Member dbMem = dao.selectOneEmail(email);
+		   if(!dbMem.getPassword().equals(currentPass)) {
+			   request.setAttribute("msg", "비밀번호가 틀립니다.");
+			   request.setAttribute("url", "pwChgUpdateForm?email="+email);
+			   return "alert";
+		   } else {
+			   if(dao.updatePass(email, pass)) {
+				   request.setAttribute("msg", "비밀번호가 수정되었습니다.");
+				   return "self_close";
+			   } else {
+				   request.setAttribute("msg", "비밀번호 수정 실패.");
+				   request.setAttribute("url", "pwChgUpdateForm");
 				   return "alert";
 			   }
 		   }

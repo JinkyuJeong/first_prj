@@ -21,7 +21,7 @@ import model.BoardDetailView;
 import model.BoardListView;
 import model.BoardMybatisDao;
 import model.Member;
-import model.MemberDao;
+import model.MemberMybatisDao;
 
 @WebServlet(urlPatterns = {"/board/*"},
 initParams = {@WebInitParam(name="view", value="/view/")}
@@ -158,7 +158,7 @@ public class BoardController extends MskimRequestMapping{
 		}
 		
 		// 운영자 프사등록
-		Member admin = new MemberDao().selectOneNick("운영자");
+		Member admin = new MemberMybatisDao().selectOneNick("운영자");
 		request.setAttribute("adminPicture", admin.getPicture());
 		
 		int maxPage = (int)((double)boardCnt/limit +0.95);

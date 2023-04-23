@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -68,7 +69,7 @@
         </div>
       </div>
       
-      <h4 class="mt-4">가입일자 : ${mem.regdate}</h4>
+      <h4 class="mt-4">가입일자 : <fmt:formatDate value="${mem.regdate}" pattern="yyyy년 MM월 dd일"/></h4>
 
       <div class="mt-3">
         <a class="btn" href="myBoardList?email1="><font size="5">게시글 : 10개</font></a>
@@ -82,7 +83,7 @@
   <!-- 회원가입 / 초기화 -->
   <div class="container mt-3" align="center">
     <a class="btn" href="updateForm?email=${sessionScope.login }">수정</a>
-    <a class="btn ms-2" href="deleteForm?email1=">회원탈퇴</a>
+    <a class="btn ms-2" href="deleteForm?email=${sessionScope.login }">회원탈퇴</a>
   </div>
 
 </body>
