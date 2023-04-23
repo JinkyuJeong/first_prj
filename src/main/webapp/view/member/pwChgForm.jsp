@@ -15,7 +15,8 @@
     .container .form-group{position: relative;}
     #minMsg{position: absolute; bottom: 5vh; left: 0; color: red;}
     #cor1, #cor2{position:relative;}
-  	#pwMsg, #crPwMsg{font-size:10px; margin-top:-2vh; position:absolute; bottom:0; left:0;}
+  	#crPwMsg{font-size:10px;position:absolute; bottom:-4vh; left:0;}
+  	#pwMsg{font-size:10px; position:absolute; bottom:4vh; left:0;}
   </style>
   <script>
 		function inchk(f){

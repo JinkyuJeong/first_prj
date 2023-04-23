@@ -14,6 +14,9 @@
     h2{margin-bottom: 30px;}
     .container .form-group{position: relative;}
     #minMsg{position: absolute; bottom: 4vh; left: 0; color: red;}
+    #cor1, #cor2{position:relative;}
+  	#crPwMsg{font-size:10px;position:absolute; bottom:-4vh; left:0;}
+  	#pwMsg{font-size:10px; position:absolute; bottom:4vh; left:0;}
   </style>
   <script>
     function inchk(f){
@@ -92,14 +95,14 @@
         <!-- 변경 비밀번호-->
         <div class="form-group">
           <label class="mb-1" for="chgpass">변경 비밀번호</label>
-          <input type="password" class="form-control mb-4" id="chgpass" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()">
+          <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()">
           <span id="crPwMsg"></span>
           <input type="hidden" id="corpwchk" value="pwunchecked">
         </div>
         <!-- 변경 비밀번호 재입력 -->
         <div class="form-group">
           <label class="mb-1" for="chgpass2">변경 비밀번호 재입력</label>
-          <input type="password" class="form-control mb-3" id="chgpass2" name="pass2" onkeyup="checkPasswords()">
+          <input type="password" class="form-control mb-3" id="pwd2" name="pass2" onkeyup="checkPasswords()">
           <br>
           <span id="pwMsg"></span>     
           <input type="hidden" id="pwchkchk" value="pwunchecked"> 
