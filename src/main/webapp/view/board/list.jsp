@@ -185,10 +185,10 @@
 		          	<a href="detail?no=${b.no }#comment" class="orange">[2]</a>
 		          </td>
 		          <td>
-		          	<c:if test="${b.picture == null }">
+		          	<c:if test="${b.picture == 'basic-profile.JPG' }">
 		          		<img id="profile" src="${path }/images/basic-profile.JPG">
 		          	</c:if>
-		          	<c:if test="${b.picture != null }">
+		          	<c:if test="${b.picture != 'basic-profile.JPG' }">
 		          		<img id="profile" src="/first_prj/upload/member/${b.picture}">
 		          	</c:if>
 		          	${b.nickname }

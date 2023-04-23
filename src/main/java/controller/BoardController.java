@@ -316,4 +316,36 @@ public class BoardController extends MskimRequestMapping{
 		request.setAttribute("url", url);
 		return "alert";
 	}
+	
+	@RequestMapping("delete")
+	public String delete(HttpServletRequest request, HttpServletResponse response) {
+		String nickname = (String)request.getSession().getAttribute("nickname");
+		String login = (String)request.getSession().getAttribute("login");
+		String boardType = (String)request.getSession().getAttribute("boardType");
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		BoardDetailView b = dao.selectOne(no);
+		
+		String msg = "게시글이 삭제 되었습니다.";
+		String url = "list?boardType="+boardType;
+		
+		if(login == null) {
+			msg = "잘못된 접근입니다.";
+		}else if(boardType.equals("4") && !login.equals("admin")) {
+			msg = "공지사항은 운영자만 삭제 가능합니다.";
+			url = "detail?no="+no;
+		}else if(!login.equals("admin") && !nickname.equals(b.getNickname())) {
+			msg = "본인이 작성한 글만 삭제 가능합니다.";
+			url = "detail?no="+no;
+		}else {
+			if(!dao.delete(no)) {
+				msg = "삭제 실패";
+				url = "detail?no="+no;
+			}
+		}
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("url", url);
+		return "alert";
+	}
 }

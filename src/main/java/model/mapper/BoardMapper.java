@@ -3,6 +3,7 @@ package model.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -24,7 +25,7 @@ public interface BoardMapper {
 			+ sqlField
 			+ " ) ORDER BY regdate DESC LIMIT #{start}, #{limit} "
 			+ " </script>")
-	List<BoardListView> list(Map<String, Object> map);
+	List<BoardListView> list(Map<String, Object> map); 
 
 	@Select("<script>"
 			+ " SELECT COUNT(*) FROM boardListView "
@@ -63,4 +64,7 @@ public interface BoardMapper {
 
 	@Update("update board set title=#{title}, content=#{content}, file1=#{file1} where no=#{no}")
 	int update(Board b);
+
+	@Delete("delete from board where no=#{value}")
+	int delete(int no);
 }

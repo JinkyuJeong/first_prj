@@ -197,7 +197,19 @@ public class BoardMybatisDao {
 		} finally {
 			MybatisConnection.close(session);
 		}
-		
+		return false;
+	}
+
+	public boolean delete(int no) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			int cnt = session.getMapper(cls).delete(no);
+			return cnt>0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
 		return false;
 	}
 

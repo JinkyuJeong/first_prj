@@ -39,68 +39,90 @@
 <body>
 	  <!-- About Section -->
   <div class="container">
-    <form method="post" action="write" enctype="multipart/form-data" name="f"  id="f">
-      <h2 id="title">${boardName}</h2>
-    
-      <table class="table table-hover align-middle">
-        <tr>
-          <th class="table-dark">제목</th>
-          <td>${b.title}</td>
-        </tr>
+     <h2 id="title">${boardName}</h2>
+   
+     <table class="table table-hover align-middle">
+       <tr>
+         <th class="table-dark">제목</th>
+         <td>${b.title}</td>
+       </tr>
 
-        <tr>
-          <th class="table-dark">조회수</th>
-          <td>${b.hit}</td>
-        </tr>
+       <tr>
+         <th class="table-dark">조회수</th>
+         <td>${b.hit}</td>
+       </tr>
 
-        <tr>
-          <th class="table-dark">작성자</th>
-          <td>
-          	<c:if test="${empty b.picture}">
-            	<img id="prof" src="${path }/images/basic-profile.JPG">
-            </c:if>
-            <c:if test="${!empty b.picture}">
-            	<img id="prof" src="/first_prj/upload/member/${b.picture}">
-            </c:if>
-            &nbsp;${b.nickname }
-          </td>
-        </tr>
+       <tr>
+         <th class="table-dark">작성자</th>
+         <td>
+         	<c:if test="${b.picture == 'basic-profile.JPG'}">
+           	<img id="prof" src="${path }/images/basic-profile.JPG">
+           </c:if>
+           <c:if test="${b.picture != 'basic-profile.JPG'}">
+           	<img id="prof" src="/first_prj/upload/member/${b.picture}">
+           </c:if>
+           &nbsp;${b.nickname }
+         </td>
+       </tr>
 
-        <tr id="content">
-          <th class="table-dark">내용</th>
-          <td >
-            ${b.content }
-          </td>
-        </tr>
+       <tr id="content">
+         <th class="table-dark">내용</th>
+         <td >
+           ${b.content }
+         </td>
+       </tr>
 
-        <tr>
-          <th class="table-dark">첨부파일</th>
-          <td>
-          	<c:if test="${empty b.file1 }">
-							&nbsp;
-						</c:if>
-						<c:if test="${!empty b.file1 }">
-							<a download href="${path }/upload/board/${b.file1 }">${b.file1 }</a>
-						</c:if>
-          </td>
-        </tr>
+       <tr>
+         <th class="table-dark">첨부파일</th>
+         <td>
+         	<c:if test="${empty b.file1 }">
+						&nbsp;
+					</c:if>
+					<c:if test="${!empty b.file1 }">
+						<a download href="${path }/upload/board/${b.file1 }">${b.file1 }</a>
+					</c:if>
+         </td>
+       </tr>
 
-      </table>
-      
-      <c:if test="${b.boardType != 4 }">
-	      <!-- 좋아요 -->
-	      <div align="center"><button id="recomm" class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 50px;"></i>&nbsp;${b.recommend }</button></div>
-      </c:if>
-      
-      <!-- 버튼들 -->
-      <div align="center">
-      	<c:if test="${sessionScope.login == 'admin' || b.nickname == nickname }">
-	        <a class="btn btn-dark" href="updateForm?no=${b.no}">수정</a>
-	        <a class="btn btn-dark" href="deleteForm?no=${b.no}">삭제</a>
-        </c:if>
-        <a class="btn btn-dark" href="list">목록으로</a>
-      </div>
-    </form>
+     </table>
+     
+     <c:if test="${b.boardType != 4 }">
+      <!-- 좋아요 -->
+      <div align="center"><button id="recomm" class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 50px;"></i>&nbsp;${b.recommend }</button></div>
+     </c:if>
+     
+     <!-- 버튼들 -->
+     <div align="center">
+     	<c:if test="${sessionScope.login == 'admin' || b.nickname == nickname }">
+        <a class="btn btn-dark" href="updateForm?no=${b.no}">수정</a>
+        <%-- <a class="btn btn-dark" href="deleteForm?no=${b.no}">삭제</a> --%>
+        <!-- Button trigger modal -->
+				<a type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+				 	삭제
+				</a>
+				
+				<!-- Modal -->
+				<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="staticBackdropLabel">게시물 삭제</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				        해당 게시물을 삭제 하시겠습니까?
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				        <a type="button" class="btn btn-primary" href="delete?no=${b.no}" >삭제</a>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+       </c:if>
+       
+       <a class="btn btn-dark" href="list">목록으로</a>
+     </div>
 
     <div>&nbsp;</div>
 
