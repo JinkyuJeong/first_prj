@@ -221,7 +221,7 @@
                 	<c:if test="${comm.nickname == mem.nickname || sessionScope.login == 'admin'}">
                 		<a class="btn btn-dark comm" href="">삭제</a>
                 	</c:if>
-                	<c:if test="${comm.grpLevel <1 }">
+                	<c:if test="${comm.grpLevel <1 && sessionScope.login != null}">
                 		<a class="btn btn-dark comm" href="#f1" onclick="openReply(this)">댓글작성</a>
                 	</c:if>
                 </td>
