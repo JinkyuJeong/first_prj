@@ -62,4 +62,15 @@ public class CommentMybatisDao {
 		return 0;
 	}
 
+	public void grpStepAdd(int grp, int grpStep) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			 session.getMapper(cls).grpStepAdd(grp, grpStep);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+	}
+
 }

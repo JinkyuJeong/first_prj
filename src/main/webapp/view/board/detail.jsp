@@ -34,6 +34,7 @@
   td .btn{font-family: 'Dongle', sans-serif; font-size: 20px;}
   td .btn:hover {color: lightgray;}
   .btn.btn-dark.comm{font-size:12px;}
+  .reply{display : none;}
   /* ************************************ */
 </style>
 </head>
@@ -190,6 +191,7 @@
               <tr>
               
                 <td width="15%">
+                	<c:if test="${comm.grpLevel == 1}">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;</c:if>
                 	<c:if test="${comm.picture == 'basic-profile.JPG'}">
 				           	<img id="prof" src="${path }/images/basic-profile.JPG">
 				           </c:if>
@@ -219,12 +221,45 @@
                 	<c:if test="${comm.nickname == mem.nickname || sessionScope.login == 'admin'}">
                 		<a class="btn btn-dark comm" href="">삭제</a>
                 	</c:if>
-                	<c:if test="${comm.grpLevel <=1 }">
-                		<a class="btn btn-dark comm" href="">댓글작성</a>
+                	<c:if test="${comm.grpLevel <1 }">
+                		<a class="btn btn-dark comm" href="#f1" onclick="openReply(this)">댓글작성</a>
                 	</c:if>
                 </td>
                 
               </tr>
+              
+              <tr class="reply">
+              	<td colspan="5">
+              	<c:if test="${!empty sessionScope.login}">
+							    <form action="commReply" method="post" name="f1" id="f1" onsubmit="return inputcheck(this)">
+							    	<input type="hidden" name="no" value="${comm.no }">
+										<input type="hidden" name="grp" value="${comm.grp}">
+										<input type="hidden" name="grpLevel" value="${comm.grpLevel }">
+										<input type="hidden" name="grpStep" value="${comm.grpStep }">
+										
+							      <table class="table align-middle table-borderless">
+							        <tr>
+							          <th class="table-light">
+							          	<c:if test="${mem.picture == 'basic-profile.JPG'}">
+							           		&nbsp;&#10551;&nbsp;&nbsp;<img id="prof" src="${path }/images/basic-profile.JPG">
+							           	</c:if>
+							           	<c:if test="${mem.picture != 'basic-profile.JPG'}">
+							           		&nbsp;&#10551;&nbsp;&nbsp;<img id="prof" src="/first_prj/upload/member/${mem.picture}">
+							           	</c:if>
+							           	&nbsp;${mem.nickname }
+							           	<input type="hidden" name="nickname" value="${mem.nickname }"> 
+							          	</th>
+							          <td width="75%">
+							          	<input type="text" name="content" class="form-control">
+							          </td>
+							          <td align="right"><button type="submit" class="btn btn-dark">댓글등록</button></td>
+							        </tr>
+							      </table>
+									</form>
+								</c:if>
+								</td>
+              </tr>
+              
               </c:forEach>
               <!-- &nbsp;&nbsp;&#10551;&nbsp;&nbsp; -->
               
@@ -257,11 +292,20 @@
 
         return true;
       }
+      function openReply(btn) {
+    	  // 클릭한 버튼에 대응하는 댓글 작성 폼 선택
+    	  var replyForm = $(btn).closest('tr').next('.reply');
+    	  // 선택한 댓글 작성 폼 열거나 닫기
+    	  replyForm.toggle();
+    	  // 모든 댓글 작성 폼 중 선택한 댓글 작성 폼과 다른 요소를 닫기
+    	  $('.reply').not(replyForm).hide();
+    	}
     </script>
     
     <c:if test="${!empty sessionScope.login}">
-	    <form action="comment" method="post" name="f" onsubmit="return inputcheck(this)">
+	    <form action="comment"  method="post" name="f" onsubmit="return inputcheck(this)">
 	    	<input type="hidden" name="no" value="${b.no }">
+				
 	      <table class="table align-middle table-borderless">
 	        <tr>
 	          <th class="table-light">

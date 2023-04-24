@@ -44,6 +44,45 @@ public class BoardController extends MskimRequestMapping{
 		return boardName;
 	}
 	
+	@RequestMapping("commReply")
+	public String commeReply(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		int no = Integer.parseInt(request.getParameter("no"));
+		String url = "detail?no=" + no+"&hit=f";
+		
+		// 대댓글 객체 생성
+		Comment comm = new Comment();
+		comm.setNo(no);
+		comm.setNickname(request.getParameter("nickname"));
+		comm.setContent(request.getParameter("content"));
+		comm.setGrp(Integer.parseInt(request.getParameter("grp")));
+		comm.setGrpLevel(Integer.parseInt(request.getParameter("grpLevel")));
+		comm.setGrpStep(Integer.parseInt(request.getParameter("grpStep")));
+		
+		// 대댓글 스텝 추가
+		cDao.grpStepAdd(comm.getGrp(), comm.getGrpStep());
+		
+		// grp수정
+		int grpLevel = comm.getGrpLevel(); 
+		int grpStep = comm.getGrpStep();
+		int seq = cDao.maxSeq(no);
+		comm.setSeq(++seq);
+		comm.setGrpLevel(grpLevel+1);
+		comm.setGrpStep(grpStep+1);
+		
+		// 입력
+		if(cDao.insert(comm)) {
+			return "redirect:" + url; 
+		}
+		request.setAttribute("msg", "댓글 등록실패");
+		request.setAttribute("url", url);
+		return "alert";
+	}
+	
 	@RequestMapping("comment")
 	public String comment(HttpServletRequest request, HttpServletResponse response) {
 		try {

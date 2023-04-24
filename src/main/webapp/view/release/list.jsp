@@ -62,7 +62,7 @@
 				      
 				      <p>
 					      <c:forEach var="n" items="${infos }">
-					      	<span class="badge rounded-pill bg-info text-dark">${n} </span>
+					      	<span class="badge rounded-pill bg-primary text-dark">${n} </span>
 					      </c:forEach> 
 					      <br>
 					      ${rc.releaseTime}
@@ -81,7 +81,7 @@
 				      
 				      <p>
 					      <c:forEach var="n" items="${infos }">
-					      	<span class="badge rounded-pill bg-info text-dark">${n} </span>
+					      	<span class="badge rounded-pill bg-primary text-dark">${n} </span>
 					      </c:forEach> 
 					      <br>
 					      ${rc.releaseTime}
