@@ -40,7 +40,7 @@
     <div id="jumbo" class="w3-container w3-padding-32 w3-center"> 
       <h3>당첨 상품 : ${name}</h3>
       <div class="mb-3">
-        <img src="${path }/images/product.jpg" width="350" height="250" id="pic"><br>
+        <img src="${path }/images/product.jpg" width="450" height="350" id="pic"><br>
         <c:if test="${sessionScope.login == 'admin' }">
         	<div align="center"><a href="javascript:win_upload()">사진등록</a></div>
         </c:if>

@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="http://cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
-<link rel="shortcut icon" href="../images/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="${path}/images/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +65,10 @@
 <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" id="mySidebar">
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button"><i id="flip-horizontal" class="fa fa-sign-out"></i></a>
   <a href="${path}/release/list"  class="w3-bar-item w3-button">실시간 발매정보</a>
-  <a href="${path}/event/eventForm"  class="w3-bar-item w3-button">이벤트</a>
+  <a href="#"  class="w3-bar-item w3-button">발매 소식</a>
+  <a href="${path}/event/eventForm"  class="w3-bar-item w3-button">
+  	<img src="${path}/images/favicon.png" width="60px" height="40px"> 이벤트
+  </a>
   <hr>
   <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn1">게시판 &nbsp;<i class="fa fa-caret-down"></i></a>
   <div id="demoAcc1" class="w3-bar-block w3-hide w3-padding-large w3-medium">
@@ -88,7 +91,7 @@
 	    <div class="w3-right w3-padding-16"><a href="${path}/member/joinForm">회원가입</a></div>
 	    <div class="w3-right w3-padding-16"><a href="${path}/member/loginForm">로그인</a>&nbsp;&nbsp;</div>
     </c:if>
-    <div id="center" class="w3-center w3-padding-16"><a href="${path}">SHOERACE</a></div>
+    <div id="center" class="w3-center w3-padding-16"><a href="${path}"><img src="${path}/images/mainLogo.JPG" width="120px" height="40px"></a></div>
   </div>
 </div>
   
