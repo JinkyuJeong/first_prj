@@ -10,7 +10,7 @@
 <style type="text/css">
 	body, h1, h2, h3, p{font-family: 'Dongle', sans-serif;}
 	a{text-decoration: none;}
-	h1 {font-weight : bold;}
+	.w3-quarter h1 {font-weight : bold;}
 	h3 {font-size : 1.7em;}
 	.w3-quarter p{font-size : 1.5em; color:blue;}
 	#title{

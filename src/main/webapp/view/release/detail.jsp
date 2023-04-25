@@ -14,7 +14,7 @@
     font-size: 5em;
     margin-bottom : 5vh;
   }
-  #info, strong, span, .btn.btn-dark{font-family: 'Dongle', sans-serif; font-size: 1.7em;}
+  #info, strong, span, .btn.btn-dark, .mb-3.mt-3{font-family: 'Dongle', sans-serif; font-size: 1.7em;}
   #prodimg>img{box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);}
 </style>
 </head>
@@ -37,7 +37,8 @@
     </c:forEach>
     
   </div>
-
+	
+	<p style="color:blue;" class="mb-3 mt-3"><i class="fa fa-info-circle"></i> 아래 이미지들을 클릭하면 확대하여 볼 수 있습니다.</p>
   <!-- 밑에 사진들 -->
   <div class="w3-row-padding w3-section">
   	<c:forEach var="img" items="${list}" varStatus="st">
@@ -55,7 +56,7 @@
       <div class="w3-col s6" style="font-size:1.5em;">
         <p><i id="brand-icon" class="fa fa-nike"></i> 브랜드 : ${rd.brand }</p><!-- 브랜드 -->
         <p><i class="fa fa-barcode"></i> 제품코드 : ${rd.code }</p> <!-- 제품 코드 -->
-        <p><i class="fa fa-paint-brush"></i> 컬러 : ${rd.color })</p> <!-- 제품 색상 -->
+        <p><i class="fa fa-paint-brush"></i> 컬러 : ${rd.color }</p> <!-- 제품 색상 -->
         <p><i class="fa fa-calendar"></i> 발매일 : ${rd.releaseDate }</p> <!-- 발매일 -->
         <p>가격 : ${rd.price }</p> <!-- 발매가 -->
       </div>

@@ -136,7 +136,7 @@
 				</div>
        </c:if>
        
-       <a class="btn btn-dark" href="list">목록으로</a>
+       <a class="btn btn-dark" href="list?boardType=${b.boardType }">목록으로</a>
      </div>
 
     <div>&nbsp;</div>

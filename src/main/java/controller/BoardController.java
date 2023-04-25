@@ -287,7 +287,7 @@ public class BoardController extends MskimRequestMapping{
 		
 		String hit = request.getParameter("hit");
 		
-		// 리로드 조회수 늘어나기 방지용
+		// 댓글쓰기 조회수 늘어나기 방지용
 		if(hit == null || !hit.equals("f")) 
 			dao.HitAdd(no);
 	
