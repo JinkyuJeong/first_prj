@@ -1,5 +1,8 @@
 package model.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -26,5 +29,18 @@ public interface MemberMapper {
 
 	@Update("update member set password=#{param2} where emailaddress=#{param1}")
 	int updatePass(String email, String pass);
+
+	@Select("<script>"
+			+ "select * from member"
+			+ "<if test='nickname!=null'> where nickname like '%${nickname}%' </if>"
+			+ " limit #{start},#{limit}"
+			+ "</script>")
+	List<Member> list(Map<String, Object> map);
+
+	@Select("<script>"
+			+"select count(*) from member"
+			+"<if test='nickname != null'> where nickname like '%${value}%'</if>"
+			+"</script>")
+	int memberCount(String nickname);
 
 }

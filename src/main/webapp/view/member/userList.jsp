@@ -1,14 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<script>
+	function listsubmit(page) {
+		document.f.pageNum.value = page;
+		document.f.submit();		
+	}
+</script>
 <title>회원목록</title>
 <style type="text/css">
 	/* userList.jsp에 들어갈 css속성임 */
   body{font-size: 12px;}
+  .container>div>div, .btn.btn-dark{font-family: 'Dongle', sans-serif; font-size:1.5em;}
   #title{
     font-family: 'Dongle', sans-serif; 
     text-align: center; 
@@ -32,12 +40,13 @@
 <body>
  <!-- About Section -->
   <div class="container">
-    <h1 id="title">회원목록</h1>
+    <h1 id="title"><a href="userList">회원목록</a></h1>
 
     <div style="display: flex; justify-content: space-between; margin-bottom: -7px;">
-      <div></div>
+      <div>회원 수:${memberCount }</div>
 
-      <form class="table-form">
+      <form action="userList" class="table-form" name="f">
+      	<input type="hidden" name="pageNum" value="1">
         <div class="input-group mb-3 ms-1">
           <input type="text" class="form-control" name="nickname" placeholder="닉네임 검색">
           <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
@@ -49,6 +58,7 @@
 
       <thead>
         <tr class="table-dark">
+          <th>no</th>
           <th>이메일</th>
           <th>사진</th>
           <th>닉네임</th>
@@ -58,32 +68,45 @@
       </thead>
 
       <tbody>
-        
+        <c:forEach var="m" items="${list }">
         <tr>
-          <td scope="row">khb@naver.com</td>
-          <td><img id="profile" src="./images/basic-profile.JPG"></td>
-          <td><a href="myPage?email1=">고현빈</a></td>
-          <td>2023/04/16</td>
+          <td>${memberNum }</td>
+          <c:set var="memberNum" value="${memberNum+1 }" />
+          
+          <td scope="row">${m.emailaddress }</td>
+          <td><img id="profile" src="./images/${m.picture }"></td>
+          <td><a href="myPage?email=${m.emailaddress }">${m.nickname }</a></td>
+          <td><fmt:formatDate value="${m.regdate}" pattern="yyyy년 MM월 dd일"/></td>
           <td>
-            <a class="btn btn-dark" href="updateForm?id=${mem.email1 }">수정</a>
+            <a class="btn btn-dark" href="updateForm?email=${m.emailaddress }">수정</a>
             <!-- 관리자 일 때 -->
-            <a class="btn btn-dark"href="deleteForm?id=${mem.email1 }">강제탈퇴</a>
+            <a class="btn btn-dark"href="deleteForm?email=${m.emailaddress }">강제탈퇴</a>
           </td>
         </tr>
-
+		</c:forEach>
       </tbody>
 
     </table>
-    <!-- Pagination -->
+    <!-- 페이징 -->
     <div class="w3-center w3-padding-32">
       <div class="w3-bar">
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">&laquo;</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">1</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">5</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">&raquo;</a>
+      	<c:if test="${pageNum <=1}">
+       		<a href="" class="w3-bar-item w3-button">&laquo;</a>
+      	</c:if>
+      	<c:if test="${pageNum >1}">
+      		<a href="userList?pageNum=${pageNum-1 }&nickname=${param.nickname}" class="w3-bar-item w3-button w3-hover-black">&laquo;</a>
+      	</c:if>
+      	
+      	<c:forEach var="a" begin="${startPage }" end="${endPage }">
+      			<a href="userList?pageNum=${a }&nickname=${param.nickname}" class="w3-bar-item w3-button w3-hover-black">${a }</a>
+      	</c:forEach>
+      	
+        <c:if test="${pageNum >= maxPage }">
+        	<a href="" class="w3-bar-item w3-button">&raquo;</a>
+        </c:if>
+        <c:if test="${pageNum < maxPage }">
+        	<a href="userList?pageNum=${pageNum+1 }&nickname=${param.nickname}" class="w3-bar-item w3-button w3-hover-black">&raquo;</a>
+        </c:if>        
       </div>
     </div>
   </div>

@@ -19,33 +19,45 @@
   	#pwMsg{font-size:10px; position:absolute; bottom:4vh; left:0;}
   </style>
   <script>
-    function inchk(f){
-      if(f.pass.value.trim() === ""){
+    function inchk(f) {
+      if(f.currentPass.value.trim() === ""){
         alert("비밀번호를 입력하세요.");
-        f.pass.focus();
+        f.currentPass.focus();
         return false;
       }
       
-      if(f.chgpass.value.trim() === ""){
+      if(f.pass1.value.trim() === ""){
         alert("변경 비밀번호를 입력하세요");
-        f.chgpass.focus();
+        f.pass1.focus();
         return false;
       }
       
-      if(f.chgpass2.value.trim() === ""){
+      if(f.pass2.value.trim() === ""){
         alert("변경 재입력 비밀번호를 입력하세요");
-        f.chgpass2.focus();
+        f.pass2.focus();
         return false;
       }
       
-      if(f.chgpass.value.trim() !== f.chgpass2.value.trim()){
+      if(f.pass1.value.trim() != f.pass2.value.trim()){
         alert("변경 비밀번호와 변경 재입력 비밀번호가 일치하지 않습니다.");
-        f.chgpass2.value = "";
-        f.chgpass2.focus();
+        f.pass2.value = "";
+        f.pass2.focus();
         return false;
       }
+      
+      if(f.pwchkchk.value != "pwchecked") {
+  		alert("비밀번호를 확인해주세요.");
+  		f.pass2.focus();
+  		return false;
+  	  }
+  	  if(f.corpwchk.value != "pwchecked") {
+  		alert("비밀번호를 확인해주세요.");
+  		f.pass1.focus();
+  		return false;
+  	  }
       return true;
     }
+    
     function correctPwChk() {
 		let password = document.getElementById("pwd").value;
 		let pwPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
@@ -83,8 +95,8 @@
   </script>
 </head>
 <body>
-    <form action="password2">
-    	<input type="hidden" name="email" value="${email }">
+    <form action="password2"  method="post" name="f" onsubmit="return inchk(this)" >
+    	<input type="hidden" name="email" value="${param.email }">
       <div class="container">
         <h2>비밀번호 변경</h2>
         <!-- 현재 비밀번호-->
@@ -93,19 +105,19 @@
           <input type="password" class="form-control mb-4" id="pass" name="currentPass">
         </div>
         <!-- 변경 비밀번호-->
-        <div class="form-group">
+        <div id="cor1" class="form-group">
           <label class="mb-1" for="chgpass">변경 비밀번호</label>
-          <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()">
+          <input type="password" class="form-control mb-4" id="pwd" name="pass1" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()">
           <span id="crPwMsg"></span>
-          <input type="hidden" id="corpwchk" value="pwunchecked">
+          <input type="hidden" name="corpwchk" id="corpwchk" value="pwunchecked">
         </div>
         <!-- 변경 비밀번호 재입력 -->
-        <div class="form-group">
+        <div id="cor2" class="form-group">
           <label class="mb-1" for="chgpass2">변경 비밀번호 재입력</label>
           <input type="password" class="form-control mb-3" id="pwd2" name="pass2" onkeyup="checkPasswords()">
           <br>
           <span id="pwMsg"></span>     
-          <input type="hidden" id="pwchkchk" value="pwunchecked"> 
+          <input type="hidden" name="pwchkchk" id="pwchkchk" value="pwunchecked"> 
         </div>
 
         <div class="form-group">

@@ -17,10 +17,9 @@
   </style>
 </head>
 <body>
-<form action="emailFormchk" name="f">
+<form action="emailPwchk" name="f">
 	<input type="hidden" name="emailchkchk" value="emailunchecked">
-	<input type="hidden" name="email1" value="${email1 }">
-	<input type="hidden" name="email2" value="${email2 }">
+	<input type="hidden" name="email" value="${param.email }">
     <div class="container">
       <h2>이메일 인증</h2>
       <!-- 인증번호-->
@@ -30,13 +29,13 @@
       </div>
       <div class="form-group">
       	<button type="submit" class="btn btn-dark">확인</button>
-      		<c:if test="${able }">
+<!--     		<c:if test="${able }">
       			<script>
         			opener.document.f.emailchkchk.value="emailchecked";        		
         			self.close();
         			opener.document.getElementById("authMsg").innerHTML="인증 되었습니다.";
         	</script>
-      		</c:if>
+      		</c:if>  --> 
  <!--        <c:if test="${able }">
         	<c:if test="${pwchg==pwchgAble && able }">
         		<script>

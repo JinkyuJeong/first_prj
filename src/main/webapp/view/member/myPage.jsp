@@ -84,6 +84,9 @@
   <div class="container mt-3" align="center">
     <a class="btn" href="updateForm?email=${sessionScope.login }">수정</a>
     <a class="btn ms-2" href="deleteForm?email=${sessionScope.login }">회원탈퇴</a>
+    <c:if test="${sessionScope.login =='admin' }">
+    	<a class="btn ms-2" href="userList">회원리스트</a>
+    </c:if>
   </div>
 
 </body>

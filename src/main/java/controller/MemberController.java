@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.oreilly.servlet.MultipartRequest;
 
+import gdu.mskim.MSLogin;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.Member;
@@ -33,6 +35,37 @@ import model.MemberMybatisDao;
 		)
 public class MemberController extends MskimRequestMapping{
 	private MemberMybatisDao dao = new MemberMybatisDao();
+	
+	public String loginCheck(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { // @MSLogin annotation에 있는 거랑 이름 똑같아야함.
+		request.setCharacterEncoding("UTF-8");
+		String email = request.getParameter("email");
+		String login = (String)request.getSession().getAttribute("login");
+		if(login==null || login.equals("")) {
+			request.setAttribute("msg", "로그인하세요.");
+			request.setAttribute("url", "loginForm");
+			return "alert";
+		} else if(!login.equals("admin") && !email.equals(login)) {
+			request.setAttribute("msg" , "본인만 접근 가능합니다.");
+			request.setAttribute("url", "/first_prj/index");
+			return "alert";
+		}
+		return null;
+	}
+	
+	public String loginAdminCheck(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		request.setCharacterEncoding("UTF-8");
+		String login = (String)request.getSession().getAttribute("login");
+		if(login==null || login.equals("")) {
+			request.setAttribute("msg", "로그인하세요.");
+			request.setAttribute("url", "loginForm");
+			return "alert";
+		} else if(!login.equals("admin")) {
+			request.setAttribute("msg" , "관리자만 접근 가능합니다.");
+			request.setAttribute("url", "/first_prj/index");
+			return "alert";
+		}
+		return null;
+	}
 	
 	@RequestMapping("joinForm")
 	public String joinForm(HttpServletRequest request, HttpServletResponse response) {
@@ -66,30 +99,22 @@ public class MemberController extends MskimRequestMapping{
 			return "alert";
 		}				
 	}
-	@RequestMapping("emailForm2")
-	public String emailForm2(HttpServletRequest request, HttpServletResponse response) {
-		request.getSession().setAttribute("fromEmail2", "fromEmail2");
-		return "member/emailForm2";
-	}
-	@RequestMapping("emailForm") //이메일 인증
+	
+	//가입시 이메일 인증
+	@RequestMapping("emailForm")
 	public String emailForm(HttpServletRequest request, HttpServletResponse respnose) {
 		try {
 			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		//비밀번호 찾기 할 때, 가입되어있는지 확인
-		String from = (String)request.getSession().getAttribute("fromEmail2");
-		System.out.println(from);
+		//가입되어있는지 확인
 		String email = request.getParameter("email");
-		boolean able = false;
-		if(from == null) from = "";
-		if(from.equals("fromEmail2")) {			
-			if(dao.selectOneEmail(email)==null) {
-				request.setAttribute("msg", "가입되지 않은 이메일입니다.");
-				request.getSession().removeAttribute("fromEmail2");
+		boolean able = false;		
+		if(dao.selectOneEmail(email)!=null) {
+				request.setAttribute("msg", "이미 가입되어있는 이메일 입니다.");
 				return "self_close";
-			} else {
+		} else {
 				//비밀번호 찾을 때
 				String inputedEmail = request.getParameter("email");
 				//인증번호 랜덤 생성
@@ -139,61 +164,85 @@ public class MemberController extends MskimRequestMapping{
 						e.printStackTrace(); 
 					}
 				request.getSession().setAttribute("randomkey", randomkey);
+				request.getSession().removeAttribute("fromEmail2");
 				return "member/emailForm";
-			}
-		} else {
-		
-		//회원가입 할 때
-		String inputedEmail = request.getParameter("email");
-		//인증번호 랜덤 생성
-	    String randomkey = authCodeMaker();
-		// 발신자 정보
-		String sender = "zxc2289@naver.com";
-		String password = "slfflflakaqh";
-		
-		// 메일 받을 주소
-		String recipient = inputedEmail;
-		System.out.println("inputedEmail : " + inputedEmail);
-		Properties prop = new Properties();
-		   try {
-			   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
-			   prop.load(fis);
-			   prop.put("mail.smtp.user", sender);
-			   System.out.println(prop);
-		   } catch(IOException e) {
-			   e.printStackTrace();
-		   }
-		Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(sender, password);
-			}
-		});
-		MimeMessage msg = new MimeMessage(session);
-			
-			// email 전송
-		try {
-			try {
-					msg.setFrom(new InternetAddress(sender,"SHOERACE 인증센터","UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-
-				// 메일 제목
-				msg.setSubject("이메일 인증");
-				// 메일 내용
-				msg.setText(randomkey);
-				Transport.send(msg);
-				System.out.println("이메일 전송 : " + randomkey);
-
-			} catch (AddressException e) { 
-				e.printStackTrace(); 
-			} catch (MessagingException e) { 
-				e.printStackTrace(); 
-			}
-		request.getSession().setAttribute("randomkey", randomkey);
-		return "member/emailForm";
 		}
+	}
+	
+	//비밀번호 변경 시 이메일 인증
+	@RequestMapping("emailPwForm") 
+	public String emailPwForm(HttpServletRequest request, HttpServletResponse respnose) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		//가입되어있는지 확인
+		String email = request.getParameter("email");
+		String resend = request.getParameter("resend");
+		request.setAttribute("email", email);
+		boolean able = false;		
+		if(email==null || email.equals("")) {
+			return "member/emailPwForm";
+		} else if(dao.selectOneEmail(email)==null) {
+			request.setAttribute("msg", "가입되지 않은 이메일입니다.");
+			request.getSession().removeAttribute("firstTry");
+			return "self_close";
+		} else if(resend != null){ //메일 2번 보내는거 방지
+			return "member/emailPwForm";
+		} else {
+				String inputedEmail = request.getParameter("email");
+				//인증번호 랜덤 생성
+			    String randomkey = authCodeMaker();
+				// 발신자 정보
+				String sender = "zxc2289@naver.com";
+				String password = "slfflflakaqh";
+				
+				// 메일 받을 주소
+				String recipient = inputedEmail;
+				System.out.println("inputedEmail : " + inputedEmail);
+				Properties prop = new Properties();
+				   try {
+					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   prop.load(fis);
+					   prop.put("mail.smtp.user", sender);
+					   System.out.println(prop);
+				   } catch(IOException e) {
+					   e.printStackTrace();
+				   }
+				Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(sender, password);
+					}
+				});
+				MimeMessage msg = new MimeMessage(session);
+					
+					// email 전송
+				try {
+					try {
+							msg.setFrom(new InternetAddress(sender,"SHOERACE 인증센터","UTF-8"));
+						} catch (UnsupportedEncodingException e) {
+							e.printStackTrace();
+						}
+						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+
+						// 메일 제목
+						msg.setSubject("이메일 인증");
+						// 메일 내용
+						msg.setText(randomkey);
+						Transport.send(msg);
+						System.out.println("이메일 전송 : " + randomkey);
+
+					} catch (AddressException e) { 
+						e.printStackTrace(); 
+					} catch (MessagingException e) { 
+						e.printStackTrace(); 
+					}
+				request.getSession().setAttribute("randomkey", randomkey);
+				return "member/emailPwForm";
+		} 
+			
 	}
 	
 	 //인증번호 생성 함수
@@ -226,14 +275,15 @@ public class MemberController extends MskimRequestMapping{
 			return authCode;
 		}
 	   
-	   @RequestMapping("emailchk") //인증번호 확인
-		public String emailchk(HttpServletRequest request, HttpServletResponse respnose) {
+	   @RequestMapping("emailFormchk") //인증번호 확인
+		public String emailFormchk(HttpServletRequest request, HttpServletResponse respnose) {
 		   String autoNum = request.getParameter("autoNum");
 		   String randomkey = (String)request.getSession().getAttribute("randomkey");
 		   String pwchg = request.getParameter("pwchg");
 		   boolean able = true;
 		   if(!autoNum.equals(randomkey)) {
 			   request.setAttribute("msg", "인증번호가 틀립니다.");
+			   request.getSession().removeAttribute("firstTry");
 			   request.setAttribute("url", "emailForm");
 			   return "alert";
 		   } else {
@@ -246,6 +296,21 @@ public class MemberController extends MskimRequestMapping{
 				   request.setAttribute("pwchg", pwchg);
 				   return "member/emailForm";
 			   }			   
+		   }
+	   }
+	   
+	   @RequestMapping("emailPwchk") //인증번호 확인
+		public String emailPwchk(HttpServletRequest request, HttpServletResponse respnose) {
+		   String autoNum = request.getParameter("autoNum");
+		   String randomkey = (String)request.getSession().getAttribute("randomkey");
+		   String email = request.getParameter("email");
+		   boolean able = true;
+		   if(!autoNum.equals(randomkey)) {
+			   request.setAttribute("msg", "인증번호가 틀립니다.");
+			   request.setAttribute("url", "emailPwForm?email="+email+"&resend=1");
+			   return "alert";
+		   } else {			   
+			   return "member/pwChgForm";			   
 		   }
 	   }
 	   
@@ -308,6 +373,7 @@ public class MemberController extends MskimRequestMapping{
 		   return "alert";
 	   }
 	   
+	   @MSLogin("loginCheck")
 	   @RequestMapping("myPage")
 	   public String myPage(HttpServletRequest request, HttpServletResponse response) {
 		   String email = request.getParameter("email");
@@ -322,6 +388,7 @@ public class MemberController extends MskimRequestMapping{
 		   return "redirect:/first_prj/index";
 	   }
 	   
+	   @MSLogin("loginCheck")
 	   @RequestMapping("updateForm")
 	   public String updateForm(HttpServletRequest request, HttpServletResponse response) {
 		   try {
@@ -335,6 +402,7 @@ public class MemberController extends MskimRequestMapping{
 		   return "member/updateForm";
 	   }
 	   
+	   @MSLogin("loginCheck")
 	   @RequestMapping("update")
 	   public String update(HttpServletRequest request, HttpServletResponse response) {
 		   try {
@@ -368,6 +436,13 @@ public class MemberController extends MskimRequestMapping{
 		   }
 	   }
 	   
+	   @RequestMapping("deleteForm")
+	   @MSLogin("loginCheck")
+	   public String deleteForm(HttpServletRequest request, HttpServletResponse response) {  
+		   return "member/deleteForm";
+	   }
+	   
+	   @MSLogin("loginCheck")
 	   @RequestMapping("delete")
 	   public String delete(HttpServletRequest request, HttpServletResponse response) {
 		   String pass = request.getParameter("pass");
@@ -391,7 +466,7 @@ public class MemberController extends MskimRequestMapping{
 		   }
 	   }
 	   
-	   //비밀번호 찾기(loginForm) 
+	   //비밀번호 찾기 loginForm->pwChgForm->
 	   @RequestMapping("password1")
 	   public String password1(HttpServletRequest request, HttpServletResponse response) {
 		   String pass = request.getParameter("pass");	
@@ -406,12 +481,13 @@ public class MemberController extends MskimRequestMapping{
 		   }
 	   }
 	   
-	   //비밀번호 수정 updateForm
+	   //비밀번호 수정 updateForm->pwChgUpdateForm->
 	   @RequestMapping("password2")
 	   public String password2(HttpServletRequest request, HttpServletResponse response) {
-		   String pass = request.getParameter("pass");
+		   String pass = request.getParameter("pass1");
 		   String currentPass = request.getParameter("currentPass");
-		   String email = (String)request.getSession().getAttribute("login");
+		   String email = request.getParameter("email");
+		   System.out.println(email);
 		   Member dbMem = dao.selectOneEmail(email);
 		   if(!dbMem.getPassword().equals(currentPass)) {
 			   request.setAttribute("msg", "비밀번호가 틀립니다.");
@@ -427,5 +503,46 @@ public class MemberController extends MskimRequestMapping{
 				   return "alert";
 			   }
 		   }
+	   }
+	   
+	   @MSLogin("loginAdminCheck")
+	   @RequestMapping("userList")
+	   public String userList(HttpServletRequest request, HttpServletResponse response) {
+		   try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		   request.getSession().setAttribute("pageNum","1");
+		   int pageNum = 1;
+		   try {
+			   pageNum = Integer.parseInt(request.getParameter("pageNum")); 
+		   } catch(NumberFormatException e) {}
+		   
+		   String nickname = request.getParameter("nickname");
+		   int memberCount = dao.memberCount(nickname);
+		   if(nickname==null || nickname.trim().equals("")) {
+			   nickname=null;
+		   }
+		   int limit=10;
+		   int maxPage = (int)((double)memberCount/limit + 0.95);
+		   int startPage = ((int)(pageNum/10.0 + 0.9) -1)*10 +1; 
+		   int endPage = startPage + 9; 
+		   if(endPage > maxPage) endPage = maxPage;
+		   
+		   List<Member> list = dao.list(pageNum, limit, nickname);
+		   
+		   int memberNum = 1 + (pageNum -1)*limit;		   
+		   
+		   request.setAttribute("list", list);
+		   request.setAttribute("memberCount", memberCount);
+		   request.setAttribute("memberNum", memberNum);
+		   request.setAttribute("startPage",startPage);
+		   request.setAttribute("endPage",endPage);
+		   request.setAttribute("maxPage",maxPage);
+		   request.setAttribute("nickname", nickname);
+		   request.setAttribute("pageNum",pageNum);
+		   return "member/userList";
 	   }
 }

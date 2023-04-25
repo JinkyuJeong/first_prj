@@ -34,13 +34,13 @@
 	      return false;
 			}
       	
-      	window.location.href="emailForm?email="+email;
+      	window.location.href="emailPwForm?email="+email;
       	f.submit();
 	  }
 </script>
 </head>
 <body>
-   <form action="emailForm" name="f" id="f" onsubmit="return inchk(this)">
+   <form action="emailPwForm" name="f" id="f" onsubmit="return inchk(this)">
      <div class="container">
      <input type="hidden" name="email" id="email">
      <input type="hidden" name="pwchg" id="pwchg" value="pwchgUnable">

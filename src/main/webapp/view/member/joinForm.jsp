@@ -64,13 +64,15 @@
   		return false;
   	  }
 	  if(f.pwchkchk.value != "pwchecked") {
-		alert("비밀번호를 확인 해주세요.");
+		alert("비밀번호를 확인해주세요.");
+		f.pass2.focus();
 		return false;
 	  }
 	  if(f.corpwchk.value != "pwchecked") {
-			alert("비밀번호를 확인 해주세요.");
-			return false;
-		  }
+		alert("비밀번호를 확인해주세요.");
+		f.pass.focus();
+		return false;
+	  }
 	  if(f.nicknamechkchk.value != "nicknamechecked") {
 		alert("닉네임 중복검사를 해주세요.");
 		return false;
@@ -186,14 +188,14 @@
           <label class="mb-1" for="pwd">비밀번호</label>
           <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
           <span id="crPwMsg"></span>
-          <input type="hidden" id="corpwchk" value="pwunchecked"> 
+          <input type="hidden" name="corpwchk" id="corpwchk" value="pwunchecked"> 
         </div>
         <!-- 비밀번호 재입력 -->
         <div id="cor2" class="form-group">
           <label class="mb-1" for="pwd2">비밀번호 재입력</label>
           <input type="password" class="form-control mb-4" id="pwd2" name="pass2" onkeyup="checkPasswords()">
           <span id="pwMsg"></span>     
-          <input type="hidden" id="pwchkchk" value="pwunchecked"> 
+          <input type="hidden" name="pwchkchk" id="pwchkchk" value="pwunchecked"> 
           
         </div>
         <!-- 닉네임 -->
