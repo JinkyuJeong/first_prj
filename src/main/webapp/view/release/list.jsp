@@ -35,7 +35,7 @@
 		
 			<div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
 				<div id="head">
-					<p id="msg"><i class="fa fa-info-circle"></i> 해당 이미지를 클릭하면 발매정보 사이트의 상세정보로 이동합니다.</p>
+					<p id="msg"><i class="fa fa-info-circle"></i> 해당 이미지를 클릭하면 해당 상품의 상세정보를 볼 수 있습니다.</p>
 					<form class="table-form">
 		        <select id="sel" class="form-select" name="t">
 		          <option ${(param.t == "name") ? "selected" : ""} value="name">상품명</option>
@@ -55,8 +55,8 @@
 				  <c:forEach var="rc" items="${list }" begin="${(pageNum-1)*4 }" end="${pageNum*4-1 }" varStatus="st">
 				    <div class="w3-quarter">
 				    	<h1>${rc.agentsite }</h1>
-				      <a href="https://www.luck-d.com/release/product/${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
-				      <a href="https://www.luck-d.com/release/product/${rc.no }"><h3>${rc.productName }</h3></a>
+				      <a href="detail?no=${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
+				      <a href="detail?no=${rc.no }"><h3>${rc.productName }</h3></a>
 				      
 				      <c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
 				      
@@ -75,8 +75,8 @@
 				  <c:forEach var="rc" items="${list }" begin="${(pageNum-1)*4+4 }" end="${pageNum*4-1+4 }" varStatus="st">
 				    <div class="w3-quarter">
 				    	<h1>${rc.agentsite }</h1>
-				      <a href="https://www.luck-d.com/release/product/${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
-				      <a href="https://www.luck-d.com/release/product/${rc.no }"><h3>${rc.productName }</h3></a>
+				      <a href="detail?no=${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
+				      <a href="detail?no=${rc.no }"><h3>${rc.productName }</h3></a>
 				     	<c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
 				      
 				      <p>

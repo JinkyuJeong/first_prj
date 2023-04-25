@@ -17,6 +17,7 @@ import org.jsoup.select.Elements;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.ReleaseCard;
+import model.ReleaseDetail;
 
 @WebServlet(urlPatterns = {"/release/*"},
 initParams = {@WebInitParam(name="view", value="/view/")}
@@ -98,5 +99,67 @@ public class ReleaseController extends MskimRequestMapping{
 		request.setAttribute("endPage", endPage);
 
 		return "release/list";
+	}
+	
+	@RequestMapping("detail")
+	public String detail(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		String url = "https://www.luck-d.com/release/product/"+no+"/"; // 크롤링하고자 하는 웹페이지의 URL
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(url).get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ReleaseDetail rd = new ReleaseDetail();
+		
+		// 브랜드 정보 추출
+        Element brand = doc.selectFirst("span.text.cursor-pointer");
+        rd.setBrand(brand.text());
+
+        // 제품 정보 추출
+        Element productInfo = doc.selectFirst("div.product_info");
+
+        Element pageTitle = productInfo.selectFirst("h1.page_title");
+        if(pageTitle != null) 
+        	rd.setTitle( pageTitle.text());
+
+        Element subTitle = productInfo.selectFirst("h2.sub_title");
+        if(subTitle != null) 
+        	rd.setSubTitle(subTitle.text());
+
+        Element productCode = productInfo.selectFirst("li:has(span.title:contains(제품 코드))  span.text");
+        if(productCode != null) 
+        	rd.setCode(productCode.text());
+
+        Element productColor = productInfo.selectFirst("li:has(span.title:contains(제품 색상))  span.text");
+        if(productColor != null) 
+        	rd.setColor(productColor.text());
+
+        Element releaseDate = productInfo.selectFirst("li:has(span.title:contains(발매일))  span.text");
+        if(releaseDate != null)
+        	rd.setReleaseDate(releaseDate.text());
+
+        Element price = productInfo.selectFirst("li:has(span.title:contains(발매가))  span.text");
+        if(price != null)
+        	rd.setPrice(price.text());
+
+        Element productDesc = productInfo.selectFirst("li:has(span.title:contains(제품 설명)) div");
+        if(productDesc != null)
+        	rd.setInfo(productDesc.text());
+        
+        Element productimage= doc.selectFirst(".product_detail");
+        Elements images = productimage.select("img");
+        List<String> list = new ArrayList<>();
+        for(Element image : images) {
+        	if(!image.attr("src").contains("kream") && !image.attr("src").contains("soldout"))
+        		list.add(image.attr("src"));
+        }
+        
+        request.setAttribute("rd", rd);
+        request.setAttribute("list", list);
+		
+		return "release/detail";
 	}
 }
