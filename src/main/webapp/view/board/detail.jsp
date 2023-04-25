@@ -184,7 +184,7 @@
             <tbody>
             
             <c:if test="${commCnt <= 0 }">
-            	<tr><td>등록된 댓글이 없습니다.</td></tr>
+            	<tr align="center"><td>등록된 댓글이 없습니다.</td></tr>
             </c:if>
             
             <c:forEach var="comm" items="${commList }">
