@@ -30,7 +30,7 @@
   <div class="w3-container text-center" id="apartment">
   	<c:forEach var="img" items="${list}" varStatus="st">
 	    <div class="w3-display-container mySlides" id="prodimg">
-	    <img src="${img}" style="width:60%;height: 450px;margin-bottom:-6px">
+	    <img src="${img}" style="width:60%;height: 500px;margin-bottom:-6px">
 	      <div class="w3-display-bottomleft w3-container w3-black">
 	      </div>
     	</div>
@@ -43,7 +43,7 @@
   <div class="w3-row-padding w3-section">
   	<c:forEach var="img" items="${list}" varStatus="st">
 	    <div class="w3-col s3">
-	      <img class="demo w3-opacity w3-hover-opacity-off" src="${img}" style="width:70%;height: 110px;cursor:pointer" onclick="currentDiv('${st.index+1}')">
+	      <img class="demo w3-opacity w3-hover-opacity-off" src="${img}" style="width:100%;height: 170px;cursor:pointer" onclick="currentDiv('${st.index+1}')">
 	    </div>
     </c:forEach>
     

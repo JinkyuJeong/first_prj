@@ -38,7 +38,7 @@
 	<form action="event" method="post">
 	<div class="container">
     <div id="jumbo" class="w3-container w3-padding-32 w3-center"> 
-      <h3 class="mt-5">당첨 상품 : ${name}</h3>
+      <h3 class="mt-3">당첨 상품 : 나이키x사카이 베이퍼와플</h3>
       <div class="mb-3">
         <img src="${path }/images/product.jpg" width="450" height="350" id="pic"><br>
         <c:if test="${sessionScope.login == 'admin' }">
@@ -46,7 +46,7 @@
         </c:if>
       </div>
       <div>
-        <h4 class="fw-bold mb-3">응모기간 : <span>${beginDay } ~ ${endDay }</span></h4>
+        <h4 class="fw-bold mb-3">응모기간 : <span>2023/04/29 ~ 2023/05/12</span></h4>
         <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 				 	<font size="6">응모하기</font>
 				</a>
