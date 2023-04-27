@@ -16,12 +16,9 @@
 	<div class="container">
   <!-- Push down content on small screens -->
   <div class="w3-hide-large" style="margin-top:80px"></div>
-  
-  <h4 class="text-center mt-5"><strong>${rd.title }</strong><span>(${rd.subTitle })</span></h4>
-
   <!-- Slideshow Header -->
   <div class="w3-container text-center" id="apartment">
-  	<c:forEach var="img" items="${list}" varStatus="st">
+  	<c:forEach var="img" items="${imgList}" varStatus="st">
 	    <div class="w3-display-container mySlides" id="prodimg">
 	    <img src="${img}" style="width:60%;height: 500px;margin-bottom:-6px">
 	      <div class="w3-display-bottomleft w3-container w3-black">
@@ -36,7 +33,7 @@
 	<p style="color:blue;" class="mb-3 mt-3"><i class="fa fa-info-circle"></i> 아래 이미지들을 클릭하면 확대하여 볼 수 있습니다.</p>
   <!-- 밑에 사진들 -->
   <div class="w3-row-padding w3-section">
-  	<c:forEach var="img" items="${list}" varStatus="st">
+  	<c:forEach var="img" items="${imgList}" varStatus="st">
 	    <div class="w3-col s1">
 	      <img class="demo w3-opacity w3-hover-opacity-off" src="${img}" style="width:80%;height: 60px;cursor:pointer" onclick="currentDiv('${st.index+1}')">
 	    </div>
@@ -44,24 +41,16 @@
     
   </div>
 
-  <div class="w3-container" id="info">
-    
-    <p></p>
-    <div class="w3-row w3-large">
-      <div class="w3-col s6" style="font-size:1.5em;">
-        <p><i id="brand-icon" class="fa fa-nike"></i> 브랜드 : ${rd.brand }</p><!-- 브랜드 -->
-        <p><i class="fa fa-barcode"></i> 제품코드 : ${rd.code }</p> <!-- 제품 코드 -->
-        <p><i class="fa fa-paint-brush"></i> 컬러 : ${rd.color }</p> <!-- 제품 색상 -->
-        <p><i class="fa fa-calendar"></i> 발매일 : ${rd.releaseDate }</p> <!-- 발매일 -->
-        <p>가격 : ${rd.price }</p> <!-- 발매가 -->
-      </div>
-    </div>
-    <hr>
-    
-    <h4><strong>제품 소개</strong></h4>
-    <p>${rd.info }</p>
-  </div>
-  <hr>
+   <div class="w3-container" id="info">
+	    <h3 class="text-left mt-5"><strong>${nd.title }</strong></h3>
+	    <hr>
+	    
+	    <h4><strong>내용</strong></h4>
+	    <p>${nd.content }</p>
+  	</div>
+  	
+  	<hr>
+  	
     <div class="text-center"><a type="button" class="btn btn-dark" href="list">목록으로</a></div>
 
 <!-- End page content -->

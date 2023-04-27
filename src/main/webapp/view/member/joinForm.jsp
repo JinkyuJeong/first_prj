@@ -186,7 +186,7 @@
         <!-- 비밀번호-->
         <div id="cor1" class="form-group">
           <label class="mb-1" for="pwd">비밀번호</label>
-          <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
+          <input type="password" class="form-control mb-4 is-invalid" id="pwd" name="pass" placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
           <span id="crPwMsg"></span>
           <input type="hidden" name="corpwchk" id="corpwchk" value="pwunchecked"> 
         </div>

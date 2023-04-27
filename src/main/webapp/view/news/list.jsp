@@ -64,7 +64,7 @@ h3{font-size : 30px}
 		        <div class="item text-center">
 		        	<img src="${list[0].src }" style="width:100%">
 		        	<h3>${list[0].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[0].no}'">바로가기</button>
 		        </div>
 	        </div>
 	        
@@ -72,7 +72,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[3].src }" style="width:100%">
 		        	<h3>${list[3].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[3].no}'">바로가기</button>
 		        </div>
 	        </div>
 	        
@@ -80,7 +80,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[6].src }" style="width:100%">
 		        	<h3>${list[6].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[6].no}'">바로가기</button>
 		        </div>
 	        </div>
 	      </div>
@@ -90,7 +90,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[1].src }" style="width:100%">
 		        	<h3>${list[1].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[1].no}'">바로가기</button>
 		        </div>
 	        </div>
 	        
@@ -98,7 +98,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[4].src }" style="width:100%">
 		        	<h3>${list[4].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[4].no}'">바로가기</button>
 		        </div>
 	        </div>
 	        
@@ -106,7 +106,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[7].src }" style="width:100%">
 		        	<h3>${list[7].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[7].no}'">바로가기</button>
 		        </div>
 	        </div>
 	      </div>
@@ -116,7 +116,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[2].src }" style="width:100%">
 		        	<h3>${list[2].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[2].no}'">바로가기</button>
 		        </div>
 	        </div>
 	        
@@ -124,7 +124,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[5].src }" style="width:100%">
 		        	<h3>${list[5].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[5].no}'">바로가기</button>
 		        </div>
 	        </div>
 	        
@@ -132,7 +132,7 @@ h3{font-size : 30px}
 		        <div class="item" >
 		        	<img src="${list[8].src }" style="width:100%">
 		        	<h3>${list[8].alt }</h3>
-	  					<button class="btn btn-dark">바로가기</button>
+	  					<button class="btn btn-dark" onclick="javascript:location.href='detail?no=${list[8].no}'">바로가기</button>
 		        </div>
 	        </div>
 	      </div>

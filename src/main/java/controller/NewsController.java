@@ -17,6 +17,7 @@ import org.jsoup.select.Elements;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.NewsCard;
+import model.NewsDetail;
 
 @WebServlet(urlPatterns = {"/news/*"},
 initParams = {@WebInitParam(name="view", value="/view/")}
@@ -52,5 +53,39 @@ public class NewsController extends MskimRequestMapping{
         request.setAttribute("list", list);
         
 		return "news/list";
+	}
+	
+	@RequestMapping("detail")
+	public String detail(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		String url = "https://www.luck-d.com/agit/news/"+no+"/";
+        Document doc = null;
+		try {
+			doc = Jsoup.connect(url).get();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		NewsDetail nd = new NewsDetail();
+		List<String> imgList = new ArrayList<>();
+        // 페이지 제목 추출
+        String pageTitle = doc.select("h1.page_title").text();
+        nd.setTitle(pageTitle);
+        // 게시물 내용 추출
+        Element postContent = doc.select(".post_contents_layer").first();
+        nd.setContent(postContent.text());
+        // 이미지 src 속성 추출
+        Elements images = postContent.select("img");
+        for (Element img : images) {
+            String imgUrl = img.attr("src");
+            imgList.add(imgUrl);
+        }
+		
+        request.setAttribute("nd", nd);
+        request.setAttribute("imgList", imgList);
+        request.setAttribute("imgCnt", imgList.size());
+        
+		return "news/detail";
 	}
 }
