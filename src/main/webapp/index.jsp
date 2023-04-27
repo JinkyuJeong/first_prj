@@ -13,7 +13,7 @@ body {font-size: 16px;}
 .mySlides .w3-image {
   min-width: 500px;
   width: 100%;
-  height: 600px; /* 이미지 높이 고정 */
+  height: 1000px; /* 이미지 높이 고정 */
   object-fit: cover; /* 이미지 비율 유지 */
 }
 	.jumbo {
@@ -48,7 +48,7 @@ body {font-size: 16px;}
 </style>
 </head>
 <body>
-<div class="w3-content w3-black" style="max-width:2000px;margin: -30px -20px 0;min-height: 100vh;">
+<div class="w3-content w3-black" style="max-width:2000px;margin: -30px -20px 0;height: 100vh;">
 <!-- Header with Slideshow -->
 <header class="w3-display-container w3-center">
   <div class="mySlides w3-animate-opacity">
@@ -73,7 +73,7 @@ body {font-size: 16px;}
 	  <div class="jumbo">
 	    <h3 class="display-4 fw-bold mb-4">스니커 소식</h3>
 	    <p class="mb-4">스니커 소식들을 접해봅니다.</p>
-	    <p><a class="btn btn-primary btn-lg" href="${path}/release/list" role="button">바로가기</a></p>
+	    <p><a class="btn btn-primary btn-lg" href="${path}/news/list" role="button">바로가기</a></p>
 	  </div>
 	  <img class="w3-image" src="./images/jumbo2.jpg" alt="Image 3" style="min-width:500px" width="1800" height="100%">
 	</div>	
@@ -82,7 +82,7 @@ body {font-size: 16px;}
 	  <div class="jumbo">
 	    <h3 class="display-4 fw-bold mb-4">EVENT</h3>
 	    <p class="mb-4">슈레이스에서 주최하는 응모이벤트!</p>
-	    <p><a class="btn btn-primary btn-lg" href="#" role="button">바로가기</a></p>
+	    <p><a class="btn btn-primary btn-lg" href="${path }/event/eventForm" role="button">바로가기</a></p>
 	  </div>
 	  <img class="w3-image" src="./images/jumbo3.jpg" alt="Image 1" style="min-width:500px" width="1800" height="100%">
 	</div>
@@ -116,7 +116,7 @@ function plusDivs(n) {
 	}
 setInterval(function() {
 	  $(".w3-button.w3-black.w3-display-right").click();
-	}, 3000);
+	}, 4500);
 </script>
 </body>
 </html>

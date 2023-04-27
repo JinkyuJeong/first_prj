@@ -107,9 +107,9 @@
 <!-- Footer -->
 <footer id="footer" class="w3-row-padding w3-padding-32 text-center">
   <div class="w3-third">
-    <h3><i class="fa fa-map-marker"></i> 구디아카데미 GDJ62기 2조</h3>
-    <h3><i class="fa fa-envelope"></i> rritjy@naver.com</h3>
-    <h3><i class="fa fa-instagram"></i> @jeongjingyu63</h3>
+    <h3><i class="fa fa-map-marker"></i> 구디아카데미 GDJ62기 CNT2조 정진규, 강수빈</h3>
+    <h3><i class="fa fa-envelope"></i> rritjy@naver.com | zxc2289@naver.com</h3>
+    <h3><i class="fa fa-instagram"></i> @jeongjingyu63 | @sub__b.in</h3>
   </div>
 </footer>
 
