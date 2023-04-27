@@ -12,8 +12,8 @@ body,h1,h2,h3,h4,h5 {font-family: 'Dongle', sans-serif;}
 body {font-size: 16px;}
 .mySlides .w3-image {
   min-width: 500px;
-  width: 100%;
-  height: 1000px; /* 이미지 높이 고정 */
+  width: 100vw;
+  height: 100vh; /* 이미지 높이 고정 */
   object-fit: cover; /* 이미지 비율 유지 */
 }
 	.jumbo {

@@ -33,6 +33,7 @@ initParams = {@WebInitParam(name="view", value="/view/")}
 public class BoardController extends MskimRequestMapping{
 	private BoardMybatisDao dao = new BoardMybatisDao();
 	private CommentMybatisDao cDao = new CommentMybatisDao();
+	private MemberMybatisDao mDao = new MemberMybatisDao();
 	private static String boardName(String boardType) {
 		String boardName = "";
 		switch (boardType){
@@ -115,6 +116,8 @@ public class BoardController extends MskimRequestMapping{
 		String login = (String)request.getSession().getAttribute("login");
 		if(boardType == null || boardType.equals("")) boardType = "1";
 		request.getSession().setAttribute("boardType", boardType);
+		Member mem = mDao.selectOneEmail(login);
+		request.getSession().setAttribute("nickname", mem.getNickname());
 		
 		if(login == null) {	// 로그인 상태가 아닐 때
 			request.setAttribute("msg", "비회원은 게시글 작성이 불가능합니다.");

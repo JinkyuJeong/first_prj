@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>발매 뉴스</title>
+<title>스니커 소식</title>
 <style type="text/css">
 h3, .btn.btn-dark{font-family: 'Dongle', sans-serif;}
 h3{font-size : 30px}
