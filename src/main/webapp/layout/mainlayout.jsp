@@ -91,13 +91,12 @@
 	    <div class="w3-right w3-padding-16"><a href="${path}/member/joinForm">회원가입</a></div>
 	    <div class="w3-right w3-padding-16"><a href="${path}/member/loginForm">로그인</a>&nbsp;&nbsp;</div>
     </c:if>
-    <div id="center" class="w3-center w3-padding-16"><a href="${path}"><img src="${path}/images/mainLogo.JPG" width="120px" height="40px"></a></div>
+    <div class="w3-center w3-padding-16 text-center">&nbsp;&nbsp;&nbsp;&nbsp;<a href="${path}"><img src="${path}/images/mainLogo.JPG" width="130px" height="40px"></a></div>
   </div>
 </div>
   
 
 <div class="w3-main w3-content w3-padding" style="max-width:120vw;margin-top:50px;min-height:100vh;">
-  <hr id="about">
 
   <sitemesh:write property='body'/>
   
