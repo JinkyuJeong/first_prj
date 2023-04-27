@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="path" value="${pageContext.request.contextPath}"/>
+<c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,7 +45,6 @@
 
     <div style="display: flex; justify-content: space-between; margin-bottom: -7px;">
       <div>회원 수:${memberCount }</div>
-
       <form action="userList" class="table-form" name="f">
       	<input type="hidden" name="pageNum" value="1">
         <div class="input-group mb-3 ms-1">
@@ -54,9 +53,8 @@
         </div>
       </form>
     </div>
-
+    
     <table class="table table-hover text-center">
-
       <thead>
         <tr class="table-dark">
           <th>no</th>
@@ -76,11 +74,11 @@
           
           <td scope="row">${m.emailaddress }</td>
           <c:if test="${m.picture=='basic-profile.JPG' }">
-            <td><img src="${path }/images/basic-profile.JPG" id="profile"></td>
-           </c:if>
-          <c:if test="${m.picture != 'basic-profile.JPG' }">
-            <td><img src="/first_prj/upload/member/${m.picture}"  id="profile"></td>
-           </c:if>
+      		<td><img src="${path }/images/basic-profile.JPG" id="profile"></td>
+      	  </c:if>
+     	  <c:if test="${m.picture != 'basic-profile.JPG' }">
+      		<td><img src="/first_prj/upload/member/${m.picture}"  id="profile"></td>
+      	  </c:if>    
           <td><a href="myPage?email=${m.emailaddress }">${m.nickname }</a></td>
           <td><fmt:formatDate value="${m.regdate}" pattern="yyyy년 MM월 dd일"/></td>
           <td>
@@ -91,7 +89,6 @@
         </tr>
 		</c:forEach>
       </tbody>
-
     </table>
     <!-- 페이징 -->
     <div class="w3-center w3-padding-32">

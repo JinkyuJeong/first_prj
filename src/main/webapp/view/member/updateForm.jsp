@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원정보수정</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <style type="text/css">
 	#title{
     font-family: 'Dongle', sans-serif; 
@@ -40,6 +41,11 @@
 	}
 	
 	function win_passChg(){
+		if(document.f.pass.value.trim() === "") {
+			alert("비밀번호를 입력하세요")
+		    f.pass.focus();
+		    return false;
+		}
 		let email1 = document.f.email1.value;
 		let email2 = document.f.email2.value;
 		let email = email1+"@"+email2;
@@ -62,6 +68,15 @@
 		const op = "width=400, height=250, left=50, top=150";
 		open("nickChk?nickname="+nickname,"",op);
 	}
+	$(function() {
+		$("#update").click(function() {
+			if(f.pass.value.trim() === "") {
+				alert("비밀번호를 입력하세요")
+			    f.pass.focus();
+			    return false;
+			}
+		})
+	})
 </script>
 </head>
 <body>

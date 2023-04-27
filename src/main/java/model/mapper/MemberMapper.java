@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import model.Board;
 import model.Member;
 
 public interface MemberMapper {
@@ -42,5 +43,17 @@ public interface MemberMapper {
 			+"<if test='nickname != null'> where nickname like '%${value}%'</if>"
 			+"</script>")
 	int memberCount(String nickname);
+
+	@Select("select count(*) from board where nickname=#{value}")
+	int myBoardCnt(String nickname);
+
+	@Select("select count(*) from comment where nickname=#{value}")
+	int myCommCnt(String nickname);
+
+	@Select("select * from board where nickname=#{nickname} limit #{start},#{limit}")
+	List<Board> boardList(Map<String, Object> map);
+
+	@Select("select * from comment where nickname=#{nickname} limit #{start},#{limit}")
+	List<Board> commList(Map<String, Object> map);
 
 }

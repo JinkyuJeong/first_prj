@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,11 +36,11 @@
 
 	<!-- About Section -->
   <div class="container">
-    <h1 id="title">내가 쓴 게시글</h1>
+    <h1 id="title"><a href="myBoardList?email=${email }&nickname=${nickname}">내가 쓴 게시글</a></h1>
 
-		<h3>내가 쓴 게시글 <span id="cnt">0</span>개</h3>
+		<h3>내가 쓴 게시글 <span id="cnt">${myBoardCnt }</span>개</h3>
     <table class="table table-hover">
-
+		
       <thead>
         <tr class="table-dark">
           <th scope="col">번호</th>
@@ -50,27 +52,46 @@
       </thead>
 
       <tbody>
+      <c:if test="${myBoardCnt==0 }">
+   			<tr>
+      			<td colspan="5"> 등록된 게시글이 없습니다.</td>
+   			</tr>
+   		</c:if>
+   	   <c:if test="${myBoardCnt != 0 }">
+      	<c:forEach var="b" items="${boardList }">
         <tr>
-          <th class="fw-bold"><span class="blue">1</span></th>
-          <td><a href="">찍찍찍찍</a></td>
-          <td>2023-04-16</td>
-          <td>100</td>
-          <td>10</td>
+          <th class="fw-bold"><span class="blue">${myBoardNum }</span></th>
+          <c:set var="myBoardNum" value="${myBoardNum+1 }" />
+          <td><a href="/first_prj/board/detail?no=${b.no }">${b.title }</a></td>
+          <td><fmt:formatDate value="${b.regdate}" pattern="yyyy년 MM월 dd일"/></td>
+          <td>${b.hit }</td>
+          <td>${b.recommend }</td>
         </tr>
+        </c:forEach>
+        </c:if>
       </tbody>
-
     </table>
 
     <!-- Pagination -->
     <div class="w3-center w3-padding-32">
       <div class="w3-bar">
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">&laquo;</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">1</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">5</a>
-        <a href="#" class="w3-bar-item w3-button w3-hover-black">&raquo;</a>
+        <c:if test="${pageNum <=1}">
+       		<a href="" class="w3-bar-item w3-button">&laquo;</a>
+      	</c:if>
+      	<c:if test="${pageNum >1}">
+      		<a href="myBoardList?pageNum=${pageNum-1 }&nickname=${param.nickname}" class="w3-bar-item w3-button w3-hover-black">&laquo;</a>
+      	</c:if>
+      	
+      	<c:forEach var="a" begin="${startPage }" end="${endPage }">
+      			<a href="myBoardList?pageNum=${a }&nickname=${param.nickname}" class="w3-bar-item w3-button w3-hover-black">${a }</a>
+      	</c:forEach>
+      	
+        <c:if test="${pageNum >= maxPage }">
+        	<a href="" class="w3-bar-item w3-button">&raquo;</a>
+        </c:if>
+        <c:if test="${pageNum < maxPage }">
+        	<a href="myBoardList?pageNum=${pageNum+1 }&nickname=${param.nickname}" class="w3-bar-item w3-button w3-hover-black">&raquo;</a>
+        </c:if>
       </div>
     </div>
   </div>

@@ -121,4 +121,62 @@ public class MemberMybatisDao {
 		}
 		return 0;
 	}
+
+	public int myBoardCnt(String nickname) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			int count = session.getMapper(cls).myBoardCnt(nickname);
+			return count;
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		return 0;
+	}
+
+	public int myCommCnt(String nickname) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			int count = session.getMapper(cls).myCommCnt(nickname);
+			return count;
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		return 0;
+	}
+
+	public List<Board> boardList(int pageNum, int limit, String nickname) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			map.clear();
+			map.put("start", (pageNum-1)*limit);
+			map.put("limit", limit);
+			map.put("nickname", nickname);
+			return session.getMapper(cls).boardList(map);				
+		} catch(Exception e) {
+	   		 e.printStackTrace();
+	   	 } finally {
+	   		 MybatisConnection.close(session);
+	   	 }
+	   	 return null;
+	}
+
+	public List<Board> commList(int pageNum, int limit, String nickname) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			map.clear();
+			map.put("start", (pageNum-1)*limit);
+			map.put("limit", limit);
+			map.put("nickname", nickname);
+			return session.getMapper(cls).commList(map);				
+		} catch(Exception e) {
+	   		 e.printStackTrace();
+	   	 } finally {
+	   		 MybatisConnection.close(session);
+	   	 }
+	   	 return null;
+	}
 }

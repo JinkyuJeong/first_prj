@@ -26,6 +26,7 @@ import com.oreilly.servlet.MultipartRequest;
 import gdu.mskim.MSLogin;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
+import model.Board;
 import model.Member;
 import model.MemberMybatisDao;
 
@@ -128,7 +129,7 @@ public class MemberController extends MskimRequestMapping{
 				System.out.println("inputedEmail : " + inputedEmail);
 				Properties prop = new Properties();
 				   try {
-					   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 					   prop.load(fis);
 					   prop.put("mail.smtp.user", sender);
 					   System.out.println(prop);
@@ -378,7 +379,12 @@ public class MemberController extends MskimRequestMapping{
 	   public String myPage(HttpServletRequest request, HttpServletResponse response) {
 		   String email = request.getParameter("email");
 		   Member mem = dao.selectOneEmail(email);
+		   String nickname = mem.getNickname();
+		   int myBoardCnt = dao.myBoardCnt(nickname);
+		   int myCommCnt = dao.myCommCnt(nickname);
 		   request.setAttribute("mem", mem);
+		   request.setAttribute("myBoardCnt", myBoardCnt);
+		   request.setAttribute("myCommCnt", myCommCnt);
 		   return "member/myPage";
 	   }
 	   
@@ -439,16 +445,29 @@ public class MemberController extends MskimRequestMapping{
 	   @RequestMapping("deleteForm")
 	   @MSLogin("loginCheck")
 	   public String deleteForm(HttpServletRequest request, HttpServletResponse response) {  
+		   String login = (String)request.getSession().getAttribute("login");
+		   String email = request.getParameter("email");
+		   if(login.equals("admin") || email.equals("admin")) {
+			   request.setAttribute("msg", "관리자는 탈퇴가 불가능합니다.");
+			   request.setAttribute("url", "myPage?email="+email);
+			   return "alert";
+		   }
 		   return "member/deleteForm";
 	   }
 	   
 	   @MSLogin("loginCheck")
 	   @RequestMapping("delete")
 	   public String delete(HttpServletRequest request, HttpServletResponse response) {
+		   String login = (String)request.getSession().getAttribute("login");		   
 		   String pass = request.getParameter("pass");
 		   String email = request.getParameter("email");
 		   System.out.println(email);
 		   Member dbMem = dao.selectOneEmail(email);
+		   if(login.equals("admin") || email.equals("admin")) {
+			   request.setAttribute("msg", "관리자는 탈퇴가 불가능합니다.");
+			   request.setAttribute("url", "myPage?email="+email);
+			   return "alert";
+		   }
 		   if(!dbMem.getPassword().equals(pass)) {
 			   request.setAttribute("msg", "비밀번호가 다릅니다.");
 			   request.setAttribute("url", "deleteForm?email="+email);
@@ -544,5 +563,88 @@ public class MemberController extends MskimRequestMapping{
 		   request.setAttribute("nickname", nickname);
 		   request.setAttribute("pageNum",pageNum);
 		   return "member/userList";
+	   }
+	   
+	   @MSLogin("loginCheck")
+	   @RequestMapping("myBoardList")
+	   public String myBoardList(HttpServletRequest request, HttpServletResponse response) {
+		   try {
+				request.setCharacterEncoding("UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		   String email = request.getParameter("email");
+		   String nickname = request.getParameter("nickname");
+		   
+		   int myBoardCnt = dao.myBoardCnt(nickname);
+		   
+		   request.getSession().setAttribute("pageNum","1");
+		   int pageNum = 1;
+		   try {
+				 pageNum = Integer.parseInt(request.getParameter("pageNum")); 
+		   } catch(NumberFormatException e) {}
+		   int limit=10;
+		   int maxPage = (int)((double)myBoardCnt/limit + 0.95);
+		   int startPage = ((int)(pageNum/10.0 + 0.9) -1)*10 +1; 
+		   int endPage = startPage + 9; 
+		   if(endPage > maxPage) endPage = maxPage;
+		   
+		   int myBoardNum = 1 + (pageNum -1)*limit;
+		   
+		   List<Board> boardList = dao.boardList(pageNum, limit, nickname);
+		   
+		   request.setAttribute("boardList", boardList);
+		   request.setAttribute("myBoardCnt", myBoardCnt);
+		   request.setAttribute("startPage",startPage);
+		   request.setAttribute("endPage",endPage);
+		   request.setAttribute("maxPage",maxPage);
+		   request.setAttribute("myBoardNum", myBoardNum);
+		   request.setAttribute("pageNum",pageNum);
+		   request.setAttribute("nickname", nickname);
+		   request.setAttribute("email", email);
+		   return "member/myBoardList";
+	   }
+	   
+	   @MSLogin("loginCheck")
+	   @RequestMapping("myCommList")
+	   public String myCommList(HttpServletRequest request, HttpServletResponse response) {
+		   try {
+				request.setCharacterEncoding("UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		   String email = request.getParameter("email");
+		   String nickname = request.getParameter("nickname");
+		   
+		   int myCommCnt = dao.myCommCnt(nickname);
+		   
+		   request.getSession().setAttribute("pageNum","1");
+		   int pageNum = 1;
+		   try {
+			   pageNum = Integer.parseInt(request.getParameter("pageNum")); 
+		   } catch(NumberFormatException e) {}
+		
+		   int limit=10;
+		   int maxPage = (int)((double)myCommCnt/limit + 0.95);
+		   int startPage = ((int)(pageNum/10.0 + 0.9) -1)*10 +1; 
+		   int endPage = startPage + 9; 
+		   if(endPage > maxPage) endPage = maxPage;
+		   
+		   int myCommNum = 1 + (pageNum -1)*limit;
+		   
+		   List<Board> commList = dao.commList(pageNum, limit, nickname);
+		   
+		   request.setAttribute("commList", commList);
+		   request.setAttribute("myCommCnt", myCommCnt);
+		   request.setAttribute("startPage",startPage);
+		   request.setAttribute("endPage",endPage);
+		   request.setAttribute("maxPage",maxPage);
+		   request.setAttribute("myCommNum", myCommNum);
+		   request.setAttribute("pageNum",pageNum);
+		   request.setAttribute("nickname", nickname);
+		   request.setAttribute("email", email);
+		   return "member/myCommList";
 	   }
 }

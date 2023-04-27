@@ -202,7 +202,7 @@
         <div class="form-group">
           <label class="mb-1" for="nickname">닉네임</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="nickname" id="nickname" placeholder="최대 8자, 부적절한 닉네임 사용금지">
+            <input type="text" class="form-control" name="nickname" id="nickname" placeholder="최대 7자, 부적절한 닉네임 사용금지" maxlength="7">
             <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="win_nickChk()">중복검사</button>
             <input type="hidden" id="nicknamechkchk" value="nicknameunchecked">
           </div>
