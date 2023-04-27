@@ -2,6 +2,7 @@ package model.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -28,5 +29,11 @@ public interface CommentMapper {
 
 	@Update("update comment set grpStep = grpStep +1 where grp=#{grp} and grpStep >#{grpStep}")
 	void grpStepAdd(@Param("grp")int grp,@Param("grp") int grpStep);
+
+	@Select("select * from comment where no=#{no} and seq=#{seq}")
+	Comment selectOne(@Param("no")int no, @Param("seq")int seq);
+
+	@Delete("delete from comment where no=#{no} and seq=#{seq}")
+	int delete(@Param("no")int no, @Param("seq")int seq);
 	
 }

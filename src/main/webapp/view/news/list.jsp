@@ -10,7 +10,6 @@
 h3, .btn.btn-dark{font-family: 'Dongle', sans-serif;}
 h3{font-size : 30px}
 .btn{font-size : 20px}
-	.w3-third img{margin-bottom: -6px;  cursor: pointer}
 .item:hover::before {
   content: "";
   position: absolute;
@@ -54,7 +53,7 @@ h3{font-size : 30px}
 </head>
 <body>
 	 <!-- !PAGE CONTENT! -->
-  <div class="w3-main" style="margin: -13px -20px 0;">
+  <div class="w3-main" style="margin: -8px -20px 0;">
 
     
     <!-- Photo grid -->

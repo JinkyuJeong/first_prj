@@ -45,6 +45,32 @@ public class BoardController extends MskimRequestMapping{
 		return boardName;
 	}
 	
+	@RequestMapping("commDel")
+	public String commDel(HttpServletRequest request, HttpServletResponse response) {
+		
+		int no = Integer.parseInt(request.getParameter("no"));
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		String nickname = (String)request.getSession().getAttribute("nickname");
+		
+		Comment comm = cDao.selectOne(no,seq);
+		
+		String url = "detail?no=" +no+"&hit=f";
+		String msg = "잘못된 접근입니다.";
+		
+		if(!nickname.equals(comm.getNickname()) && !nickname.equals("admin")) {
+			msg = "다른회원의 댓글은 삭제 불가능합니다.";
+		}else {
+			if(cDao.delete(no, seq)) {
+				return "redirect:"+url;
+			}else {
+				msg = "댓글 삭제 오류 발생";
+			}
+		}
+		request.setAttribute("msg", msg);
+		request.setAttribute("url", url);
+		return "alert";
+	}
+	
 	@RequestMapping("commReply")
 	public String commeReply(HttpServletRequest request, HttpServletResponse response) {
 		try {

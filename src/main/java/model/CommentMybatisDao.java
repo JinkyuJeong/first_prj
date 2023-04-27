@@ -73,4 +73,29 @@ public class CommentMybatisDao {
 		}
 	}
 
+	public Comment selectOne(int no, int seq) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			 return session.getMapper(cls).selectOne(no, seq);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		return null;
+	}
+
+	public boolean delete(int no, int seq) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			 int cnt = session.getMapper(cls).delete(no, seq);
+			 return cnt>0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		return false;
+	}
+
 }

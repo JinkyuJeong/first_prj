@@ -94,6 +94,7 @@
     <div class="w3-center w3-padding-16 text-center">&nbsp;&nbsp;&nbsp;&nbsp;<a href="${path}"><img src="${path}/images/mainLogo.JPG" width="130px" height="40px"></a></div>
   </div>
 </div>
+	<hr id="about">
   
 
 <div class="w3-main w3-content w3-padding" style="max-width:120vw;margin-top:50px;min-height:100vh;">
