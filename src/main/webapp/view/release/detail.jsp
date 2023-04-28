@@ -8,7 +8,7 @@
 <title>제품 상세</title>
 <style type="text/css">
 	.container{width: 75vw;}
-  #info, strong, span, .btn.btn-dark, .mb-3.mt-3,.w3-button mt-3{font-family: 'Dongle', sans-serif; font-size: 1.7em;}
+  #info, strong, span, .btn.btn-dark, .mb-3.mt-3,.w3-button.mt-3{font-family: 'Dongle', sans-serif; font-size: 1.7em;}
   #prodimg>img{box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);}
 </style>
 </head>
