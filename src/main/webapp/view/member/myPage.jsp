@@ -72,9 +72,9 @@
       <h4 class="mt-4">가입일자 : <fmt:formatDate value="${mem.regdate}" pattern="yyyy년 MM월 dd일"/></h4>
 
       <div class="mt-3">
-        <a class="btn" href="myBoardList?email=${mem.emailaddress }&nickname=${mem.nickname }"><font size="5">게시글 : ${myBoardCnt }개</font></a>
+        <a class="btn" href="myBoardList?email=${mem.emailaddress }&nickname=${mem.nickname }"><font size="5">내 게시글 : ${myBoardCnt }개</font></a>
         <br>
-        <a class="btn" href="myCommList?email=${mem.emailaddress }&nickname=${mem.nickname }"><font size="5">댓글 : ${myCommCnt }개</font></a>
+        <a class="btn" href="myCommList?email=${mem.emailaddress }&nickname=${mem.nickname }"><font size="5">내 댓글 : ${myCommCnt }개</font></a>
       </div>
     </div>
 

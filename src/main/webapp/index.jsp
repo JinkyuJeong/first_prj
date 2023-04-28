@@ -10,10 +10,10 @@
 <style type="text/css">
 body,h1,h2,h3,h4,h5 {font-family: 'Dongle', sans-serif;}
 body {font-size: 16px;}
-.mySlides .w3-image {
+.carousel-item img {
   min-width: 500px;
   width: 100vw;
-  height: 100vh; /* 이미지 높이 고정 */
+  height: 95vh; /* 이미지 높이 고정 */
   object-fit: cover; /* 이미지 비율 유지 */
 }
 	.jumbo {
@@ -48,74 +48,65 @@ body {font-size: 16px;}
 </style>
 </head>
 <body>
-<div class="w3-content w3-black" style="max-width:2000px;margin: -30px -20px 0;height: 100vh;">
-<!-- Header with Slideshow -->
-<header class="w3-display-container w3-center">
-  <div class="mySlides w3-animate-opacity">
-	  <div class="jumbo">
-	    <h3 class="display-4 fw-bold mb-4">자유게시판</h3>
-	    <p class="mb-4">회원분들과 소통을 하는 공간입니다.</p>
-	    <p><a class="btn btn-primary btn-lg" href="${path}/board/list?boardType=1" role="button">바로가기</a></p>
-	  </div>
-	  <img class="w3-image" src="./images/jumbo.jpg" alt="Image 1" style="min-width:500px" width="1800" height="100%">
-	</div>
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="margin: -30px -20px 0;">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+  </div>
+  <div class="carousel-inner">
   
-  <div class="mySlides w3-animate-opacity">
-	  <div class="jumbo">
-	    <h3 class="display-4 fw-bold mb-4">실시간 발매정보</h3>
-	    <p class="mb-4">발매예정인 상품들의 정보를 볼 수 있습니다.</p>
-	    <p><a class="btn btn-primary btn-lg" href="${path}/release/list" role="button">바로가기</a></p>
-	  </div>
-	  <img class="w3-image" src="./images/jumbo1.jpg" alt="Image 1" style="min-width:500px" width="1800" height="100%">
-	</div>
-  
-  <div class="mySlides w3-animate-opacity">
-	  <div class="jumbo">
-	    <h3 class="display-4 fw-bold mb-4">스니커 소식</h3>
-	    <p class="mb-4">스니커 소식들을 접해봅니다.</p>
-	    <p><a class="btn btn-primary btn-lg" href="${path}/news/list" role="button">바로가기</a></p>
-	  </div>
-	  <img class="w3-image" src="./images/jumbo2.jpg" alt="Image 3" style="min-width:500px" width="1800" height="100%">
-	</div>	
-  
-  <div class="mySlides w3-animate-opacity">
-	  <div class="jumbo">
-	    <h3 class="display-4 fw-bold mb-4">EVENT</h3>
-	    <p class="mb-4">슈레이스에서 주최하는 응모이벤트!</p>
-	    <p><a class="btn btn-primary btn-lg" href="${path }/event/eventForm" role="button">바로가기</a></p>
-	  </div>
-	  <img class="w3-image" src="./images/jumbo3.jpg" alt="Image 1" style="min-width:500px" width="1800" height="100%">
-	</div>
-  
-  <a class="w3-button w3-black w3-display-left w3-margin-left w3-round w3-hide-small w3-hover-light-grey" onclick="plusDivs(-1)"><i class="fa fa-angle-left"></i> 이전</a>
-	<a class="w3-button w3-block w3-black w3-hide-large w3-hide-medium" onclick="plusDivs(-1)"><i class="fa fa-angle-left"></i> 이전</a>
-  
-  <a class="w3-button w3-black w3-display-right w3-margin-right w3-round w3-hide-small w3-hover-light-grey" onclick="plusDivs(1)">다음 <i class="fa fa-angle-right"></i></a>
-  <a class="w3-button w3-block w3-black w3-hide-large w3-hide-medium" onclick="plusDivs(1)">다음 <i class="fa fa-angle-right"></i></a>
-</header>
+    <div class="carousel-item active">
+    	<div class="jumbo">
+    		<h3 class="display-4 fw-bold mb-4">자유게시판</h3>
+		    <p class="mb-4">회원분들과 소통을 하는 공간입니다.</p>
+		    <p><a class="btn btn-primary btn-lg" href="${path}/board/list?boardType=1" role="button">바로가기</a></p>
+    	</div>
+      <img src="${path }/images/jumbo.jpg" class="d-block w-100" alt="...">
+    </div>
+    
+    <div class="carousel-item">
+    	<div class="jumbo">
+    		<h3 class="display-4 fw-bold mb-4">실시간 발매정보</h3>
+		    <p class="mb-4">발매예정인 상품들의 정보를 볼 수 있습니다.</p>
+		    <p><a class="btn btn-primary btn-lg" href="${path}/release/list" role="button">바로가기</a></p>
+    	</div>
+      <img src="${path }/images/jumbo1.jpg" class="d-block w-100" alt="...">
+    </div>
+    
+    <div class="carousel-item">
+    	<div class="jumbo">
+    		<h3 class="display-4 fw-bold mb-4">스니커 소식</h3>
+		    <p class="mb-4">스니커 소식들을 접해봅니다.</p>
+		    <p><a class="btn btn-primary btn-lg" href="${path}/news/list" role="button">바로가기</a></p>
+    	</div>
+      <img src="${path }/images/jumbo2.jpg" class="d-block w-100" alt="...">
+    </div>
+    
+     <div class="carousel-item">
+    	<div class="jumbo">
+    		<h3 class="display-4 fw-bold mb-4">EVENT</h3>
+		    <p class="mb-4">슈레이스에서 주최하는 응모이벤트!</p>
+		    <p><a class="btn btn-primary btn-lg" href="${path}/event/eventForm" role="button">바로가기</a></p>
+    	</div>
+      <img src="${path }/images/jumbo3.jpg" class="d-block w-100" alt="...">
+    </div>
+    
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
 
 <script>
-// Slideshow
-var slideIndex = 1;
-showDivs(slideIndex);
-
-function plusDivs(n) {
-	  showDivs(slideIndex += n);
-	}
-
-	function showDivs(n) {
-	  let i;
-	  const x = document.getElementsByClassName("mySlides");
-	  if (n > x.length) {slideIndex = 1}
-	  if (n < 1) {slideIndex = x.length}
-	  for (i = 0; i < x.length; i++) {
-	    x[i].style.display = "none";  
-	  }
-	  x[slideIndex-1].style.display = "block";  
-	}
 setInterval(function() {
-	  $(".w3-button.w3-black.w3-display-right").click();
+	  $(".carousel-control-next").click();
 	}, 4500);
 </script>
 </body>
