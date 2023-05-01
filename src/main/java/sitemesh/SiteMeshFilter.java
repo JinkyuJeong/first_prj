@@ -24,7 +24,8 @@ public class SiteMeshFilter extends ConfigurableSiteMeshFilter {
 		 .addExcludedPath("/member/password*")
 		 .addExcludedPath("/member/picture*")
 		.addExcludedPath("/member/pw*")
-		.addExcludedPath("/event/picture*");
+		.addExcludedPath("/event/picture*")
+		.addExcludedPath("/board/comm*");
 	}
 }
 

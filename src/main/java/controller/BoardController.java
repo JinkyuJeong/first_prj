@@ -45,6 +45,42 @@ public class BoardController extends MskimRequestMapping{
 		return boardName;
 	}
 	
+	@RequestMapping("commList")
+	public String commList(HttpServletRequest request, HttpServletResponse response) {
+		String nickname = (String)request.getSession().getAttribute("nickname");
+		Member mem = new MemberMybatisDao().selectOneNick(nickname);
+		int no = Integer.parseInt(request.getParameter("no"));
+		
+		String pageNum_ = request.getParameter("pageNum");
+		int pageNum = 1;
+		
+		if(pageNum_ != null && !pageNum_.equals("")) {
+			try{
+				pageNum = Integer.parseInt(pageNum_);
+			}catch (Exception e) {e.printStackTrace();}
+		}
+		int commCnt = 0;
+		commCnt = cDao.commCnt(no);
+		
+		int limit = 10;
+		int maxPage = (int)((double)commCnt/limit +0.95);
+		int startPage = pageNum-(pageNum-1)%5;
+		int endPage = startPage + 4;
+		if(endPage > maxPage) endPage = maxPage;
+		
+		List<CommentListView> commList = cDao.list(no, pageNum, limit);
+		
+		request.setAttribute("commList", commList);
+		request.setAttribute("commCnt", commCnt);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
+		request.setAttribute("maxPage", maxPage);
+		request.setAttribute("mem", mem);
+		
+		return "board/commList";
+	}
+	
 	@RequestMapping("commDel")
 	public String commDel(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -327,17 +363,17 @@ public class BoardController extends MskimRequestMapping{
 		BoardDetailView bPrevious = dao.selectPrevious(b);
 		String boardName = boardName(b.getBoardType());
 		
-		List<CommentListView> commList = cDao.list(no);
 		int commCnt = cDao.commCnt(no);
+		List<CommentListView> commList = cDao.list(no);
 		
 		request.setAttribute("boardName", boardName);
 		request.setAttribute("b", b);
 		request.setAttribute("bNext", bNext);
 		request.setAttribute("bPrevious", bPrevious);
 		request.setAttribute("mem", mem);
-		request.setAttribute("commList", commList);
-		request.setAttribute("commCnt", commCnt);
 		request.setAttribute("today", new Date());
+		request.setAttribute("commCnt", commCnt);
+		request.setAttribute("commList", commList);
 		
 		return "board/detail";
 	}

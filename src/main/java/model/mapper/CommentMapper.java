@@ -1,6 +1,7 @@
 package model.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -21,8 +22,8 @@ public interface CommentMapper {
 			+ " (#{no}, #{seq}, #{nickname}, #{content}, #{grp}, #{grpLevel}, #{grpStep})")
 	int insert(Comment comm);
 
-	@Select("select * from commentListView where no=#{value} ORDER BY GRP asc, GRPSTEP asc LIMIT 0, 10")
-	List<CommentListView> list(int no);
+	@Select("select * from commentListView where no=#{no} ORDER BY GRP asc, GRPSTEP asc  LIMIT #{start}, #{limit}")
+	List<CommentListView> list(Map<String, Object> map);
 
 	@Select("select count(*) from comment where no=#{value}")
 	int commCnt(int no);

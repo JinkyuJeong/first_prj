@@ -1,0 +1,139 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="path" value="${pageContext.request.contextPath }" />
+  <table  class="table table-hover align-middle">
+            <tbody>
+            
+            <c:if test="${commCnt <= 0 }">
+            	<tr align="center"><td>등록된 댓글이 없습니다.</td></tr>
+            </c:if>
+            
+            <c:forEach var="comm" items="${commList }" varStatus="st">
+            	<span id="id${comm.no}${comm.seq}"></span>
+              <tr>
+                <td width="15%">
+                	<c:if test="${comm.grpLevel == 1}">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;</c:if>
+                	<c:if test="${comm.picture == 'basic-profile.JPG'}">
+				           	<img id="prof" src="${path }/images/basic-profile.JPG">
+				           </c:if>
+				           <c:if test="${comm.picture != 'basic-profile.JPG'}">
+				           	<img id="prof" src="/first_prj/upload/member/${comm.picture}">
+				           </c:if>
+				           &nbsp;${comm.nickname }
+                </td>
+                
+                <td width="100vw" align="left">${comm.content }</td>
+                
+                <fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd" var="r2"/>
+                <c:if test="${t eq r2}">
+									<td width="10%">
+										<font size="1"><fmt:formatDate value="${comm.regdate }" pattern="HH:mm"/></font>
+									</td>
+								</c:if>
+								<c:if test="${t != r2}">
+									<td width="10%">
+										<font size="1"><fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd"/></font>
+									</td>
+								</c:if>
+                
+                <td width="9%"><button class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 24px;"></i>&nbsp;${comm.recommend }</button></td>
+                
+                <td width="10%">
+                	<c:if test="${comm.nickname == mem.nickname || sessionScope.login == 'admin'}">
+                		  <!-- Button trigger modal -->
+											<a type="button" class="btn btn-dark comm" data-bs-toggle="modal" data-bs-target="#staticBackdrop${comm.no}${comm.seq}">
+											 	삭제
+											</a>
+											
+											<%-- Modal --%>
+											<div class="modal fade" id="staticBackdrop${comm.no}${comm.seq}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+											  <div class="modal-dialog">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h5 class="modal-title" id="staticBackdropLabel">댓글 삭제</h5>
+											        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											      </div>
+											      <div class="modal-body">
+											        해당 댓글을 삭제 하시겠습니까?
+											      </div>
+											      <div class="modal-footer">
+											        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+											        <a class="btn btn-dark" href="commDel?no=${comm.no }&seq=${comm.seq}">삭제</a>
+											      </div>
+											    </div>
+											  </div>
+											</div>
+											
+                	</c:if>
+                	<c:if test="${comm.grpLevel <1 && sessionScope.login != null}">
+                		<a class="btn btn-dark comm" href="#id${comm.no}${comm.seq}" onclick="openReply(this)">댓글작성</a>
+                	</c:if>
+                </td>
+                
+              </tr>
+              
+              <tr class="reply">
+              	<td colspan="5">
+              	<c:if test="${!empty sessionScope.login}">
+              	
+							    <form action="commReply" method="post" name="f${comm.no}${comm.seq}" id="f${comm.no}${comm.seq}" onsubmit="return inputcheck(this)">
+							    	<input type="hidden" name="no" value="${comm.no }">
+										<input type="hidden" name="grp" value="${comm.grp}">
+										<input type="hidden" name="grpLevel" value="${comm.grpLevel }">
+										<input type="hidden" name="grpStep" value="${comm.grpStep }">
+										
+										
+							      <table class="table align-middle table-borderless" >
+							        <tr>
+							          <th class="table-light">
+							          	<c:if test="${mem.picture == 'basic-profile.JPG'}">
+							           		&nbsp;&#10551;&nbsp;&nbsp;<img id="prof" src="${path }/images/basic-profile.JPG">
+							           	</c:if>
+							           	<c:if test="${mem.picture != 'basic-profile.JPG'}">
+							           		&nbsp;&#10551;&nbsp;&nbsp;<img id="prof" src="/first_prj/upload/member/${mem.picture}">
+							           	</c:if>
+							           	&nbsp;${mem.nickname }
+							           	<input type="hidden" name="nickname" value="${mem.nickname }"> 
+							          	</th>
+							          <td width="75%">
+							          	<input type="text" name="content" class="form-control">
+							          </td>
+							          <td align="right"><button type="submit" class="btn btn-dark">댓글등록</button></td>
+							        </tr>
+							      </table>
+									</form>
+								</c:if>
+								</td>
+              </tr>
+              
+              </c:forEach>
+              
+            </tbody>
+          </table>
+          
+          <%-- paging --%>
+			  <div class="w3-center w3-padding-32">
+			    <div class="w3-bar">
+				    <c:if test="${startPage <= 1}">
+							<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('이전 페이지가 없습니다.');">&laquo;</a>
+						</c:if>
+						<c:if test="${startPage > 1}">
+							<a class="w3-bar-item w3-button w3-hover-black" href="javascript:curPage(${a }-1)">&laquo;</a>
+						</c:if>
+						
+						<c:forEach var="a" begin="${startPage}" end="${endPage}">
+							<c:if test="${a <= maxPage}">
+								<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="javascript:curPage(${a })">${a}</a>
+							</c:if>
+						</c:forEach>
+							
+						<c:if test="${startPage+4 >= maxPage}">
+							<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('다음 페이지가 없습니다.');">&raquo;</a>
+						</c:if>
+						<c:if test="${startPage+4 < maxPage}">
+							<a class="w3-bar-item w3-button w3-hover-black" href="javascript:curPage(${a }+5)">&raquo;</a>
+						</c:if>
+			    </div>
+			  </div>

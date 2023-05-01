@@ -1,6 +1,8 @@
 package model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -8,6 +10,7 @@ import model.mapper.CommentMapper;
 
 public class CommentMybatisDao {
 	private static Class<CommentMapper> cls = CommentMapper.class;
+	private static Map<String, Object> map = new HashMap<>();
 	
 	public int maxSeq(int no) {
 		SqlSession session = MybatisConnection.getConnection();
@@ -36,11 +39,20 @@ public class CommentMybatisDao {
 		
 		return false;
 	}
+	
+	public List<CommentListView> list(int no){
+		return list(no, 1, 10);
+	}
 
-	public List<CommentListView> list(int no) {
+	public List<CommentListView> list(int no, int pageNum, int limit) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
-			return session.getMapper(cls).list(no);
+			map.clear();
+			map.put("no", no);
+			map.put("start", (pageNum -1) * limit);
+			map.put("limit", limit);
+			
+			return session.getMapper(cls).list(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
