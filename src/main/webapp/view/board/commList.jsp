@@ -3,7 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+  <div style="display: flex; justify-content: space-between; margin: 15px auto;">
+          <div>
+            전체 댓글 <span id="commCnt" style="color:red">${commCnt }</span>개
+          </div>
+          <div></div>
+       </div>
 <input id="lastPage" type="hidden" value="${maxPage }">
+<div id="line">
   <table  class="table table-hover align-middle">
             <tbody>
             
@@ -140,7 +147,7 @@
               
             </tbody>
           </table>
-          
+          </div>
           <%-- paging --%>
 			  <div class="w3-center w3-padding-32">
 			    <div class="w3-bar">

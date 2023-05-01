@@ -30,7 +30,7 @@
   #prof{width: 30px; height: 30px; border-radius: 50%;}
   #content{height: 40vh;}
   #recomm{font-family:'Dongle', sans-serif; font-size: 50px;}
-  #comment{border-top: 2px solid; border-bottom: 2px solid;}
+  #line{border-top: 2px solid; border-bottom: 2px solid;}
   td .btn{font-family: 'Dongle', sans-serif; font-size: 20px;}
   td .btn:hover {color: lightgray;}
   .btn.btn-dark.comm{font-size:12px;}
@@ -219,18 +219,7 @@
     <div>&nbsp;</div>
 
     <!-- 댓글 -->
-    <div class="container">
-      
-      <div style="display: flex; justify-content: space-between; margin: 15px auto;">
-          <div>
-            전체 댓글 <span id="commCnt" style="color:red">${commCnt }</span>개
-          </div>
-          <div></div>
-       </div>
-
-        <div id="comment"></div>
-        
-      </div>
+    <div class="container" id="comment"></div>
     
     <!-- 댓글작성 폼 -->
     <script>
