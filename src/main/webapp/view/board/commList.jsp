@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+<input id="lastPage" type="hidden" value="${maxPage }">
   <table  class="table table-hover align-middle">
             <tbody>
             
@@ -78,7 +79,7 @@
               	<td colspan="5">
               	<c:if test="${!empty sessionScope.login}">
               	
-							    <form action="commReply" method="post" name="f${comm.no}${comm.seq}" id="f${comm.no}${comm.seq}" onsubmit="return inputcheck(this)">
+							    <form action="commReply" method="post" name="f${comm.no}${comm.seq}" id="f${comm.no}${comm.seq}">
 							    	<input type="hidden" name="no" value="${comm.no }">
 										<input type="hidden" name="grp" value="${comm.grp}">
 										<input type="hidden" name="grpLevel" value="${comm.grpLevel }">
@@ -98,7 +99,7 @@
 							           	<input type="hidden" name="nickname" value="${mem.nickname }"> 
 							          	</th>
 							          <td width="75%">
-							          	<input type="text" name="content" class="form-control">
+							          	<input type="text" name="content" id="cont${comm.no}${comm.seq}" class="form-control">
 							          </td>
 							          <td align="right"><button type="submit" class="btn btn-dark">댓글등록</button></td>
 							        </tr>
@@ -106,6 +107,33 @@
 									</form>
 								</c:if>
 								</td>
+								
+								<script>
+								$('#f${comm.no}${comm.seq}').submit(function(event) {
+									  if($("#cont${comm.no}${comm.seq}").val() == ''){
+									    alert("내용을 입력해주세요.");
+									    $("#cont${comm.no}${comm.seq}").focus();
+									    return false;
+									  }
+									  event.preventDefault(); // 기본 제출 동작을 막음
+									  const form = $(this);
+									  const formData = form.serialize(); // 폼 데이터 직렬화
+									  $.ajax({
+									    type: form.attr('method'), // 폼의 method 속성 값을 사용
+									    url: form.attr('action'), // 폼의 action 속성 값을 사용
+									    data: formData,
+									    success: function(response) {
+									      // 등록 성공 시 댓글 목록을 새로고침
+									      $("#comment").load("commList?no=${comm.no}&pageNum="+${pageNum});
+									      $("#cont${comm.no}${comm.seq}").val("");
+									    },
+									    error: function(jqXHR, textStatus, errorThrown) {
+									      console.error(textStatus + ": " + errorThrown);
+									    }
+									  });
+									});
+								</script>
+								
               </tr>
               
               </c:forEach>
@@ -125,7 +153,7 @@
 						
 						<c:forEach var="a" begin="${startPage}" end="${endPage}">
 							<c:if test="${a <= maxPage}">
-								<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="javascript:curPage(${a })">${a}</a>
+								<a class="w3-bar-item w3-button w3-hover-black ${a == pageNum ? 'w3-black' : '' }" href="javascript:curPage(${a })" id="${a}">${a}</a>
 							</c:if>
 						</c:forEach>
 							

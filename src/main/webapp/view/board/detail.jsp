@@ -49,6 +49,30 @@
        }
 	     
 	   })
+	   $('#commForm').submit(function(event) {
+		   if($("#cont").val() == ''){
+			   alert("내용을 입력해주세요.");
+			   $("#cont").focus();
+			   return false;
+		   }
+	     event.preventDefault(); // 기본 제출 동작을 막음
+	     const form = $(this);
+	     const formData = form.serialize(); // 폼 데이터 직렬화
+	     $.ajax({
+         type: form.attr('method'), // 폼의 method 속성 값을 사용
+         url: form.attr('action'), // 폼의 action 속성 값을 사용
+         data: formData,
+         success: function(response) {
+             // 등록 성공 시 댓글 목록을 새로고침
+             $("#comment").load("commList?no=${b.no}&pageNum="+$("#lastPage").val());
+             $("#cont").val("");
+         },
+         error: function(jqXHR, textStatus, errorThrown) {
+             console.error(textStatus + ": " + errorThrown);
+         }
+	     });
+	 		});
+	   
 	})
   function curPage(n){
 		 $.ajax({
@@ -199,10 +223,10 @@
       
       <div style="display: flex; justify-content: space-between; margin: 15px auto;">
           <div>
-            전체 댓글 <span style="color:red">${commCnt }</span>개
+            전체 댓글 <span id="commCnt" style="color:red">${commCnt }</span>개
           </div>
           <div></div>
-        </div>
+       </div>
 
         <div id="comment"></div>
         
@@ -210,15 +234,6 @@
     
     <!-- 댓글작성 폼 -->
     <script>
-      function inputcheck(f){
-        if(f.content.value.trim() == ''){
-          alert("댓글 내용을 입력하세요.")
-          f.content.focus();
-          return false;
-        }
-
-        return true;
-      }
       function openReply(btn) {
     	  // 클릭한 버튼에 대응하는 댓글 작성 폼 선택
     	  let replyForm = $(btn).closest('tr').next('.reply');
@@ -228,7 +243,7 @@
     </script>
     
     <c:if test="${!empty sessionScope.login}">
-	    <form action="comment"  method="post" name="f" onsubmit="return inputcheck(this)">
+	    <form action="comment"  method="post" name="f" id="commForm">
 	    	<input type="hidden" name="no" value="${b.no }">
 				
 	      <table class="table align-middle table-borderless">
@@ -243,7 +258,7 @@
 	           	&nbsp;${mem.nickname }
 	           	<input type="hidden" name="nickname" value="${mem.nickname }"> 
 	          	</th>
-	          <td><input type="text" name="content" class="form-control"></td>
+	          <td><input type="text" name="content"  id="cont" class="form-control"></td>
 	        </tr>
 	        <tr>
 	          <td colspan="2" align="right"><button type="submit" class="btn btn-dark">댓글등록</button></td>

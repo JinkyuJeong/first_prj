@@ -29,7 +29,7 @@ public interface CommentMapper {
 	int commCnt(int no);
 
 	@Update("update comment set grpStep = grpStep +1 where grp=#{grp} and grpStep >#{grpStep}")
-	void grpStepAdd(@Param("grp")int grp,@Param("grp") int grpStep);
+	void grpStepAdd(@Param("grp")int grp,@Param("grpStep") int grpStep);
 
 	@Select("select * from comment where no=#{no} and seq=#{seq}")
 	Comment selectOne(@Param("no")int no, @Param("seq")int seq);

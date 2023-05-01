@@ -141,7 +141,7 @@ public class BoardController extends MskimRequestMapping{
 		if(cDao.insert(comm)) {
 			return "redirect:" + url; 
 		}
-		request.setAttribute("msg", "댓글 등록실패");
+		request.setAttribute("msg", "댓글등록 실패");
 		request.setAttribute("url", url);
 		return "alert";
 	}
@@ -364,8 +364,7 @@ public class BoardController extends MskimRequestMapping{
 		String boardName = boardName(b.getBoardType());
 		
 		int commCnt = cDao.commCnt(no);
-		List<CommentListView> commList = cDao.list(no);
-		
+	
 		request.setAttribute("boardName", boardName);
 		request.setAttribute("b", b);
 		request.setAttribute("bNext", bNext);
@@ -373,7 +372,6 @@ public class BoardController extends MskimRequestMapping{
 		request.setAttribute("mem", mem);
 		request.setAttribute("today", new Date());
 		request.setAttribute("commCnt", commCnt);
-		request.setAttribute("commList", commList);
 		
 		return "board/detail";
 	}
