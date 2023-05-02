@@ -157,8 +157,7 @@
 									 $.ajax({
 								     url : "/first_prj/ajax/replyRecomm?no="+no+"&seq="+seq,
 								     success : function(html){
-								    	 $("#recommend${comm.no}${comm.seq}").html(html);
-								    	 $("#comment").load("commList?no=${comm.no}&pageNum="+${pageNum});
+								    	 $("#comment").load("/first_prj/board/commList?no=${comm.no}&pageNum=${pageNum}");
 								     },
 									 	error : function(e){
 							       alert("서버오류" + e.status)
