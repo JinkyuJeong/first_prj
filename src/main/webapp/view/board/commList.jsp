@@ -20,7 +20,7 @@
             
             <c:forEach var="comm" items="${commList }" varStatus="st">
             	<span id="id${comm.no}${comm.seq}"></span>
-              <tr>
+              <tr class="${comm.recommend >=5? 'table-secondary' : ''  }">
                 <td width="15%">
                 	<c:if test="${comm.grpLevel == 1}">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;</c:if>
                 	<c:if test="${comm.picture == 'basic-profile.JPG'}">
@@ -32,7 +32,17 @@
 				           &nbsp;${comm.nickname }
                 </td>
                 
-                <td width="100vw" align="left">${comm.content }</td>
+                <c:if test="${comm.recommend >= 5 }">
+	                <td width="100vw" align="left">
+		                <span class="badge rounded-pill bg-success">Best</span><br>
+		                <p class="fw-bold" style="margin:0;">${comm.content }</p>
+	                </td>
+                </c:if>
+                <c:if test="${comm.recommend < 5 }">
+	                <td width="100vw" align="left">
+		                <p  style="margin:0;">${comm.content }</p>
+	                </td>
+                </c:if>
                 
                 <fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd" var="r2"/>
                 <c:if test="${t eq r2}">
