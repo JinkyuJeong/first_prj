@@ -22,7 +22,7 @@ public interface CommentMapper {
 			+ " (#{no}, #{seq}, #{nickname}, #{content}, #{grp}, #{grpLevel}, #{grpStep})")
 	int insert(Comment comm);
 
-	@Select("select * from commentListView where no=#{no} ORDER BY GRP asc, GRPSTEP asc  LIMIT #{start}, #{limit}")
+	@Select("select * from commentListView where no=#{no} ORDER BY GRP asc, GRPLEVEL asc, GRPSTEP desc  LIMIT #{start}, #{limit}")
 	List<CommentListView> list(Map<String, Object> map);
 
 	@Select("select count(*) from comment where no=#{value}")
@@ -36,5 +36,8 @@ public interface CommentMapper {
 
 	@Delete("delete from comment where no=#{no} and seq=#{seq}")
 	int delete(@Param("no")int no, @Param("seq")int seq);
+
+	@Update("update comment set recommend=recommend+1 where no=#{no} and seq=#{seq}")
+	int plusRecomm(@Param("no")int no, @Param("seq")int seq);
 	
 }

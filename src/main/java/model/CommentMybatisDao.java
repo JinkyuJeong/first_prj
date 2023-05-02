@@ -110,4 +110,17 @@ public class CommentMybatisDao {
 		return false;
 	}
 
+	public boolean plusRecomm(int no, int seq) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			int cnt = session.getMapper(cls).plusRecomm(no, seq);
+			return cnt>0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		return false;
+	}
+
 }

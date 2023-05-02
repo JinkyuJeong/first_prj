@@ -37,16 +37,16 @@
                 <fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd" var="r2"/>
                 <c:if test="${t eq r2}">
 									<td width="10%">
-										<font size="1"><fmt:formatDate value="${comm.regdate }" pattern="HH:mm"/></font>
+										<font size="3"><fmt:formatDate value="${comm.regdate }" pattern="HH:mm"/></font>
 									</td>
 								</c:if>
 								<c:if test="${t != r2}">
 									<td width="10%">
-										<font size="1"><fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd"/></font>
+										<font size="3"><fmt:formatDate value="${comm.regdate }" pattern="yyyy-MM-dd"/></font>
 									</td>
 								</c:if>
                 
-                <td width="9%"><button class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 24px;"></i>&nbsp;${comm.recommend }</button></td>
+                <td width="9%"><span  id="recommend${comm.no}${comm.seq}"></span></td>
                 
                 <td width="10%">
                 	<c:if test="${comm.nickname == mem.nickname || sessionScope.login == 'admin'}">
@@ -139,6 +139,33 @@
 									    }
 									  });
 									});
+								
+								$(()=>{
+									 $.ajax({
+								     url : "/first_prj/ajax/replyRecommForm?no=${comm.no}&seq=${comm.seq}",
+								     success : function(html){
+								    	 $("#recommend${comm.no}${comm.seq}").html(html);
+								     },
+									 	error : function(e){
+								        alert("서버오류" + e.status)
+								      }
+								     
+								   })
+								})
+								
+									function replyRecomm(no, seq){
+									 $.ajax({
+								     url : "/first_prj/ajax/replyRecomm?no="+no+"&seq="+seq,
+								     success : function(html){
+								    	 $("#recommend${comm.no}${comm.seq}").html(html);
+								    	 $("#comment").load("commList?no=${comm.no}&pageNum="+${pageNum});
+								     },
+									 	error : function(e){
+							       alert("서버오류" + e.status)
+							     }
+								     
+								   })
+								 }
 								</script>
 								
               </tr>

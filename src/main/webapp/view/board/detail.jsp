@@ -30,6 +30,7 @@
   #prof{width: 30px; height: 30px; border-radius: 50%;}
   #content{height: 40vh;}
   #recomm{font-family:'Dongle', sans-serif; font-size: 50px;}
+  #recomm{font-family:'Dongle', sans-serif; font-size: 25px;}
   #line{border-top: 2px solid; border-bottom: 2px solid;}
   td .btn{font-family: 'Dongle', sans-serif; font-size: 20px;}
   td .btn:hover {color: lightgray;}
