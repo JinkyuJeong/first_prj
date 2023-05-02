@@ -122,6 +122,7 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="nickname" id="nickname" value="${mem.nickname }">
             <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="win_nickChk()">중복검사</button>
+            <span id="nickChkMsg"></span>
           </div>
         </div>
       </div>

@@ -168,7 +168,7 @@
 							<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('다음 페이지가 없습니다.');">&raquo;</a>
 						</c:if>
 						<c:if test="${startPage+4 < maxPage}">
-							<a class="w3-bar-item w3-button w3-hover-black" href="javascript:curPage(${a }+5)">&raquo;</a>
+							<a class="w3-bar-item w3-button w3-hover-black" href="javascript:curPage(${a }+1)">&raquo;</a>
 						</c:if>
 			    </div>
 			  </div>

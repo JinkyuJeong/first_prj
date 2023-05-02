@@ -30,10 +30,8 @@ import model.Board;
 import model.Member;
 import model.MemberMybatisDao;
 
-// /member/ 이후의 어떤 요청이 들어와도 MemberController가 요청됨
 @WebServlet(urlPatterns = {"/member/*"},
-						initParams = {@WebInitParam(name="view", value="/view/")}
-		)
+						initParams = {@WebInitParam(name="view", value="/view/")})
 public class MemberController extends MskimRequestMapping{
 	private MemberMybatisDao dao = new MemberMybatisDao();
 	
@@ -391,7 +389,9 @@ public class MemberController extends MskimRequestMapping{
 	   @RequestMapping("logout")
 	   public String logout(HttpServletRequest request, HttpServletResponse response) {
 		   request.getSession().invalidate();
-		   return "redirect:/first_prj/index";
+		   request.setAttribute("msg", "로그아웃 되었습니다.");
+		   request.setAttribute("url", "/first_prj/index");
+		   return "alert";
 	   }
 	   
 	   @MSLogin("loginCheck")
@@ -491,8 +491,9 @@ public class MemberController extends MskimRequestMapping{
 		   String pass = request.getParameter("pass");	
 		   String email = request.getParameter("email");
 		   if(dao.updatePass(email,pass)) {
-			   request.setAttribute("msg", "비밀번호가 수정되었습니다.");
-			   return "self_close";
+			   request.setAttribute("msg", "비밀번호가 수정되었습니다. 변경된 비밀번호로 다시 로그인하세요.");
+			   request.setAttribute("url", "loginForm");
+			   return "opener";
 		   } else {
 			   request.setAttribute("msg", "비밀번호 수정 실패.");
 			   request.setAttribute("url", "pwChgForm");
@@ -506,7 +507,6 @@ public class MemberController extends MskimRequestMapping{
 		   String pass = request.getParameter("pass1");
 		   String currentPass = request.getParameter("currentPass");
 		   String email = request.getParameter("email");
-		   System.out.println(email);
 		   Member dbMem = dao.selectOneEmail(email);
 		   if(!dbMem.getPassword().equals(currentPass)) {
 			   request.setAttribute("msg", "비밀번호가 틀립니다.");
@@ -514,8 +514,10 @@ public class MemberController extends MskimRequestMapping{
 			   return "alert";
 		   } else {
 			   if(dao.updatePass(email, pass)) {
-				   request.setAttribute("msg", "비밀번호가 수정되었습니다.");
-				   return "self_close";
+				   request.getSession().invalidate();
+				   request.setAttribute("msg", "비밀번호가 수정되었습니다. 변경된 비밀번호로 다시 로그인하세요.");
+				   request.setAttribute("url", "loginForm");
+				   return "opener";
 			   } else {
 				   request.setAttribute("msg", "비밀번호 수정 실패.");
 				   request.setAttribute("url", "pwChgUpdateForm");

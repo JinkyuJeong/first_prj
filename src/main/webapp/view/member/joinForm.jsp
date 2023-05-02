@@ -53,7 +53,11 @@
 	    f.pass.focus();
 	    return false;
 	  }
-	  
+	  if(f.pass2.value.trim() == ""){
+		    alert("비밀번호를 입력하세요")
+		    f.pass2.focus();
+		    return false;
+		  }
 	  if(f.nickname.value.trim() == ""){
 	    alert("닉네임을 입력하세요")
 	    f.nickname.focus();
@@ -138,6 +142,7 @@
 		let pwPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
 		let crPwMsg = document.getElementById("crPwMsg");
 		if(!pwPattern.test(password)) {
+			
 			crPwMsg.innerHTML="유효하지 않은 비밀번호 입니다.";
 			crPwMsg.style.color = "red";
 			document.getElementById("corpwchk").value = "pwunchecked";
@@ -146,6 +151,7 @@
 			crPwMsg.style.color = "blue";
 			document.getElementById("corpwchk").value = "pwchecked";
 		}
+//		checkPasswords()
 	}
 </script>
 </head>
@@ -186,14 +192,15 @@
         <!-- 비밀번호-->
         <div id="cor1" class="form-group">
           <label class="mb-1" for="pwd">비밀번호</label>
-          <input type="password" class="form-control mb-4 is-valid" id="pwd" name="pass" placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
+          <input type="password" class="form-control mb-4" id="pwd" name="pass" 
+          placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
           <span id="crPwMsg"></span>
           <input type="hidden" name="corpwchk" id="corpwchk" value="pwunchecked"> 
         </div>
         <!-- 비밀번호 재입력 -->
         <div id="cor2" class="form-group">
           <label class="mb-1" for="pwd2">비밀번호 재입력</label>
-          <input type="password" class="form-control mb-4 is-invalid" id="pwd2" name="pass2" onkeyup="checkPasswords()">
+          <input type="password" class="form-control mb-4" id="pwd2" name="pass2" onkeyup="checkPasswords()">
           <span id="pwMsg"></span>     
           <input type="hidden" name="pwchkchk" id="pwchkchk" value="pwunchecked"> 
           

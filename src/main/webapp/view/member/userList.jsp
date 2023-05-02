@@ -84,7 +84,12 @@
           <td>
             <a class="btn btn-dark" href="updateForm?email=${m.emailaddress }">수정</a>
             <!-- 관리자 일 때 -->
-            <a class="btn btn-dark"href="deleteForm?email=${m.emailaddress }">강제탈퇴</a>
+            <c:if test="${m.emailaddress == 'admin' }">
+            	
+            </c:if>
+            <c:if test="${m.emailaddress != 'admin' }">
+             <a class="btn btn-dark"href="deleteForm?email=${m.emailaddress }">강제탈퇴</a>
+            </c:if>            
           </td>
         </tr>
 		</c:forEach>

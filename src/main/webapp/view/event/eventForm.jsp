@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -33,25 +34,37 @@
   table tr:last-child{font-size: 30px;}
   #prize{color: blue; font-weight: bold;}
 </style>
+<script>
+	function win_upload(){
+		let op = "width=600, height=500, left=50, top=150";
+		open("pictureForm","",op);
+	}
+</script>
 </head>
 <body>
-	<form action="event" method="post">
+	<form action="event" method="post" name="f">
+	<c:set var="event" value="${event }" />
 	<div class="container">
-    <div id="jumbo" class="w3-container w3-padding-32 w3-center"> 
-      <h3 class="mt-3">당첨 상품 : 나이키x사카이 베이퍼와플</h3>
+			 <div id="jumbo" class="w3-container w3-padding-32 w3-center"> 
+      <h3 class="mt-3">당첨 상품 : ${event.product}</h3>
       <div class="mb-3">
-        <img src="${path }/images/product.jpg" width="450" height="350" id="pic"><br>
+        <img src="/first_prj/upload/event/${event.picture}" width="450" height="350" id="pic"><br>
         <c:if test="${sessionScope.login == 'admin' }">
         	<div align="center"><a href="javascript:win_upload()">사진등록</a></div>
         </c:if>
       </div>
-      <div>
-        <h4 class="fw-bold mb-3">응모기간 : <span>2023/04/29 ~ 2023/05/12</span></h4>
+      <div>      	
+        <h4 class="fw-bold mb-3">응모기간 : 
+       		<span><fmt:formatDate value="${event.startdate}" pattern="yyyy/ MM/ dd"/> 
+        	~ <fmt:formatDate value="${event.enddate}" pattern="yyyy/ MM/ dd"/> </span></h4>
+        <c:if test="${sessionScope.login == 'admin' }">
+		</c:if>
+		
+        <c:if test="${sessionScope.login != 'admin' }">
         <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 				 	<font size="6">응모하기</font>
-				</a>
-				
-				<!-- Modal -->
+				</a>	
+			<!-- Modal -->
 				<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 				  <div class="modal-dialog">
 				    <div class="modal-content">
@@ -64,19 +77,22 @@
 				      </div>
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-				        <a type="button" class="btn btn-primary" href="#" >응모</a>
+				        <a type="button" class="btn btn-primary" href="/first_prj/draw/draw?no=${event.no }">응모</a>
 				      </div>
 				    </div>
 				  </div>
 				</div>
+		</c:if>
+				
       </div>
     </div>
+   
 
 		<c:if test="${sessionScope.login == 'admin' }">
     <div id="event-init">
       
-        <input type="hidden" name="no" value="${no }">
-        <input type="hidden" name="picture" value="${picture }">
+        <input type="hidden" name="no" value="${event.no }">
+        <input type="hidden" name="picture" value="">
         
         <table class="table text-center table-borderless table-hover align-middle ">
           <tr>
@@ -86,9 +102,9 @@
 
           <tr>
             <th class="table-dark">응모기간</th>
-            <td><input type="date" class="form-control" name="beginDay"></td>
+            <td><input type="date" class="form-control" name="startdate"></td>
             <td>부터</td>
-            <td><input type="date" class="form-control" name="endDay"></td>
+            <td><input type="date" class="form-control" name="enddate"></td>
           </tr>
 
           <tr>
@@ -133,17 +149,20 @@
 							      </div>
 							      <div class="modal-footer">
 							        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-							        <a type="button" class="btn btn-primary" href="end">종료</a>
+							        <a type="button" class="btn btn-primary" href="end?no=${event.no }">종료</a>
 							      </div>
 							    </div>
 							  </div>
 							</div>
             </td>
           </tr>
-
-          <tr align="center">
-            <td colspan="4">당첨자 : <span id="prize">고현빈</span></td>
-          </tr>
+          
+		  <c:if test="${! empty draw }">
+		  	<tr align="center">
+            	<td colspan="4">당첨자 : <span id="prize">${mem.nickname}</span></td>
+          	</tr>
+		  </c:if>
+          
         </table>
     </div>
     </c:if>

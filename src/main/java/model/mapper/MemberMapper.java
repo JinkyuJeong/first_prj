@@ -55,5 +55,4 @@ public interface MemberMapper {
 
 	@Select("select * from comment where nickname=#{nickname} limit #{start},#{limit}")
 	List<Board> commList(Map<String, Object> map);
-
 }
