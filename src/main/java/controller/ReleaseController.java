@@ -104,7 +104,7 @@ public class ReleaseController extends MskimRequestMapping{
 	@RequestMapping("detail")
 	public String detail(HttpServletRequest request, HttpServletResponse response) {
 		String no = request.getParameter("no");
-		String url = "https://www.luck-d.com/release/product/"+no+"/"; // 크롤링하고자 하는 웹페이지의 URL
+		String url = "https://www.luck-d.com/release/product/"+no+"/";
 		Document doc = null;
 		try {
 			doc = Jsoup.connect(url).get();

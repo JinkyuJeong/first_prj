@@ -13,9 +13,7 @@
 </style>
 </head>
 <body>
-	<div class="container">
-  <!-- Push down content on small screens -->
-  <div class="w3-hide-large" style="margin-top:80px"></div>
+	<div class="container" style="margin-top:40px">
   <!-- Slideshow Header -->
   <div class="w3-container text-center" id="apartment">
   	<c:forEach var="img" items="${imgList}" varStatus="st">

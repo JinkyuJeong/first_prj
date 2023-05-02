@@ -88,7 +88,7 @@
     
     <c:if test="${!empty sessionScope.login}">
     	<div class=w3-padding-16>
-    		<span id="unreadMsg"></span>&nbsp;&nbsp;
+    		<p style="display:inline" id="unreadMsg"></p>&nbsp;&nbsp;
 		    <a href="${path}/member/myPage?email=${sessionScope.login}">마이페이지</a>&nbsp;&nbsp;
 	    	<a href="${path}/member/logout">로그아웃</a>&nbsp;&nbsp;
 	    </div>
