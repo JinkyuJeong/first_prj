@@ -69,4 +69,7 @@ public interface BoardMapper {
 
 	@Delete("delete from board where no=#{value}")
 	int delete(int no);
+
+	@Update("update board set recommend=recommend+1 where no=#{value}")
+	int plusRecomm(int no);
 }

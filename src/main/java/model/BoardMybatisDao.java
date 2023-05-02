@@ -217,4 +217,17 @@ public class BoardMybatisDao {
 		return false;
 	}
 
+	public boolean plusRecomm(int no) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			int cnt = session.getMapper(cls).plusRecomm(no);
+			return cnt>0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			MybatisConnection.close(session);
+		}
+		return false;
+	}
+
 }		

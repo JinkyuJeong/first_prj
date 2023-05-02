@@ -30,7 +30,7 @@
     min-width:300px;
   }
   #mySidebar a, #top, #footer, #footer h3{font-family: 'Dongle', sans-serif;}
-  #mySidebar> a {font-size: 1.2em;}
+  #mySidebar > a {font-size: 1.2em;}
   #demoAcc1 a{font-size: 1.4em;}
   #demoAcc2 a{font-size: 1.4em;}
   #flip-horizontal {
@@ -88,15 +88,7 @@
     
     <c:if test="${!empty sessionScope.login}">
     	<div class=w3-padding-16>
-    		<button type="button" class="btn btn-dark position-relative" id="msgBtn" onclick="location.href='messenger/msgForm'">
-              쪽지함
-           <c:if test="${sessionScope.unreadMsg  > 0}">
-	           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-	             ${sessionScope.unreadMsg }
-	             <span class="visually-hidden">unread messages</span>
-	           </span>
-           </c:if>
-       </button>&nbsp;&nbsp;
+    		<span id="unreadMsg"></span>&nbsp;&nbsp;
 		    <a href="${path}/member/myPage?email=${sessionScope.login}">마이페이지</a>&nbsp;&nbsp;
 	    	<a href="${path}/member/logout">로그아웃</a>&nbsp;&nbsp;
 	    </div>
@@ -145,6 +137,17 @@
     $('#myBtn1, #demoAcc1').mouseleave(function() {
       $('#demoAcc1').removeClass('w3-show');
     });
+    
+	 $.ajax({
+	     url : "${path}/ajax/unreadMsg",
+	     success : function(html){
+	    	 $("#unreadMsg").html(html);
+	     },
+		 	error : function(e){
+         alert("서버오류" + e.status)
+       }
+	     
+	   })
   });
 </script>
 

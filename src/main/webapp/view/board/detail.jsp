@@ -49,6 +49,17 @@
        }
 	     
 	   })
+	   
+   	 $.ajax({
+	     url : "/first_prj/ajax/recommForm?no=${b.no}",
+	     success : function(html){
+	    	 $("#recommend").html(html);
+	     },
+		 	error : function(e){
+	        alert("서버오류" + e.status)
+	      }
+	     
+	   })
 	   $('#commForm').submit(function(event) {
 		   if($("#cont").val() == ''){
 			   alert("내용을 입력해주세요.");
@@ -83,6 +94,18 @@
 		 	error : function(e){
          alert("서버오류" + e.status)
        }
+	     
+	   })
+	 }
+	function recomm(){
+		 $.ajax({
+	     url : "/first_prj/ajax/recomm?no=${b.no}",
+	     success : function(html){
+	    	 $("#recommend").html(html);
+	     },
+		 	error : function(e){
+        alert("서버오류" + e.status)
+      }
 	     
 	   })
 	 }
@@ -153,7 +176,7 @@
      
      <c:if test="${b.boardType != 4 }">
       <!-- 좋아요 -->
-      <div align="center"><button id="recomm" class="btn"><i class="fa fa-thumbs-up" style="color: red; font-size: 50px;"></i>&nbsp;${b.recommend }</button></div>
+      <div align="center" id="recommend"></div>
      </c:if>
      
      <!-- 버튼들 -->
