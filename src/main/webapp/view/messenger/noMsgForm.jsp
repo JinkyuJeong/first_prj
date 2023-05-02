@@ -15,7 +15,6 @@
 <script type="text/javascript">
 	$(function(){
     	$(".chat").niceScroll();
-    	$(".chat-users").niceScroll();
     	$("#message").keyup(function(e) {
     		if(e.keyCode == 13) {
     			document.f.submit();
@@ -128,13 +127,6 @@ body{ margin-top:20px; background:#eee;}
           <div class="col-inside-lg decor-default chat" style="overflow: hidden; outline: none;" tabindex="5000">
             <div class="chat-users">
           <h6>쪽지함</h6>
-              <button type="button" class="btn btn-success position-relative">
-  				쪽지함
-  			  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-    				${notReadCnt }
-    				<span class="visually-hidden">unread messages</span>
-  			  </span>
-		      </button>
               <c:forEach var="r" items="${senderInfoMap }" varStatus="st">
               	<c:set var="sender" value="${r.key}" />
   				<c:set var="cnt" value="${r.value.cnt}" />

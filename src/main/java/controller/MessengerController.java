@@ -118,6 +118,6 @@ public class MessengerController extends MskimRequestMapping {
 		request.setAttribute("myPic", myPic);
 		request.setAttribute("yourPic", yourPic);
 		request.setAttribute("senderInfoMap",senderInfoMap);
-		return "messenger/msgForm";
+		return "redirect:msgForm?receiver="+receiver;
 	}
 }

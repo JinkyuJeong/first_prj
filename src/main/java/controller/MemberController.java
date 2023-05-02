@@ -29,11 +29,13 @@ import gdu.mskim.RequestMapping;
 import model.Board;
 import model.Member;
 import model.MemberMybatisDao;
+import model.MessengerMybatisDao;
 
 @WebServlet(urlPatterns = {"/member/*"},
 						initParams = {@WebInitParam(name="view", value="/view/")})
 public class MemberController extends MskimRequestMapping{
 	private MemberMybatisDao dao = new MemberMybatisDao();
+	private MessengerMybatisDao mdao = new MessengerMybatisDao();
 	
 	public String loginCheck(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { // @MSLogin annotation에 있는 거랑 이름 똑같아야함.
 		request.setCharacterEncoding("UTF-8");
@@ -353,6 +355,7 @@ public class MemberController extends MskimRequestMapping{
 		   String email = request.getParameter("id");
 		   String pass = request.getParameter("pass");
 		   Member mem = dao.selectOneEmail(email);
+		   
 		   String msg = null;
 		   String url = null;
 		   if(mem == null) {
@@ -363,7 +366,10 @@ public class MemberController extends MskimRequestMapping{
 			   url="loginForm";
 		   } else {
 			   request.getSession().setAttribute("login", email);
-			   request.getSession().setAttribute("nickname", mem.getNickname());
+			   String nickname = mem.getNickname();
+			   int unreadMsg = mdao.notReadCnt(nickname);
+			   request.getSession().setAttribute("nickname", nickname);			   
+			   request.getSession().setAttribute("unreadMsg", unreadMsg);
 			   msg="반갑습니다. " + mem.getNickname() + "님";
 			   url="/first_prj/index";
 		   }

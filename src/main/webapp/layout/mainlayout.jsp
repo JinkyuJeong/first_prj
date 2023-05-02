@@ -81,17 +81,34 @@
 
 <!-- Top menu -->
 <div id="top" class="w3-top">
-  <div class="w3-white w3-xlarge" style="max-width:100%;margin:auto">
-    <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">&#9776;</div>
+  <div class="w3-white w3-xlarge" style="display:flex;justify-content: space-between;align-items: center;position:relative;">
+  
+    <div class="w3-button w3-padding-16" onclick="w3_open()">&#9776;</div>
+    <div class="w3-padding-16 text-center" style="position:absolute; left:45%"><a href="${path}"><img src="${path}/images/mainLogo.JPG" width="130px" height="40px"></a></div>
+    
     <c:if test="${!empty sessionScope.login}">
-    	<div class="w3-right w3-padding-16"><a href="${path}/member/logout">로그아웃</a></div>
-	    <div class="w3-right w3-padding-16"><a href="${path}/member/myPage?email=${sessionScope.login}">마이페이지</a>&nbsp;&nbsp;</div>
+    	<div class=w3-padding-16>
+    		<button type="button" class="btn btn-dark position-relative" id="msgBtn" onclick="location.href='messenger/msgForm'">
+              쪽지함
+           <c:if test="${sessionScope.unreadMsg  > 0}">
+	           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+	             ${sessionScope.unreadMsg }
+	             <span class="visually-hidden">unread messages</span>
+	           </span>
+           </c:if>
+       </button>&nbsp;&nbsp;
+		    <a href="${path}/member/myPage?email=${sessionScope.login}">마이페이지</a>&nbsp;&nbsp;
+	    	<a href="${path}/member/logout">로그아웃</a>&nbsp;&nbsp;
+	    </div>
     </c:if>
     <c:if test="${empty sessionScope.login}">
-	    <div class="w3-right w3-padding-16"><a href="${path}/member/joinForm">회원가입</a></div>
-	    <div class="w3-right w3-padding-16"><a href="${path}/member/loginForm">로그인</a>&nbsp;&nbsp;</div>
+	    <div class=w3-padding-16>
+		    <a href="${path}/member/loginForm">로그인</a>&nbsp;&nbsp;
+		    <a href="${path}/member/joinForm">회원가입</a>&nbsp;&nbsp;
+		  </div>
     </c:if>
-    <div class="w3-center w3-padding-16 text-center">&nbsp;&nbsp;&nbsp;&nbsp;<a href="${path}"><img src="${path}/images/mainLogo.JPG" width="130px" height="40px"></a></div>
+    
+ 
   </div>
 </div>
 	<hr id="about">
