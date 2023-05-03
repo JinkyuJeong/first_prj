@@ -10,7 +10,7 @@
 	</c:if>
 	<c:if test="${isDup == 0  }">
 		<a type="button" class="btn" id="recomm"  href="javascript:recomm()">
-		 	<i class="fa fa-thumbs-up" style="color: red; font-size: 50px;"></i>&nbsp;${b.recommend }
+		 	<i class="fa fa-thumbs-o-up" style="font-size: 50px;"></i>&nbsp;${b.recommend }
 		</a>
 	</c:if>
 </c:if>
