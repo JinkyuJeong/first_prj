@@ -17,6 +17,7 @@ public class MessengerMybatisDao {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
 			session.getMapper(cls).insert(messenger);
+			session.getMapper(cls).insert2(messenger);
 		} catch(Exception e) {
 	   		 e.printStackTrace();
 	   	 } finally {
@@ -47,7 +48,7 @@ public class MessengerMybatisDao {
 	   	 }
 	   	 return null;
 	}
-
+	
 	public List<String> selectSenders(String nickname) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
@@ -86,12 +87,24 @@ public class MessengerMybatisDao {
 	public int notReadCntSep(String nickname, String receiver) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
-			return session.getMapper(cls).notRadCntSep(nickname, receiver);				
+			return session.getMapper(cls).notReadCntSep(nickname, receiver);				
 		} catch(Exception e) {
 	   		 e.printStackTrace();
 	   	 } finally {
 	   		 MybatisConnection.close(session);
 	   	 }
 	   	 return 0;
+	}
+
+	public void delete(String receiver, String nickname) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			session.getMapper(cls).delete(receiver, nickname);				
+		} catch(Exception e) {
+	   		 e.printStackTrace();
+	   	 } finally {
+	   		 MybatisConnection.close(session);
+	   	 }
+		
 	}
 }

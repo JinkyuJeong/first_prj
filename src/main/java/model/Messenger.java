@@ -9,6 +9,7 @@ public class Messenger {
 	private String content;
 	private Date regdate;
 	private int isRead;
+	private String mine;
 	
 	public int getNo() {
 		return no;
@@ -45,6 +46,12 @@ public class Messenger {
 	}
 	public void setIsRead(int isRead) {
 		this.isRead = isRead;
+	}
+	public String getMine() {
+		return mine;
+	}
+	public void setMine(String mine) {
+		this.mine = mine;
 	}
 	
 }

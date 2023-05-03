@@ -16,29 +16,44 @@
 <script type="text/javascript">
 	$(function(){
     	$(".chat").niceScroll();
-    	$(".chat-users").niceScroll();
-    	$("#message").keyup(function(e) {
+    	$("#wannaFix").keypress(function(e) {
     		if(e.keyCode == 13) {
-    			document.f.submit();
+    			if($(this).val().trim() == "") {
+    				 alert("메세지를 입력하세요.");
+    				 $(this).focus();
+    			     return false;
+    			} else {
+    				document.f.submit();
+    			}    			
     		}    		
     	})
     	$("#btn").click(function() {
+    		let content = document.f.content.value;
+    		if(content=="") {
+    			alert("메세지를 입력하세요.")
+    			f.content.focus();
+    			return;
+    		}
     		document.f.submit();
+    	})
+    	$("#out").click(function() {
+    		document.f.out.value = "out";
+    		
     	})
 	}) 
 	window.addEventListener("load", function() {
   		const fixed = document.getElementById("wannaFix"); 
   		fixed.focus();
-  		fixed.tabIndex=0;
-  		
+  		fixed.tabIndex=0;  		
 	});
 </script>
 <style type="text/css">
 .body{ margin-top:20px; background:#eee;}
 .row.row-broken { padding-bottom: 0;}
-.col-inside-lg {padding: 20px;}
+.col-inside-lg {padding: 20px; }
 .chat {height: calc(100vh - 180px);}
 .decor-default {background-color: #ffffff;}
+.col-inside-lg .decor-default { overflow-y: scroll;}
 .chat-users h6 {font-size: 20px; margin: 0 0 20px;}
 .chat-users #msgBtn {margin: 0 0 20px;}
 .chat-users .user {position: relative;padding: 0 0 10px 50px;display: block;cursor: pointer;margin: 0 0 20px;}
@@ -124,12 +139,19 @@
 }
 .bootstrap.snippets.bootdey div{font-family: 'Dongle', sans-serif; font-size: 1.1em}
 h2{font-family: 'Dongle', sans-serif; font-size:75px;}
+a {text-decoration: none;}	
 </style>
 </head>
 <body class="body">
 
 	<div class="container">
-	<h2 class="text-center">쪽지함</h2>
+	<h2 class="text-center"><a href="msgForm?receiver=${receiver }">쪽지함</a></h2>
+	<form action="search" method="post" name="searchF">
+	   	<div class="input-group ms-3 mb-1" style="width:23%">
+			<input type="text" class="form-control" name="nickname" placeholder="닉네임 검색">
+			<button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fa fa-search"></i></button>
+		</div>
+     </form>
 <div class="content container-fluid bootstrap snippets bootdey">
       <div class="row row-broken">
         <div class="col-sm-3 col-xs-12">
@@ -143,19 +165,22 @@ h2{font-family: 'Dongle', sans-serif; font-size:75px;}
                 <div class="user mb-5" onclick="location.href='msgForm?receiver=${r.key}'">                
                     <div class="avatar">
                  	 	<c:if test="${pic=='basic-profile.JPG' }">
-      						<img src="${path }/images/basic-profile.JPG" width="50px"><br>
+      						<img src="${path }/images/basic-profile.JPG" width="40px"><br>
       					</c:if>
       					<c:if test="${pic != 'basic-profile.JPG' }">
-      						<img src="/first_prj/upload/member/${pic}" width="50px"><br>
+      						<img src="/first_prj/upload/member/${pic}" width="40px"><br>
       					</c:if>  
                     </div>
                     <div class="name">
                     	${sender}                    	
                     </div>
-                    <span class="position-absolute translate-middle badge rounded-pill bg-danger" style="left: 230px; top:10px;">
+                    <c:if test="${cnt!=0 }">
+                    	<span class="position-absolute translate-middle badge rounded-pill bg-danger" style="left: 230px; top:10px;">
     							${cnt }
     						<span class="visually-hidden">unread messages</span>
-  			  		</span>
+  			  			</span>
+                    </c:if>
+                    
                 </div>
               </c:forEach>
             </div>
@@ -170,10 +195,10 @@ h2{font-family: 'Dongle', sans-serif; font-size:75px;}
               		<div class="answer right">
                 		<div class="avatar">
                   			<c:if test="${myPic=='basic-profile.JPG' }">
-      							<img src="${path }/images/basic-profile.JPG"><br>
+      							<img src="${path }/images/basic-profile.JPG" width="40px"><br>
       						</c:if>
       						<c:if test="${myPic != 'basic-profile.JPG' }">
-      							<img src="/first_prj/upload/member/${myPic}"><br>
+      							<img src="/first_prj/upload/member/${myPic}" width="40px"><br>
       						</c:if> 
                 		</div>
                 		<div class="name">${m.sender }</div>
@@ -187,10 +212,10 @@ h2{font-family: 'Dongle', sans-serif; font-size:75px;}
               		<div class="answer left">
                 		<div class="avatar">
                   			<c:if test="${yourPic=='basic-profile.JPG' }">
-      							<img src="${path }/images/basic-profile.JPG"><br>
+      							<img src="${path }/images/basic-profile.JPG" width="40px"><br>
       						</c:if>
       						<c:if test="${yourPic != 'basic-profile.JPG' }">
-      							<img src="/first_prj/upload/member/${yourPic}"><br>
+      							<img src="/first_prj/upload/member/${yourPic}" width="40px"><br>
       						</c:if> 
                 		</div>
                 		<div class="name">${m.sender }</div>
@@ -203,6 +228,7 @@ h2{font-family: 'Dongle', sans-serif; font-size:75px;}
               </c:forEach>
               
             </div>
+            
               <form action="msg" method="post" name="f">
               <div class="answer-add">
                 <input placeholder="메세지를 입력하세요." id="wannaFix" name="content" size="60" style="width: 800px;">
@@ -213,30 +239,31 @@ h2{font-family: 'Dongle', sans-serif; font-size:75px;}
                 	<a type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                    나가기
                </a>
-               
+               </form>
+               <form action="out" name="outF">
+               <input type="hidden" name="receiver" value="${receiver }">
                <!-- Modal -->
                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                  <div class="modal-dialog">
                    <div class="modal-content">
                      <div class="modal-header">
-                       <h5 class="modal-title" id="staticBackdropLabel">메세지 나가기</h5>
+                       <h5 class="modal-title" id="staticBackdropLabel">채팅방 나가기</h5>
                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                      </div>
                      <div class="modal-body">
-                       나갈래?
+                       채팅방을 나갈 시 모든 대화내용이 삭제됩니다. 채팅방을 나가시겠습니까?
                      </div>
                      <div class="modal-footer">
                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                       <button type="button" id="out" class="btn btn-dark">나가기</button>
+                       <button type="submit" id="out" class="btn btn-dark">나가기</button>
                      </div>
                    </div>
                  </div>
                </div>
-                </span>
-                
+               </form>
                 <span class="answer-btn answer-btn-2"></span>
               </div>
-              </form>
+               
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import gdu.mskim.MSLogin;
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.Member;
@@ -24,8 +25,31 @@ public class MessengerController extends MskimRequestMapping {
 	private MessengerMybatisDao dao = new MessengerMybatisDao();
 	private MemberMybatisDao mdao = new MemberMybatisDao();
 	
+	public String loginCheck(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { // @MSLogin annotation에 있는 거랑 이름 똑같아야함.
+		request.setCharacterEncoding("UTF-8");
+		String nicknameP = request.getParameter("nickname");
+		String nicknameS = (String)request.getSession().getAttribute("nickname");
+		if(nicknameS==null || nicknameS.equals("")) {
+			request.setAttribute("msg", "로그인하세요.");
+			request.setAttribute("url", "/first_prj/member/loginForm");
+			return "alert";
+		} else if(!nicknameP.equals("운영자") && !nicknameS.equals(nicknameP)) {
+			request.setAttribute("msg" , "본인만 접근 가능합니다.");
+			request.setAttribute("url", "/first_prj/index");
+			return "alert";
+		}
+		return null;
+	}
+	
+	@MSLogin("loginCheck")
 	@RequestMapping("msgForm")
 	public String msgForm(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String nickname = (String)request.getSession().getAttribute("nickname");
 		String receiver = request.getParameter("receiver");
 		Messenger msg = new Messenger();		
@@ -43,13 +67,18 @@ public class MessengerController extends MskimRequestMapping {
 				Map<String, Object> senderInfo = senderInfoMap.get(sender); 
 				senderInfo.put("cnt", dao.notReadCntSep(nickname,sender)); //읽지 않은 메세지
 				senderInfo.put("pic", mdao.selectOneNick(sender).getPicture()); //사진
-			}
+			}			
 			
 			request.setAttribute("senders", senders);
 			request.setAttribute("notReadCnt", notReadCnt);
 			request.setAttribute("senderInfoMap",senderInfoMap);
 			return "messenger/noMsgForm";
 		} else {
+			if(receiver.equals("운영자")) {
+				request.setAttribute("msg", "운영자에게는 쪽지를 보낼 수 없습니다.");
+				request.setAttribute("url", "msgForm");
+				return "alert";
+			}
 			dao.read(nickname,receiver); //isRead update
 			
 			msgs = dao.selectMsgs(receiver,nickname); //주고받은 메세지 정보
@@ -66,6 +95,7 @@ public class MessengerController extends MskimRequestMapping {
 			String myPic = mdao.selectOneNick(nickname).getPicture(); //채팅방 내 내 사진
 			String yourPic = mdao.selectOneNick(receiver).getPicture(); //채팅방 내에서 상대방 사진
 			
+			request.setAttribute("nickname",nickname);
 			request.setAttribute("receiver",receiver);
 			request.setAttribute("senders", senders);		
 			request.setAttribute("msgs",msgs);
@@ -77,6 +107,7 @@ public class MessengerController extends MskimRequestMapping {
 		}
 	}
 
+	@MSLogin("loginCheck")
 	@RequestMapping("msg")
 	public String msg(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -87,13 +118,13 @@ public class MessengerController extends MskimRequestMapping {
 		}
 		//메세지 보내는 부분
 		String nickname = (String)request.getSession().getAttribute("nickname");
-		String sender1 = nickname;
 		String receiver = request.getParameter("receiver");
+		
 		String content = request.getParameter("content");
 		Messenger messenger = new Messenger();
-		messenger.setSender(sender1);
+		messenger.setSender(nickname);
 		messenger.setReceiver(receiver);
-		messenger.setContent(content);		
+		messenger.setContent(content);	
 		dao.insert(messenger);	
 		
 		List<Messenger> msgs = dao.selectMsgs(receiver,nickname);
@@ -111,6 +142,7 @@ public class MessengerController extends MskimRequestMapping {
 			senderInfo.put("pic", mdao.selectOneNick(sender).getPicture());
 		}
 		
+		request.setAttribute("nickname",nickname);
 		request.setAttribute("receiver",receiver);
 		request.setAttribute("senders", senders);
 		request.setAttribute("msgs",msgs);
@@ -118,6 +150,45 @@ public class MessengerController extends MskimRequestMapping {
 		request.setAttribute("myPic", myPic);
 		request.setAttribute("yourPic", yourPic);
 		request.setAttribute("senderInfoMap",senderInfoMap);
-		return "redirect:msgForm?receiver="+receiver;
+		return "send";
+	}
+	
+	@MSLogin("loginCheck")
+	@RequestMapping("out")
+	public String out(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String nickname = (String)request.getSession().getAttribute("nickname");
+		String receiver = request.getParameter("receiver");
+		dao.delete(receiver, nickname);
+		request.setAttribute("receiver", receiver);
+		request.setAttribute("nickname",nickname);
+		return "send";
+	}
+	
+	@RequestMapping("search")
+	public String search(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String nickname = request.getParameter("nickname");
+		Member mem = mdao.selectOneNick(nickname);
+		if(nickname.equals("운영자")) {
+			request.setAttribute("msg", "운영자에게는 쪽지를 보낼 수 없습니다.");
+			request.setAttribute("url", "msgForm");
+			return "alert";
+		} else if(mem==null) {
+			request.setAttribute("msg", "존재하지 않는 닉네임 입니다.");
+			request.setAttribute("url", "msgForm");
+			return "alert";
+		} 
+		request.setAttribute("receiver", nickname);
+		request.setAttribute("nickname",nickname);
+		return "send";
 	}
 }
