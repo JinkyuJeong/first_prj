@@ -17,6 +17,6 @@
 
 <c:if test="${sessionScope.login == null }">
 <a type="button" class="btn" id="recomm1" onclick="alert('회원만 추천 가능합니다.')">
- 	<i class="fa fa-thumbs-up" style="color: red;"></i>&nbsp;${c.recommend }
+ 	<i class="fa fa-thumbs-o-up"></i>&nbsp;${c.recommend }
 </a>
 </c:if>
