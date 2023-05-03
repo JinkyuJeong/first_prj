@@ -37,7 +37,11 @@ public interface CommentMapper {
 	@Delete("delete from comment where no=#{no} and seq=#{seq}")
 	int delete(@Param("no")int no, @Param("seq")int seq);
 
+	@Delete("delete from comment where no=#{no} and grp=#{seq}")
+	int deleteGrp(@Param("no")int no, @Param("seq")int seq);
+	
 	@Update("update comment set recommend=recommend+1 where no=#{no} and seq=#{seq}")
 	int plusRecomm(@Param("no")int no, @Param("seq")int seq);
+
 	
 }

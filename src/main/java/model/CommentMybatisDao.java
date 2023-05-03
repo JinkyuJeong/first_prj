@@ -101,6 +101,7 @@ public class CommentMybatisDao {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
 			 int cnt = session.getMapper(cls).delete(no, seq);
+			 cnt+= session.getMapper(cls).deleteGrp(no, seq);
 			 return cnt>0;
 		} catch (Exception e) {
 			e.printStackTrace();
