@@ -21,7 +21,7 @@
             <c:forEach var="comm" items="${commList }" varStatus="st">
             	<span id="id${comm.no}${comm.seq}"></span>
               <tr class="${comm.recommend >=5? 'table-secondary' : ''  }">
-                <td width="15%">
+                <td width="15%" style="position:relative" class="item">
                 	<c:if test="${comm.grpLevel == 1}">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;</c:if>
                 	<c:if test="${comm.picture == 'basic-profile.JPG'}">
 				           	<img id="prof" src="${path }/images/basic-profile.JPG">
@@ -29,7 +29,9 @@
 				           <c:if test="${comm.picture != 'basic-profile.JPG'}">
 				           	<img id="prof" src="/first_prj/upload/member/${comm.picture}">
 				           </c:if>
-				           &nbsp;${comm.nickname }
+				           &nbsp;
+				           <span class="name" onclick="$('.msg').not($(this).next('.msg')).hide();$(this).next('.msg').toggle();">${comm.nickname }</span>
+       							<span class="msg ${comm.grpLevel == 1? 'msg-3' : 'msg-2'}" onclick="location.href='/first_prj/messenger/msgForm?receiver=${comm.nickname}'"><i class="fa fa-comments-o" aria-hidden="true"></i>&nbsp;쪽지</span>
                 </td>
                 
                 <c:if test="${comm.recommend >= 5 }">
@@ -161,6 +163,12 @@
 								      }
 								     
 								   })
+								  
+								   $(document).on('click', function(e) {
+									    if(!$(e.target).closest('.item').length) {
+									      $('.msg').hide();
+									    }
+									  });
 								})
 								
 									function replyRecomm(no, seq){

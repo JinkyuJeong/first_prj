@@ -36,6 +36,33 @@
   td .btn:hover {color: lightgray;}
   .btn.btn-dark.comm{font-size:12px;}
   .reply{display : none;}
+  .msg{
+ 	position:absolute;
+ 	border:1px solid black;
+ 	background-color:black; 
+ 	color:white; 
+ 	padding:5px;
+ 	box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+ 	display:none;
+ 	cursor: pointer;
+ }
+ .msg-1{
+ 	top:70%; 
+ 	left:10%; 
+ }
+ .msg-2{
+ 	top:50%; 
+ 	left:40%; 
+ }
+  .msg-3{
+ 	top:50%; 
+ 	left:60%; 
+ }
+ .name{cursor: pointer;}
+ .msg:hover{
+ 	background-color: grey;
+ 	border:1px solid grey;
+ }
   /* ************************************ */
 </style>
 <script type="text/javascript">
@@ -59,7 +86,6 @@
 		 	error : function(e){
 	        alert("서버오류" + e.status)
 	      }
-	     
 	   })
 	   $('#commForm').submit(function(event) {
 		   if($("#cont").val() == ''){
@@ -84,7 +110,18 @@
          }
 	     });
 	 		});
-	   
+		 $('.item .name').on('click', function() {
+			    $('.msg').not($(this).next('.msg')).hide();
+			    $(this).next('.msg').toggle();
+			  });
+
+			  $(document).on('click', function(e) {
+			    if(!$(e.target).closest('.item').length) {
+			      $('.msg').hide();
+			    }
+			  });
+			  
+			  
 	})
   function curPage(n){
 		 $.ajax({
@@ -110,6 +147,7 @@
 	     
 	   })
 	 }
+	
 </script>
 </head>
 <body>
@@ -143,14 +181,16 @@
 
        <tr>
          <th class="table-dark">작성자</th>
-         <td>
+         <td style="position:relative" class="item">
          	<c:if test="${b.picture == 'basic-profile.JPG'}">
            	<img id="prof" src="${path }/images/basic-profile.JPG">
            </c:if>
            <c:if test="${b.picture != 'basic-profile.JPG'}">
            	<img id="prof" src="/first_prj/upload/member/${b.picture}">
            </c:if>
-           &nbsp;${b.nickname }
+           &nbsp;
+           <span class="name">${b.nickname }</span>
+       			<span class="msg msg-1" onclick="location.href='/first_prj/messenger/msgForm?receiver=${b.nickname}'"><i class="fa fa-comments-o" aria-hidden="true"></i>&nbsp;쪽지</span>
          </td>
        </tr>
 

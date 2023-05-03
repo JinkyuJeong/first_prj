@@ -38,6 +38,23 @@
   .notice{background-color:lightgray;}
   #cnt{padding:0px; font-family: 'Dongle', sans-serif; font-size:25px;}
   #best{font-weight : 900; color : green;}
+  .msg{
+  	position:absolute;
+  	border:1px solid black;
+  	top:60%; 
+  	left:60%; 
+  	background-color:black; 
+  	color:white; 
+  	padding:5px;
+  	box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+  	display:none;
+  	cursor: pointer;
+  }
+  .name{cursor: pointer;}
+  .msg:hover{
+  	background-color: grey;
+  	border:1px solid grey;
+  }
   /* ************************************ */
 </style>
  <script type="text/javascript">
@@ -51,7 +68,20 @@
 			$('#allChk').click(function(){
 				$('.noChk').prop('checked', $(this).is(':checked'));
 			});
-		}); 
+		});
+	 $(()=>{
+		 $('.item .name').on('click', function(e) {
+			    e.preventDefault();
+			    $('.msg').not($(this).next('.msg')).hide();
+			    $(this).next('.msg').toggle();
+			  });
+
+			  $(document).on('click', function(e) {
+			    if(!$(e.target).closest('.item').length) {
+			      $('.msg').hide();
+			    }
+			  });
+	 })
 </script>
 </head>
 <body>
@@ -185,15 +215,16 @@
 		          		<a href="detail?no=${b.no }#comment" class="orange">[${b.commCnt }]</a>
 		          	</c:if>
 		          </td>
-		          <td>
+		          <td style="position:relative" class="item">
 		          	<c:if test="${b.picture == 'basic-profile.JPG' }">
 		          		<img id="profile" src="${path }/images/basic-profile.JPG">
 		          	</c:if>
 		          	<c:if test="${b.picture != 'basic-profile.JPG' }">
 		          		<img id="profile" src="/first_prj/upload/member/${b.picture}">
 		          	</c:if>
-		          	${b.nickname }
-		          </td>
+		          	<span class="name">${b.nickname }</span>
+	          		<span class="msg" onclick="location.href='/first_prj/messenger/msgForm?receiver=${b.nickname}'"><i class="fa fa-comments-o" aria-hidden="true"></i>&nbsp;쪽지</span>
+		          </td> 
 		          
 		          <fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
 							<c:if test="${t eq r}">

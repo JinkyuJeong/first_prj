@@ -143,10 +143,10 @@ h2{font-family: 'Dongle', sans-serif; font-size:75px;}
                 <div class="user mb-5" onclick="location.href='msgForm?receiver=${r.key}'">                
                     <div class="avatar">
                  	 	<c:if test="${pic=='basic-profile.JPG' }">
-      						<img src="${path }/images/basic-profile.JPG"><br>
+      						<img src="${path }/images/basic-profile.JPG" width="50px"><br>
       					</c:if>
       					<c:if test="${pic != 'basic-profile.JPG' }">
-      						<img src="/first_prj/upload/member/${pic}"><br>
+      						<img src="/first_prj/upload/member/${pic}" width="50px"><br>
       					</c:if>  
                     </div>
                     <div class="name">
