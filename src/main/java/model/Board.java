@@ -21,7 +21,6 @@ public class Board {
 	private String nickname;
 	private String title;
 	private String content;
-	private String file1;
 	private Date regdate;
 	private String boardType;
 	private int hit;
@@ -50,12 +49,6 @@ public class Board {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public String getFile1() {
-		return file1;
-	}
-	public void setFile1(String file1) {
-		this.file1 = file1;
 	}
 	public Date getRegdate() {
 		return regdate;
@@ -87,12 +80,5 @@ public class Board {
 	public void setPub(int pub) {
 		this.pub = pub;
 	}
-	@Override
-	public String toString() {
-		return "Board [no=" + no + ", nickname=" + nickname + ", title=" + title + ", content=" + content + ", file1="
-				+ file1 + ", regdate=" + regdate + ", boardType=" + boardType + ", hit=" + hit + ", recommend="
-				+ recommend + ", pub=" + pub + "]";
-	}
-	
 	
 }

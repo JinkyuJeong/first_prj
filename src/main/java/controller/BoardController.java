@@ -202,24 +202,11 @@ public class BoardController extends MskimRequestMapping{
 		String boardType = (String)request.getSession().getAttribute("boardType");
 		if(boardType == null) boardType = "1";
 		
-		String uploadPath = request.getServletContext().getRealPath("/") + "/upload/board"; // 절대경로
-		File f = new File(uploadPath);
-		if(!f.exists()) f.mkdirs();
-		int size = 1024*1024*10;
-		MultipartRequest multi = null;
-		try {
-			multi = new MultipartRequest(request, uploadPath, size, "UTF-8");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		Board b = new Board();
-		b.setTitle(multi.getParameter("title"));
+		b.setTitle(request.getParameter("title"));
 		b.setNickname(nickname);
-		b.setContent(multi.getParameter("content"));
-		b.setFile1(multi.getFilesystemName("file1"));
+		b.setContent(request.getParameter("content"));
 		b.setBoardType(boardType);
-		if(b.getFile1() == null) b.setFile1("");
 
 		if(dao.insert(b)){
 			request.setAttribute("msg", "게시물 등록 성공");
@@ -426,24 +413,10 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("update")
 	public String update(HttpServletRequest request, HttpServletResponse response) {
-		String path = request.getServletContext().getRealPath("/") + "/upload/board"; // 절대경로
-		File f = new File(path);
-		int size = 1024*1024*10;
-		MultipartRequest multi = null;
-		try {
-			multi = new MultipartRequest(request, path, size, "UTF-8");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		Board b = new Board();
-		b.setNo(Integer.parseInt(multi.getParameter("no")));
-		b.setTitle(multi.getParameter("title"));
-		b.setContent(multi.getParameter("content"));
-		b.setFile1(multi.getFilesystemName("file1"));
-		if(b.getFile1()==null || b.getFile1().equals("")){
-			b.setFile1(multi.getFilesystemName("file2"));
-		}
+		b.setNo(Integer.parseInt(request.getParameter("no")));
+		b.setTitle(request.getParameter("title"));
+		b.setContent(request.getParameter("content"));
 		
 		String msg = "";
 		String url = "detail?no=" + b.getNo();

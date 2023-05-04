@@ -81,11 +81,6 @@
         </tr>
 
         <tr>
-          <th class="table-light">첨부파일</th>
-          <td><input class="form-control" type="file" name="file1"></td>
-        </tr>
-
-        <tr>
           <td colspan="2" align="center"><a class="btn btn-dark" href="javascript:inputcheck()">등록하기</a></td>
         </tr>
 

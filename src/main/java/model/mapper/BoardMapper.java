@@ -14,7 +14,7 @@ import model.BoardListView;
 
 public interface BoardMapper {
 	
-	@Insert("insert into board (title, nickname, content, file1, boardType) values (#{title}, #{nickname}, #{content}, #{file1}, #{boardType})")
+	@Insert("insert into board (title, nickname, content, boardType) values (#{title}, #{nickname}, #{content}, #{boardType})")
 	int insert(Board b);
 
 	String sqlField = " <if test='pub != null'> and pub=#{pub} </if> " +
@@ -64,7 +64,7 @@ public interface BoardMapper {
 			+ "				 WHERE boardType=#{boardType} AND pub=#{pub} AND regdate < (SELECT regdate FROM boardDetailView WHERE NO=#{no}) order by regdate desc LIMIT 1)")
 	BoardDetailView selectPrevious(BoardDetailView b);
 
-	@Update("update board set title=#{title}, content=#{content}, file1=#{file1} where no=#{no}")
+	@Update("update board set title=#{title}, content=#{content} where no=#{no}")
 	int update(Board b);
 
 	@Delete("delete from board where no=#{value}")

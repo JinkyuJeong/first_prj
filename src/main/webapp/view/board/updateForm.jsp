@@ -51,7 +51,6 @@
 <body>
 	 <form method="post" action="update" enctype="multipart/form-data" name="f" >
 	 	<input type="hidden" name="no" value="${b.no }">
-	 	<input type="hidden" name="file2" value="${b.file1}">
     <div class="container">
       <h2 id="title">${boardName} 게시글 수정</h2>
     
@@ -88,20 +87,6 @@
 				    resize_enabled: false
 				  });
 				</script>
-        </tr>
-
-        <tr>
-          <th class="table-light">첨부파일</th>
-          
-          <td>
-          	<c:if test="${!empty b.file1 }">
-							<div id="file_desc">
-								${b.file1}
-								<a class="btn" href="javascript:file_delete()">[첨부파일 삭제]</a>
-							</div>
-						</c:if>
-						<input class="form-control" type="file" name="file1">
-        	</td>
         </tr>
 
         <tr>

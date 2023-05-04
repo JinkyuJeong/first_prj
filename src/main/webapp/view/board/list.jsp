@@ -207,10 +207,6 @@
 		          		<a href="detail?no=${b.no }">${title }</a>
 		          	</c:if>
 		          	
-		          	<c:if test="${!empty b.file1 }">
-		          		<i class="fa fa-image"> </i>
-		          	</c:if>
-		          	
 		          	<c:if test="${b.commCnt != 0}"> 
 		          		<a href="detail?no=${b.no }#comment" class="orange">[${b.commCnt }]</a>
 		          	</c:if>

@@ -201,18 +201,6 @@
          </td>
        </tr>
 
-       <tr>
-         <th class="table-dark">첨부파일</th>
-         <td>
-         	<c:if test="${empty b.file1 }">
-						&nbsp;
-					</c:if>
-					<c:if test="${!empty b.file1 }">
-						<a download href="${path }/upload/board/${b.file1 }">${b.file1 }</a>
-					</c:if>
-         </td>
-       </tr>
-
      </table>
      
      <c:if test="${b.boardType != 4 }">
