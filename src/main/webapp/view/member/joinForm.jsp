@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <style type="text/css">
 	/* JoinForm.jsp에 들어갈 css속성임 */
 	#title{
@@ -33,7 +34,7 @@
   .mt-3 .btn:hover {color: lightgray;}
   #authMsg{font-size:10px;}
   #cor1, #cor2{position:relative;}
-  #pwMsg, #crPwMsg{font-size:10px; margin-top:-2vh; position:absolute; bottom:0; left:0;}
+  #corPwMsg, #pwChkMsg{font-size:10px; margin-top:-2vh; position:absolute; bottom:0; left:0;}
   /* ************************************ */
 </style>
 <script>
@@ -68,12 +69,10 @@
   		return false;
   	  }
 	  if(f.pwchkchk.value != "pwchecked") {
-		alert("비밀번호를 확인해주세요.");
 		f.pass2.focus();
 		return false;
 	  }
 	  if(f.corpwchk.value != "pwchecked") {
-		alert("비밀번호를 확인해주세요.");
 		f.pass.focus();
 		return false;
 	  }
@@ -116,42 +115,45 @@
 		}
 		const op = "width=400, height=250, left=50, top=150";
 		open("nickChk?nickname="+nickname,"",op);
-	}
-	function checkPasswords() {
-		let password = document.getElementById("pwd").value;
-		let password2 = document.getElementById("pwd2").value;
-		let pwMsg = document.getElementById("pwMsg");
-		let corPw = document.getElementById("corpwchk").value;
-		if(corPw == "pwunchecked" || password==null || password=="") {
-			pwMsg.innerHTML="8~16자리 영대소문자/숫자 조합의 비밀번호를 입력해주세요.";
-			pwMsg.style.color = "red";
-		} else {
-			if(password == password2) {
-				pwMsg.innerHTML="비밀번호가 일치합니다.";
-				pwMsg.style.color = "blue";
-				document.getElementById("pwchkchk").value = "pwchecked";
-			} else {
-				pwMsg.innerHTML="비밀번호가 일치하지않습니다.";
-				pwMsg.style.color = "red";
-				document.getElementById("pwchkchk").value = "pwunchecked";
+	}	
+	$(function() {
+		$("#pwd").keyup(function() {
+			corPwChk();
+			pwChk();
+		})
+		$("#pwd2").keyup(function() {
+			corPwChk();
+			pwChk();
+		})
+		$()
+	})
+	function corPwChk() {
+		let param = {pass:$("#pwd").val(), pass2:$("#pwd2").val()};
+		$.ajax({
+			url : "/first_prj/ajax/corrPassChk",
+			type : "POST",
+			data : param,
+			success : function(result) {
+				$("#corPwMsg").html(result)
+			},
+			error : function(e) {
+				alert("비밀번호 입력" + e.status)
 			}
-		}		
+		})
 	}
-	function correctPwChk() {
-		let password = document.getElementById("pwd").value;
-		let pwPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
-		let crPwMsg = document.getElementById("crPwMsg");
-		if(!pwPattern.test(password)) {
-			
-			crPwMsg.innerHTML="유효하지 않은 비밀번호 입니다.";
-			crPwMsg.style.color = "red";
-			document.getElementById("corpwchk").value = "pwunchecked";
-		} else {
-			crPwMsg.innerHTML="사용가능한 비밀번호 입니다.";
-			crPwMsg.style.color = "blue";
-			document.getElementById("corpwchk").value = "pwchecked";
-		}
-//		checkPasswords()
+	function pwChk() {
+		let param = {pass:$("#pwd").val(), pass2:$("#pwd2").val()};
+		$.ajax({
+			url : "/first_prj/ajax/passChk",
+			type : "POST",
+			data : param,
+			success : function(result) {
+				$("#pwChkMsg").html(result)
+			},
+			error : function(e) {
+				alert("비밀번호 입력" + e.status)
+			}
+		})
 	}
 </script>
 </head>
@@ -185,32 +187,33 @@
           </div>
           <button type="button" class="btn btn-dark" onclick="win_open('emailForm')">이메일인증</button>
           
-          <span class="ms-3" id="authMsg"></span>
+           <span class="ms-3" id="authMsg"></span>
           
           <input type="hidden" name="emailchkchk" value="emailunchecked"> 
         </div>
         <!-- 비밀번호-->
         <div id="cor1" class="form-group">
-          <label class="mb-1" for="pwd">비밀번호</label>
-          <input type="password" class="form-control mb-4" id="pwd" name="pass" 
-          placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가" onkeyup="correctPwChk()"> 
-          <span id="crPwMsg"></span>
-          <input type="hidden" name="corpwchk" id="corpwchk" value="pwunchecked"> 
+        	<label class="mb-1" for="pwd">비밀번호</label>
+          	<input type="password" class="form-control mb-4" id="pwd" name="pass" 
+          		placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가">
+          	<div class="invalid-feedback" id="corPwMsg">
+    	    </div>
         </div>
         <!-- 비밀번호 재입력 -->
         <div id="cor2" class="form-group">
-          <label class="mb-1" for="pwd2">비밀번호 재입력</label>
-          <input type="password" class="form-control mb-4" id="pwd2" name="pass2" onkeyup="checkPasswords()">
-          <span id="pwMsg"></span>     
-          <input type="hidden" name="pwchkchk" id="pwchkchk" value="pwunchecked"> 
-          
+        	<label class="mb-1" for="pwd2">비밀번호 재입력</label>
+          	<input type="password" class="form-control mb-4" id="pwd2" name="pass2">
+          	<div class="invalid-feedback" id="pwChkMsg">
+    	    </div>
         </div>
         <!-- 닉네임 -->
         <div class="form-group">
           <label class="mb-1" for="nickname">닉네임</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="nickname" id="nickname" placeholder="최대 7자, 부적절한 닉네임 사용금지" maxlength="7">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="win_nickChk()">중복검사</button>
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">중복검사</button>
+            <div id="nickMsg" class="invalid-feedback">      		
+    		</div>
             <input type="hidden" id="nicknamechkchk" value="nicknameunchecked">
           </div>
         </div>

@@ -14,6 +14,8 @@ import model.BoardMybatisDao;
 import model.CommRecommendMybatisDao;
 import model.Comment;
 import model.CommentMybatisDao;
+import model.Member;
+import model.MemberMybatisDao;
 import model.MessengerMybatisDao;
 import model.RecommendMybatisDao;
 
@@ -26,6 +28,7 @@ public class AjaxController extends MskimRequestMapping{
 	private MessengerMybatisDao msgdao = new MessengerMybatisDao();
 	private BoardMybatisDao bDao = new BoardMybatisDao();
 	private CommentMybatisDao cDao = new CommentMybatisDao();
+	private MemberMybatisDao mbDao = new MemberMybatisDao();
 	
 	
 	@RequestMapping("unreadMsg")
@@ -112,4 +115,61 @@ public class AjaxController extends MskimRequestMapping{
 		}
 		return "redirect:" + url;
 	}
+	
+	@RequestMapping("passChk")
+	public String passChk(HttpServletRequest request, HttpServletResponse response) {
+		String password = request.getParameter("pass");
+		String password2 = request.getParameter("pass2");
+		boolean b = true;
+		String emptyChk = null;
+		String emptyChk2 = null;
+		if(password2==null || password2.equals("")){
+			emptyChk="emptyChk";
+		 } else{
+			 emptyChk="";
+		 }
+		if(password.equals(password2)) {
+			b=true;
+		} else {
+			b=false;			 
+		} 
+		request.setAttribute("b", b);
+		request.setAttribute("emptyChk", emptyChk);
+		request.setAttribute("emptyChk2", emptyChk2);
+		return "ajax/passChk";
+	}
+	
+	@RequestMapping("corrPassChk")
+	public String corrPassChk(HttpServletRequest request, HttpServletResponse response) {
+		String password = request.getParameter("pass");
+		String pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,16}$";
+		boolean b = true;
+		String emptyChk = null;
+		if(password==null || password.equals("")){
+			emptyChk="emptyChk";
+		} else {
+			 emptyChk="";
+		}
+		if(password.matches(pattern)) {
+			b=true;
+		} else {
+			b=false;
+		}
+		request.setAttribute("emptyChk", emptyChk);
+		request.setAttribute("b", b);
+		return "ajax/corrPassChk";
+	}
+	
+	@RequestMapping("nickchk")
+	public String nickchk(HttpServletRequest request, HttpServletResponse response) {
+		String nickname = request.getParameter("nickname");
+		Member mem = mbDao.selectOneNick(nickname);
+		boolean able = true;
+		if(mem==null) {
+			able=false;
+		}
+		request.setAttribute("able", able);
+		return "ajax/nickchk";
+	}
+	
 }
