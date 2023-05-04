@@ -26,9 +26,12 @@ public class DrawController extends MskimRequestMapping {
 	public String draw(HttpServletRequest request, HttpServletResponse response) {
 		String email = (String)request.getSession().getAttribute("login");
 		if(email==null || email.equals("")) {
-			System.out.println("확인");
 			request.setAttribute("msg", "로그인하세요.");
 			request.setAttribute("url", "/first_prj/member/loginForm");
+			return "alert";
+		} else if(email.equals("admin")) {
+			request.setAttribute("msg", "관리자는 응모가 불가합니다.");
+			request.setAttribute("url", "/first_prj/event/eventForm");
 			return "alert";
 		}
 		int no = Integer.parseInt(request.getParameter("no"));	
