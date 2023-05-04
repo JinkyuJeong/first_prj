@@ -179,4 +179,15 @@ public class MemberMybatisDao {
 	   	 }
 	   	 return null;
 	}
+
+	public void updateImg(String img, String login) {
+		SqlSession session = MybatisConnection.getConnection();
+		try {
+			session.getMapper(cls).updateImg(img, login);
+		} catch(Exception e) {
+	   		 e.printStackTrace();
+	   	 } finally {
+	   		 MybatisConnection.close(session);
+	   	 }	
+	}
 }

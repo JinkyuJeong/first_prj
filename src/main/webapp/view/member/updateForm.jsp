@@ -29,6 +29,7 @@
   #usr, #sel{width:15vw;}
   .mt-3 .btn{font-size: 24px;}
   .mt-3 .btn:hover {color: lightgray;}
+  #basic {cursor:pointer;}
   /* ************************************ */
 </style>
 <script type="text/javascript">
@@ -69,6 +70,16 @@
 		open("nickChk?nickname="+nickname,"",op);
 	}
 	$(function() {
+		$.ajax({
+			url : "/first_prj/ajax/basicForm",
+			type : "POST",
+			success : function(result) {
+				$("#picUpdate").html(result)
+			},
+			error : function(e) {
+				alert("이미지 처음 로드" + e.status)
+			}
+		})
 		$("#update").click(function() {
 			if(f.pass.value.trim() === "") {
 				alert("비밀번호를 입력하세요")
@@ -86,15 +97,8 @@
 
 		<div class="container form">
       <!-- 왼쪽 사진등록 구역 -->
-      <div class="be-light">
-        <input type="hidden" name="picture" value="${mem.picture}">
-        <c:if test="${mem.picture=='basic-profile.JPG' }">
-      		<img src="${path }/images/basic-profile.JPG" width="200" height="200" id="pic"><br>
-      	</c:if>
-      	<c:if test="${mem.picture != 'basic-profile.JPG' }">
-      		<img src="/first_prj/upload/member/${mem.picture}" width="200" height="200" id="pic"><br>
-      	</c:if>
-        <div align="center"><font size="1"><a href="javascript:win_upload()">사진등록</a></font></div>
+      <div class="be-light" id="picUpdate">
+        
       </div>
       <!-- 오른쪽 아이디/비번/닉네임 입력구역-->
       <div>

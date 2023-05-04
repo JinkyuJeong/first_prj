@@ -83,9 +83,10 @@ public class MemberController extends MskimRequestMapping{
 			e.printStackTrace();
 		}
 		Member mem = new Member();
-//		mem.setEmail1(request.getParameter("email1"));
-//		mem.setEmail2(request.getParameter("email2"));
 		String emailaddress = request.getParameter("email1")+"@"+request.getParameter("email2");
+		System.out.println(request.getParameter("email1"));
+		System.out.println(request.getParameter("email2"));
+		System.out.println(emailaddress);
 		mem.setEmailaddress(emailaddress);
 		mem.setPassword(request.getParameter("pass"));
 		mem.setPicture(request.getParameter("picture"));
@@ -129,7 +130,7 @@ public class MemberController extends MskimRequestMapping{
 				System.out.println("inputedEmail : " + inputedEmail);
 				Properties prop = new Properties();
 				   try {
-					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 					   prop.load(fis);
 					   prop.put("mail.smtp.user", sender);
 					   System.out.println(prop);
@@ -205,7 +206,7 @@ public class MemberController extends MskimRequestMapping{
 				System.out.println("inputedEmail : " + inputedEmail);
 				Properties prop = new Properties();
 				   try {
-					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 					   prop.load(fis);
 					   prop.put("mail.smtp.user", sender);
 					   System.out.println(prop);

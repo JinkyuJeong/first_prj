@@ -32,9 +32,14 @@
   #minMsg{position: absolute; bottom: 2.7vh; left: 0; color: red;}
   .mt-3 .btn{font-size: 24px;}
   .mt-3 .btn:hover {color: lightgray;}
-  #authMsg{font-size:10px;}
   #cor1, #cor2{position:relative;}
-  #corPwMsg, #pwChkMsg{font-size:10px; margin-top:-2vh; position:absolute; bottom:0; left:0;}
+  #authMsg{
+	  display:inline; 
+	  position:absolute;
+	  left:0;
+	  bottom:-45%;
+  }
+  #corPwMsg, #pwChkMsg{margin-top:-2vh; position:absolute; bottom:0; left:0;}
   /* ************************************ */
 </style>
 <script>
@@ -78,6 +83,7 @@
 	  }
 	  if(f.nicknamechkchk.value != "nicknamechecked") {
 		alert("닉네임 중복검사를 해주세요.");
+		f.nickname.focus();
 		return false;
 	  }
 	  return true;
@@ -103,19 +109,9 @@
     		let email = email1 + "@" + email2;
     		let op = "width=500, height=300, left=50, top=150";
     	    open(page+"?email="+ email,"",op);
-    	}	    
+    	}
 	  }
 	
-	function win_nickChk(){
-		const nickname = f.nickname.value.trim();
-	  if(nickname == ""){
-		    alert("닉네임을 입력하세요")
-		    f.nickname.focus();
-		    return false;
-		}
-		const op = "width=400, height=250, left=50, top=150";
-		open("nickChk?nickname="+nickname,"",op);
-	}	
 	$(function() {
 		$("#pwd").keyup(function() {
 			corPwChk();
@@ -125,7 +121,42 @@
 			corPwChk();
 			pwChk();
 		})
-		$()
+		$("#button-addon2").click(function() {
+			let param = {nickname:$("#nickname").val()};
+			$.ajax({
+				url : "/first_prj/ajax/nickchk",
+				type : "POST",
+				data : param,
+				success : function(result) {
+					$("#nickMsg").html(result)
+				},
+				error : function(e) {
+					alert("닉네임체크" + e.status)
+				}
+			})
+		})
+		
+		$("#nickname").keyup(function() {
+			$("#nickname").removeClass("is-invalid");
+			$("#nickname").removeClass("is-valid");
+			$("#nickMsg").html("");
+			$("#nicknamechkchk").val("nicknameunchecked");
+		})
+		
+		$("#email1").keyup(function() {
+			$("#email1").removeClass("is-invalid");
+			$("#email1").removeClass("is-valid");
+			$("#authMsg").html("");
+			$("#emailchkchk").val("emailunchecked");
+			$("#emailBtn").show();
+		})
+		$("#email2").change(function() {
+			$("#email1").removeClass("is-invalid");
+			$("#email1").removeClass("is-valid");
+			$("#authMsg").html("");
+			$("#emailchkchk").val("emailunchecked");
+			$("#emailBtn").show();
+		})
 	})
 	function corPwChk() {
 		let param = {pass:$("#pwd").val(), pass2:$("#pwd2").val()};
@@ -171,28 +202,28 @@
       <!-- 오른쪽 아이디/비번/닉네임 입력구역-->
       <div>
         <!-- 이메일 -->
-        <div class="form-group mb-3">
+        <div class="form-group mb-5" style="position:relative">
           <label class="mb-1" for="email1">이메일</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="email1" id="email1" placeholder="아이디" aria-label="Username">
             <span class="input-group-text">@</span>
-            <select class="form-select" name="email2">
+            <select class="form-select" name="email2" id="email2">
             	<option value="naver.com">naver.com</option>
             	<option value="nate.com">nate.com</option>
             	<option value="gmail.com">gmail.com</option>
             	<option value="hanmail.net">hanmail.net</option>
             	<option value="daum.net">daum.net</option>
             </select>
-<!--          <input type="text" class="form-control" name="email2" id="email2" placeholder="Example.com" aria-label="Server">  -->   
+            <button type="button" class="btn btn-dark" id="emailBtn" onclick="win_open('emailForm')">이메일인증</button>
           </div>
-          <button type="button" class="btn btn-dark" onclick="win_open('emailForm')">이메일인증</button>
           
-           <span class="ms-3" id="authMsg"></span>
           
-          <input type="hidden" name="emailchkchk" value="emailunchecked"> 
+           <div class="valid-feedback" id="authMsg"></div>
+          
+          <input type="hidden" name="emailchkchk" id="emailchkchk" value="emailunchecked"> 
         </div>
         <!-- 비밀번호-->
-        <div id="cor1" class="form-group">
+        <div id="cor1" class="form-group mb-3">
         	<label class="mb-1" for="pwd">비밀번호</label>
           	<input type="password" class="form-control mb-4" id="pwd" name="pass" 
           		placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가">
@@ -200,7 +231,7 @@
     	    </div>
         </div>
         <!-- 비밀번호 재입력 -->
-        <div id="cor2" class="form-group">
+        <div id="cor2" class="form-group mb-3">
         	<label class="mb-1" for="pwd2">비밀번호 재입력</label>
           	<input type="password" class="form-control mb-4" id="pwd2" name="pass2">
           	<div class="invalid-feedback" id="pwChkMsg">
@@ -214,7 +245,7 @@
             <button class="btn btn-outline-secondary" type="button" id="button-addon2">중복검사</button>
             <div id="nickMsg" class="invalid-feedback">      		
     		</div>
-            <input type="hidden" id="nicknamechkchk" value="nicknameunchecked">
+    		<input type="hidden" name="nicknamechkchk" id="nicknamechkchk" value="nicknameunchecked">
           </div>
         </div>
       </div>

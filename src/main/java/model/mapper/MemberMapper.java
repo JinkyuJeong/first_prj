@@ -55,4 +55,7 @@ public interface MemberMapper {
 
 	@Select("select * from comment where nickname=#{nickname} limit #{start},#{limit}")
 	List<Board> commList(Map<String, Object> map);
+
+	@Update("update member set picture=#{param1} where emailaddress=#{param2}")
+	void updateImg(String img, String login);
 }

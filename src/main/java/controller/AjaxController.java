@@ -165,11 +165,25 @@ public class AjaxController extends MskimRequestMapping{
 		String nickname = request.getParameter("nickname");
 		Member mem = mbDao.selectOneNick(nickname);
 		boolean able = true;
+		String emptyChk = null;
+		if(nickname==null || nickname.equals("")) {
+			emptyChk = "emptyChk";
+		}
 		if(mem==null) {
+			able=true;
+		} else {
 			able=false;
 		}
 		request.setAttribute("able", able);
+		request.setAttribute("emptyChk", emptyChk);
 		return "ajax/nickchk";
 	}
 	
+	@RequestMapping("basicForm")
+	public String basicForm(HttpServletRequest request, HttpServletResponse response) {
+		String login = (String)request.getSession().getAttribute("login");
+		Member mem = mbDao.selectOneEmail(login);
+		request.setAttribute("picture", mem.getPicture());
+		return "ajax/basicForm";
+	}	
 }
