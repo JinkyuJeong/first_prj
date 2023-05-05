@@ -41,7 +41,7 @@
 </script>
 </head>
 <body>
-	 <form method="post" action="write" enctype="multipart/form-data" name="f" >
+	 <form method="post" action="write" name="f" >
     <div class="container">
       <h2 id="title">${boardName} 게시글 작성</h2>
     

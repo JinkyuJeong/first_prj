@@ -251,7 +251,7 @@
 	       		<a href="detail?no=${bPrevious.no}" class="btn">${bPrevious.title}</a>
 	       	</c:if>
 	       	<c:if test="${empty bPrevious}">
-	       		<a href="" class="btn" onclick="event.preventDefault();">이전글이 없습니다.</a>
+	       		<a class="btn" onclick="alert('이전글이 없습니다.');event.preventDefault();">이전글이 없습니다.</a>
 	       	</c:if>
         </td>
       </tr>
@@ -262,7 +262,7 @@
         		<a href="detail?no=${bNext.no}" class="btn">${bNext.title}</a>
         	</c:if>
         	<c:if test="${empty bNext}">
-        		<a href="" class="btn" onclick="event.preventDefault();">다음글이 없습니다.</a>
+        		<a class="btn" onclick="alert('다음글이 없습니다.');event.preventDefault();">다음글이 없습니다.</a>
         	</c:if>
         </td>
       </tr>

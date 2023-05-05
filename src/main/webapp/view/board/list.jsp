@@ -11,7 +11,7 @@
 <title>${boardName }</title>
 <style type="text/css">
  	body{font-size: 12px;}
-  #title{
+  #title, h4{
     font-family: 'Dongle', sans-serif; 
     text-align: center; 
     font-size: 5em;
@@ -38,11 +38,9 @@
   .notice{background-color:lightgray;}
   #cnt{padding:0px; font-family: 'Dongle', sans-serif; font-size:25px;}
   #best{font-weight : 900; color : green;}
-  .msg{
+  .msg, .msg-1{
   	position:absolute;
   	border:1px solid black;
-  	top:60%; 
-  	left:60%; 
   	background-color:black; 
   	color:white; 
   	padding:5px;
@@ -50,12 +48,39 @@
   	display:none;
   	cursor: pointer;
   }
+  .msg{
+  	top:60%; 
+  	left:60%; 
+  }
+  .msg-1{
+  	top:20%; 
+  	left:50%; 
+  }
   .name{cursor: pointer;}
-  .msg:hover{
+  .msg:hover, .msg-1:hover{
   	background-color: grey;
   	border:1px solid grey;
   }
   /* ************************************ */
+  .pic{
+    border-radius: 50%;
+    width: 35px; 
+    height: 35px;
+    margin : 5px 15px 5px 5px
+  }
+  .info_1{
+    padding: 5px;
+  }
+  .info_2{
+    display: flex;
+  }
+  .w3-col.l2.s4 {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+    margin: 5px 15px 0 0;
+    position: relative;
+    font-family: 'Dongle', sans-serif;
+    font-size : 14px;
+  }
 </style>
  <script type="text/javascript">
   	function goWriteForm() {
@@ -72,13 +97,13 @@
 	 $(()=>{
 		 $('.item .name').on('click', function(e) {
 			    e.preventDefault();
-			    $('.msg').not($(this).next('.msg')).hide();
-			    $(this).next('.msg').toggle();
+			    $('.msg, .msg-1').not($(this).next('.msg, .msg-1')).hide();
+			    $(this).next('.msg, .msg-1').toggle();
 			  });
 
 			  $(document).on('click', function(e) {
 			    if(!$(e.target).closest('.item').length) {
-			      $('.msg').hide();
+			      $('.msg, .msg-1').hide();
 			    }
 			  });
 	 })
@@ -110,7 +135,8 @@
       </form>
     </div>
     
-		<form method="post" action="public"> <!-- 일괄공개여부(운영자전용)  -->
+    <c:if test="${boardType != 3 }"> <%-- 후기게시판이 아닐 때  --%>
+		<form method="post" action="public"> <%-- 일괄공개여부(운영자전용)  --%>
     <table class="table table-hover">
 			
       <thead>
@@ -177,7 +203,6 @@
 			        </c:forEach>
 	        </c:if>
         </c:if>
-        
         <!-- 게시판 글이 없을 때 -->
 	      <c:if test="${boardCnt <= 0}">
 					<tr><td colspan="7">등록된 게시글이 없습니다.</td></tr>
@@ -186,7 +211,7 @@
 				<c:set var="nos" value=""/>
 				<!-- 게시판 글이 있을 때 -->
 				<c:if test="${boardCnt > 0}">
-					<c:forEach var="b" items="${list }">
+					<c:forEach var="b" items="${list }" varStatus="st">
 					
 					<c:set var="nos" value="${nos } ${b.no }"/>
 					
@@ -194,6 +219,10 @@
 		        <tr>
 		          <td scope="row">${boardNum}</td>	<c:set var="boardNum" value="${boardNum-1 }"/>
 		          <td>
+		          
+	          		<c:if test="${imgSrc[st.index] != null}">
+									<i class="fa fa-picture-o" aria-hidden="true"></i>	          		
+		          	</c:if>
 		          	
 		          	<c:set var="title" value="${b.title }" />
 			          <c:if test="${fn:length(b.title) >= 35 }">
@@ -240,9 +269,11 @@
 		        
 	        </c:forEach>
         </c:if>
+        
       </tbody>
 
     </table>
+    
 
 		<!-- 공지사항으로 들어오면 글 못쓰는데 어드민이면 공지글쓰기 가능 -->
     <div align="right">
@@ -256,7 +287,231 @@
     	</c:if>
     </div>
 		</form>
-		
+		</c:if>
+	
+	
+	<%-- ---------------------------------------------------------------------------------------------------------------------------- --%>
+	<%-- ---------------------------------------------------------------------------------------------------------------------------- --%>
+	<%-- ---------------------------------------------------------------------------------------------------------------------------- --%>
+	
+	
+		<c:if test="${boardType == 3 }">
+			<fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
+			<form method="post" action="public">
+			
+			<table class="table table-hover">
+			
+      <thead>
+        <tr class="table-dark">
+          <th scope="col">번호</th>
+          <th scope="col">제목</th>
+          <th scope="col">글쓴이</th>
+          <th scope="col">작성일</th>
+          <th scope="col">조회수</th>
+          
+          <c:if test="${sessionScope.login == 'admin'}">
+          	<th scope="col"><input type="checkbox" class="form-check-input" name="allChk"  id="allChk"></th>
+          </c:if>
+        </tr>
+      </thead>
+			
+      <tbody>
+      
+      	<!-- 공지사항 고정글 1개 + 이벤트 당첨글 1개 -->
+      	<!-- 공지 글이 없을 때 -->
+      	<c:if test="${boardType != 4 }">
+		      <c:if test="${nCnt <= 0}">
+						<tr><td colspan="7">등록된 공지사항이 없습니다.</td></tr>
+					</c:if>
+					<!-- 공지 글이 있을 때 -->
+					<c:if test="${nCnt > 0}">
+						<c:set var="cnt" value="${nCnt==1? 0:nCnt }"/>
+						<c:forEach var="n" items="${nList}" begin="0" end="${cnt}">
+			      	<tr class="notice">
+			          <th class="fw-bold"><span class="blue">공지</span></th>
+			          
+			          <c:set var="title" value="${n.title }" />
+			          <c:if test="${fn:length(b.title) >= 35 }">
+								  <c:set var="title" value="${fn:substring(n.title, 0, 35)}..." />
+								</c:if>
+			          
+			          <td class="fw-bold"><a href="detail?no=${n.no }">${title}</a></td>
+			          <td class="fw-bold">
+			          	<c:if test="${adminPicture == null }">
+			          		<img id="profile" src="${path }/images/basic-profile.JPG">
+			          	</c:if>
+			          	<c:if test="${adminPicture != null }">
+			          		<img id="profile" src="/first_prj/upload/member/${adminPicture}">
+			          	</c:if>
+			          		운영자
+		          	</td>
+		          	
+		          	<fmt:formatDate value="${n.regdate }" pattern="yyyy-MM-dd" var="r2"/>
+			          <c:if test="${t eq r2}">
+									<td><fmt:formatDate value="${n.regdate }" pattern="HH:mm"/></td>
+								</c:if>
+								<c:if test="${t != r2}">
+									<td><fmt:formatDate value="${n.regdate }" pattern="yyyy-MM-dd"/></td>
+								</c:if>
+							
+			          <td>${n.hit }</td>
+			          <c:if test="${sessionScope.login == 'admin'}"><td></td></c:if>
+			        </tr>
+			        </c:forEach>
+	        </c:if>
+        </c:if>
+        </tbody>
+        </table>
+			
+				<c:if test="${boardCnt <= 0}">
+					<h4 class="text-center">등록된 게시물이 없습니다.</h4>
+				</c:if>
+				
+				<c:set var="nos" value=""/>
+				<!-- 게시판 글이 있을 때 -->
+				<c:if test="${boardCnt > 0}">
+					<div class="w3-row">
+						<c:forEach var="b" items="${list }" varStatus="st">
+						
+						<c:set var="nos" value="${nos } ${b.no }"/>
+						
+						<c:if test="${b.pub == 1 || sessionScope.login == 'admin' }">
+			      	<c:if test="${st.index <5 }">
+						    <div class="w3-col l2 s4">
+						      <div class="w3-display-container">
+						        <a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 170px;"></a>
+						        <span class="w3-tag w3-display-topright">+2장의 사진</span>
+						      </div>
+						      <div class="info_1">
+						        <c:set var="title" value="${b.title }" />
+			          <c:if test="${fn:length(b.title) >= 15 }">
+								  <c:set var="title" value="${fn:substring(b.title, 0, 15)}..." />
+								</c:if>
+		          	
+		          	<c:if test="${b.recommend >= 5}">
+		          		<div><a id="best" href="detail?no=${b.no }"><span class="badge rounded-pill bg-success">Best</span> ${title }</a></div>  <!--  👍 -->
+		          	</c:if>
+		          	<c:if test="${b.recommend < 5}">
+		          		<div><a href="detail?no=${b.no }">${title }</a></div>
+		          	</c:if>
+		          	<hr style="margin: 5px 0; background-color: rgba(0,0,0,0.7);">
+						        <div class="info_2 item" style="position:relative">
+						          <div>
+						          	<c:if test="${b.picture == 'basic-profile.JPG' }">
+						          		<img class="pic" src="${path }/images/basic-profile.JPG">
+						          	</c:if>
+						          	<c:if test="${b.picture != 'basic-profile.JPG' }">
+						          		<img class="pic" src="/first_prj/upload/member/${b.picture}">
+						          	</c:if>
+						          </div>
+						          <div>
+						          	<span class="name">${b.nickname }</span>
+	          						<span class="msg-1" onclick="location.href='/first_prj/messenger/msgForm?receiver=${b.nickname}'"><i class="fa fa-comments-o" aria-hidden="true"></i>&nbsp;쪽지</span> 
+						          	<br> 
+						          	<fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
+												<c:if test="${t eq r}">
+													<fmt:formatDate value="${b.regdate }" pattern="HH:mm"/>
+												</c:if>
+												<c:if test="${t != r}">
+													<fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd"/>
+												</c:if>
+												<br>
+												<c:if test="${sessionScope.login == 'admin'}">
+								          <input type="checkbox" class="form-check-input noChk" name="noChks"  value="${b.no}" ${b.pub ==1? "checked" : "" }>
+								        </c:if>
+						          </div>
+						        </div>
+						        <hr style="margin: 5px 0; background-color: rgba(0,0,0,0.7);">
+						        <div style="display: flex; justify-content: space-around;">
+						          <div style="color:${b.recommend>=5? 'green' : 'black'}"><i class="fa fa-thumbs-o-up"></i> ${b.recommend }</div>
+						          <div><i class="fa fa-comment-o" aria-hidden="true"></i> ${b.commCnt }</div>
+						          <div><i class="fa fa-eye" aria-hidden="true"></i> ${b.hit }</div>
+						        </div>
+						      </div>
+						    </div>
+						  </c:if>
+		        </c:if>
+			        
+		        </c:forEach>
+	        </div>
+	        <%-- 줄바뀜 --%>
+	        <div class="w3-row">
+	        <c:forEach var="b" items="${list }" varStatus="st">
+					
+					<c:if test="${b.pub == 1 || sessionScope.login == 'admin' }">
+		        <c:if test="${st.index >=5 }">
+		        <c:set var="nos" value="${nos } ${b.no }"/>
+						       <div class="w3-col l2 s4">
+						      <div class="w3-display-container">
+						        <a href="detail?no=${b.no }"><img src="./images/event.jpeg" style="width:100%; height: 170px;"></a>
+						        <span class="w3-tag w3-display-topright">+2장의 사진</span>
+						      </div>
+						      <div class="info_1">
+						        <c:set var="title" value="${b.title }" />
+			          <c:if test="${fn:length(b.title) >= 15 }">
+								  <c:set var="title" value="${fn:substring(b.title, 0, 15)}..." />
+								</c:if>
+		          	
+		          	<c:if test="${b.recommend >= 5}">
+		          		<div><a id="best" href="detail?no=${b.no }"><span class="badge rounded-pill bg-success">Best</span> ${title }</a></div>  <!--  👍 -->
+		          	</c:if>
+		          	<c:if test="${b.recommend < 5}">
+		          		<div><a href="detail?no=${b.no }">${title }</a></div>
+		          	</c:if>
+		          	<hr style="margin: 5px 0; background-color: rgba(0,0,0,0.7);">
+						        <div class="info_2 item" style="position:relative">
+						          <div>
+						          	<c:if test="${b.picture == 'basic-profile.JPG' }">
+						          		<img class="pic" src="${path }/images/basic-profile.JPG">
+						          	</c:if>
+						          	<c:if test="${b.picture != 'basic-profile.JPG' }">
+						          		<img class="pic" src="/first_prj/upload/member/${b.picture}">
+						          	</c:if>
+						          </div>
+						          <div style="position:relative" class="item">
+						          	<span class="name">${b.nickname }</span>
+	          						<span class="msg-1" onclick="location.href='/first_prj/messenger/msgForm?receiver=${b.nickname}'"><i class="fa fa-comments-o" aria-hidden="true"></i>&nbsp;쪽지</span> 
+						          	<br> 
+						          	<fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd" var="r"/>
+												<c:if test="${t eq r}">
+													<td><fmt:formatDate value="${b.regdate }" pattern="HH:mm"/></td>
+												</c:if>
+												<c:if test="${t != r}">
+													<td><fmt:formatDate value="${b.regdate }" pattern="yyyy-MM-dd"/></td>
+												</c:if>
+						          </div>
+						        </div>
+						        <hr style="margin: 5px 0; background-color: rgba(0,0,0,0.7);">
+						        <div style="display: flex; justify-content: space-around;">
+						          <div><i class="fa fa-thumbs-o-up"></i> ${b.recommend }</div>
+						          <div><i class="fa fa-comment-o" aria-hidden="true"></i> ${b.commCnt}</div>
+						          <div><i class="fa fa-eye" aria-hidden="true"></i> ${b.hit }</div>
+						          <c:if test="${sessionScope.login == 'admin'}">
+							          	<div><input type="checkbox" class="form-check-input noChk" name="noChks"  value="${b.no}" ${b.pub ==1? "checked" : "" }></div>
+							        </c:if>
+						        </div>
+						      </div>
+						    </div>
+						  </c:if>
+	        </c:if>
+		        
+	        </c:forEach>
+	        </div>
+        </c:if>
+				
+				<!-- 공지사항으로 들어오면 글 못쓰는데 어드민이면 공지글쓰기 가능 -->
+    <div align="right" class="mt-5">
+    	<c:if test="${sessionScope.boardType != 4}">
+    		<button id="write" type="button" class="btn btn-dark" onclick="goWriteForm()">글쓰기</button>
+    	</c:if>
+    	<c:if test="${sessionScope.login == 'admin'}">
+    		<input type="hidden" name="nos" value="${nos}">
+    		<button id="write" type="button" class="btn btn-dark" onclick="goWriteNoticeForm()">공지사항 작성</button>
+    		<button id="write" type="submit" class="btn btn-dark" onclick="goWriteNoticeForm()">일괄공개/비공개</button>
+    	</c:if>
+    </div>
+			</form>
+		</c:if>
       <!-- paging -->
 		  <div class="w3-center w3-padding-32">
 		    <div class="w3-bar">

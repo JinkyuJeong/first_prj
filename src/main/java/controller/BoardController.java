@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +40,6 @@ public class BoardController extends MskimRequestMapping{
 		String boardName = "";
 		switch (boardType){
 			case "1" : boardName = "자유게시판"; break;
-			case "2" : boardName = "질문게시판"; break;
 			case "3" : boardName = "후기게시판"; break;
 			case "4" : boardName = "공지사항"; break;
 		}
@@ -178,14 +179,15 @@ public class BoardController extends MskimRequestMapping{
 		String login = (String)request.getSession().getAttribute("login");
 		if(boardType == null || boardType.equals("")) boardType = "1";
 		request.getSession().setAttribute("boardType", boardType);
-		Member mem = mDao.selectOneEmail(login);
-		request.getSession().setAttribute("nickname", mem.getNickname());
-		
 		if(login == null) {	// 로그인 상태가 아닐 때
 			request.setAttribute("msg", "비회원은 게시글 작성이 불가능합니다.");
 			request.setAttribute("url", "list?boardType="+boardType);
 			return "alert";		
-		}else if(boardType.equals("4") && !login.equals("admin")){	// 공지사항 글쓰기로 들어왔는데 admin이 아닐 경우 
+		}
+		Member mem = mDao.selectOneEmail(login);
+		request.getSession().setAttribute("nickname", mem.getNickname());
+		
+		if(boardType.equals("4") && !login.equals("admin")){	// 공지사항 글쓰기로 들어왔는데 admin이 아닐 경우 
 			request.setAttribute("msg", "일반회원은 공지사항 게시글은 작성이 불가능합니다.");
 			request.setAttribute("url", "list?boardType="+boardType);
 			return "alert";
@@ -198,12 +200,18 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("write")
 	public String write(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		String nickname = (String)request.getSession().getAttribute("nickname");
 		String boardType = (String)request.getSession().getAttribute("boardType");
 		if(boardType == null) boardType = "1";
 		
 		Board b = new Board();
 		b.setTitle(request.getParameter("title"));
+		System.out.println(b.getTitle());
 		b.setNickname(nickname);
 		b.setContent(request.getParameter("content"));
 		b.setBoardType(boardType);
@@ -259,17 +267,23 @@ public class BoardController extends MskimRequestMapping{
 		int boardCnt = 0;
 		
 		// 운영자리스트 / 일반회원 리스트
-		if(login.equals("admin")) {
-			boardCnt = dao.boardCount(boardType, field, query, true, excep_mode);
-			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, true, excep_mode);	// (문자열, 정수, 정수)
-			request.setAttribute("boardCnt", boardCnt);
-			request.setAttribute("list", list);
-		}else {
-			boardCnt = dao.boardCount(boardType, field, query, false, excep_mode);
-			List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, false, excep_mode);	// (문자열, 정수, 정수)
-			request.setAttribute("boardCnt", boardCnt);
-			request.setAttribute("list", list);
+		boolean isAdmin = login.equals("admin")? true : false;
+		boardCnt = dao.boardCount(boardType, field, query, isAdmin, excep_mode);
+		List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, isAdmin, excep_mode);	// (문자열, 정수, 정수)
+		List<String> imgSrc = new ArrayList<>();
+		for(BoardListView b : list) {
+			String regex = "<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(b.getContent());
+			if (matcher.find()) {
+			    imgSrc.add(matcher.group(1));
+			}else {
+				 imgSrc.add(null);
+			}
 		}
+		request.setAttribute("boardCnt", boardCnt);
+		request.setAttribute("list", list);
+		request.setAttribute("imgSrc", imgSrc);
 		
 		// 맨 위 상단 공지글 2개
 		List<Board> nList = dao.nList();
@@ -313,8 +327,10 @@ public class BoardController extends MskimRequestMapping{
 			return "alert";		
 		}
 		
-		String[] openNos = request.getParameterValues("noChks");	// 해당 페이지 게시글 번호
-		String nos_ = request.getParameter("nos");	// 해당 페이지 체크(공개)된 게시글 번호
+		String[] openNos = new String[0];
+		String[] openNos_ = request.getParameterValues("noChks");	// 체크(공개)된 게시글 번호
+		if(openNos_ != null) openNos = openNos_; 
+		String nos_ = request.getParameter("nos");	// 전체번호
 		String[] nos = nos_.trim().split(" ");	// 공백단위로 잘라서 집어넣음
 		
 		List<String> oids = Arrays.asList(openNos);		// 공개된 게시글번호

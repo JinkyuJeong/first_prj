@@ -73,7 +73,6 @@
   <a onclick="myAccFunc()" href="javascript:void(0)" class="w3-button w3-block w3-white w3-left-align" id="myBtn1">게시판 &nbsp;<i class="fa fa-caret-down"></i></a>
   <div id="demoAcc1" class="w3-bar-block w3-hide w3-padding-large w3-medium">
   	<a href="${path}/board/list?boardType=1" class="w3-bar-item w3-button">자유게시판</a>
-	  <a href="${path}/board/list?boardType=2"  class="w3-bar-item w3-button">질문게시판</a>
 	  <a href="${path}/board/list?boardType=3"  class="w3-bar-item w3-button">후기게시판</a>
 	  <a href="${path}/board/list?boardType=4"  class="w3-bar-item w3-button">공지사항</a>
 	</div>
