@@ -82,6 +82,7 @@
     font-size : 14px;
     width: 18%;
   }
+  .w3-row div a { font-size : 20px;}
 </style>
  <script type="text/javascript">
   	function goWriteForm() {
