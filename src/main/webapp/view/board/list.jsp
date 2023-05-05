@@ -18,7 +18,7 @@
     margin-bottom: 7vh;
   }
   a{text-decoration: none;}
-  .container{width: 75vw;}
+  .container{width: 80vw;}
   .orange{color:rgb(255, 102, 0);}
   .blue{color:blue;}
   #write{width:70px; height: 30px; font-size: 16px; padding: 0; font-family: 'Dongle', sans-serif;}
@@ -54,7 +54,7 @@
   }
   .msg-1{
   	top:20%; 
-  	left:50%; 
+  	left:40%; 
   }
   .name{cursor: pointer;}
   .msg:hover, .msg-1:hover{
@@ -76,10 +76,11 @@
   }
   .w3-col.l2.s4 {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
-    margin: 5px 15px 0 0;
+    margin: 5px 10px;
     position: relative;
     font-family: 'Dongle', sans-serif;
     font-size : 14px;
+    width: 18%;
   }
 </style>
  <script type="text/javascript">
@@ -379,8 +380,15 @@
 			      	<c:if test="${st.index <5 }">
 						    <div class="w3-col l2 s4">
 						      <div class="w3-display-container">
-						        <a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 170px;"></a>
-						        <span class="w3-tag w3-display-topright">+2장의 사진</span>
+						      	<c:if test="${imgSrc[st.index] != null}">
+						        	<a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 170px;"></a>
+						        </c:if>
+						        <c:if test="${imgSrc[st.index] == null}">
+						        	<a href="detail?no=${b.no }"><img src="${path }/images/basic-thumb.jpg" style="width:100%; height: 170px;"></a>
+						        </c:if>
+						        <c:if test="${imgCnt[st.index] > 0 }">
+						        	<span class="w3-tag w3-display-topright">+${imgCnt[st.index]}장의 사진</span>
+						        </c:if>
 						      </div>
 						      <div class="info_1">
 						        <c:set var="title" value="${b.title }" />
@@ -435,7 +443,7 @@
 		        </c:forEach>
 	        </div>
 	        <%-- 줄바뀜 --%>
-	        <div class="w3-row">
+	        <div class="w3-row mt-3">
 	        <c:forEach var="b" items="${list }" varStatus="st">
 					
 					<c:if test="${b.pub == 1 || sessionScope.login == 'admin' }">
@@ -443,8 +451,10 @@
 		        <c:set var="nos" value="${nos } ${b.no }"/>
 						       <div class="w3-col l2 s4">
 						      <div class="w3-display-container">
-						        <a href="detail?no=${b.no }"><img src="./images/event.jpeg" style="width:100%; height: 170px;"></a>
-						        <span class="w3-tag w3-display-topright">+2장의 사진</span>
+						        <a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 170px;"></a>
+						        <c:if test="${imgCnt[st.index] != 0 }">
+						        	<span class="w3-tag w3-display-topright">+${imgCnt[st.index]}장의 사진</span>
+						        </c:if>
 						      </div>
 						      <div class="info_1">
 						        <c:set var="title" value="${b.title }" />
@@ -468,7 +478,7 @@
 						          		<img class="pic" src="/first_prj/upload/member/${b.picture}">
 						          	</c:if>
 						          </div>
-						          <div style="position:relative" class="item">
+						          <div>
 						          	<span class="name">${b.nickname }</span>
 	          						<span class="msg-1" onclick="location.href='/first_prj/messenger/msgForm?receiver=${b.nickname}'"><i class="fa fa-comments-o" aria-hidden="true"></i>&nbsp;쪽지</span> 
 						          	<br> 
@@ -483,9 +493,9 @@
 						        </div>
 						        <hr style="margin: 5px 0; background-color: rgba(0,0,0,0.7);">
 						        <div style="display: flex; justify-content: space-around;">
-						          <div><i class="fa fa-thumbs-o-up"></i> ${b.recommend }</div>
+						          <div style="color:${b.recommend>=5? 'green' : 'black'}; font-weight: bold;"><i class="fa fa-thumbs-o-up"></i> ${b.recommend }</div>
 						          <div><i class="fa fa-comment-o" aria-hidden="true"></i> ${b.commCnt}</div>
-						          <div><i class="fa fa-eye" aria-hidden="true"></i> ${b.hit }</div>
+						          <div ><i class="fa fa-eye" aria-hidden="true"></i> ${b.hit }</div>
 						          <c:if test="${sessionScope.login == 'admin'}">
 							          	<div><input type="checkbox" class="form-check-input noChk" name="noChks"  value="${b.no}" ${b.pub ==1? "checked" : "" }></div>
 							        </c:if>

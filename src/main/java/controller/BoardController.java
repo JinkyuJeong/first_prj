@@ -271,19 +271,27 @@ public class BoardController extends MskimRequestMapping{
 		boardCnt = dao.boardCount(boardType, field, query, isAdmin, excep_mode);
 		List<BoardListView> list = dao.list(boardType, pageNum, limit, field, query, isAdmin, excep_mode);	// (문자열, 정수, 정수)
 		List<String> imgSrc = new ArrayList<>();
+		List<Integer> imgCnt = new ArrayList<>();
 		for(BoardListView b : list) {
-			String regex = "<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>";
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(b.getContent());
-			if (matcher.find()) {
-			    imgSrc.add(matcher.group(1));
-			}else {
-				 imgSrc.add(null);
-			}
+		    String regex = "<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>";
+		    Pattern pattern = Pattern.compile(regex);
+		    Matcher matcher = pattern.matcher(b.getContent());
+		    int count = 0;
+		    while (matcher.find()) {
+		    	if(count == 0) {
+		    		imgSrc.add(matcher.group(1));
+		    	}
+		        count++;
+		    }
+		    imgCnt.add(count-1);
+		    if(count == 0) {
+		        imgSrc.add(null);
+		    }
 		}
 		request.setAttribute("boardCnt", boardCnt);
 		request.setAttribute("list", list);
 		request.setAttribute("imgSrc", imgSrc);
+		request.setAttribute("imgCnt", imgCnt);
 		
 		// 맨 위 상단 공지글 2개
 		List<Board> nList = dao.nList();
