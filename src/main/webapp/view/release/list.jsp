@@ -10,9 +10,26 @@
 <style type="text/css">
 	body, h1, h2, h3, p{font-family: 'Dongle', sans-serif;}
 	a{text-decoration: none;}
-	.w3-quarter h1 {font-weight : bold;}
+	.w3-quarter h2 {font-weight : bold;}
 	h3 {font-size : 1.7em;}
-	.w3-quarter p{font-size : 1.5em; color:blue;}
+	.w3-quarter {
+		height:530px;
+		width : 23%;
+		margin : 10px;
+		box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+		border: 1px solid rgba(0,0,0,0.2);
+		display : flex;
+		flex-direction: column;
+		justify-content: space-between;
+		transition: transform 0.2s ease;
+	}
+	.w3-quarter span{
+		font-size : 1.2em;
+	}
+  .w3-quarter:hover {
+    transform: scale(1.1);
+    z-index: 9;
+  }
 	#title{
     font-family: 'Dongle', sans-serif; 
     text-align: center; 
@@ -51,41 +68,46 @@
 				<h3 align="center">검색 결과가 없습니다.</h3>
 			</c:if>
 			<c:if test="${maxPage != 0}">
-			  <div class="w3-row-padding w3-padding-16 w3-center" id="food">
-				  <c:forEach var="rc" items="${list }" begin="${(pageNum-1)*4 }" end="${pageNum*4-1 }" varStatus="st">
+			  <div class="w3-row-padding w3-padding-16 w3-center">
+				  <c:forEach var="rc" items="${list }" begin="${pageNum*8-8}" end="${pageNum*8-5 }" varStatus="st">
 				    <div class="w3-quarter">
-				    	<h1>${rc.agentsite }</h1>
+				    	<h2>${rc.agentsite }
+					    	<c:if test="${!empty infos }">
+					    	(<c:forEach var="n" items="${infos }" varStatus="st">
+						      	${n}<c:if test="${!st.last}">,</c:if>
+						      </c:forEach>) 
+					    </c:if>
+				    	</h2>
 				      <a href="detail?no=${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
-				      <a href="detail?no=${rc.no }"><h3>${rc.productName }</h3></a>
+				      <h3>${rc.productName }</h3>
 				      
 				      <c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
 				      
-				      <p>
-					      <c:forEach var="n" items="${infos }">
-					      	<span class="badge rounded-pill bg-warning text-dark">${n} </span>
-					      </c:forEach> 
-					      <br>
-					     	<span class="fw-bold">${rc.releaseTime}</span> 
-				      </p>
+				      <div><span class="fw-bold"><i class="fa fa-calendar"></i> ${rc.releaseTime}</span></div>
+				      
+				      <div style="padding-bottom : 10px;"><a style="display: inline-block; width: 90%;" type="button" class="btn rounded-pill btn-dark" href="detail?no=${rc.no }">상세보기</a></div>
 				    </div>
 				   </c:forEach>
 			  </div>
 			  
-			  <div class="w3-row-padding w3-padding-16 w3-center" id="food">
-				  <c:forEach var="rc" items="${list }" begin="${(pageNum-1)*4+4 }" end="${pageNum*4-1+4 }" varStatus="st">
+			  <div class="w3-row-padding w3-padding-16 w3-center">
+				  <c:forEach var="rc" items="${list }" begin="${pageNum*8-4}" end="${pageNum*8-1}" varStatus="st">
 				    <div class="w3-quarter">
-				    	<h1>${rc.agentsite }</h1>
+				    	<h2>${rc.agentsite }
+					    	<c:if test="${!empty infos }">
+					    	(<c:forEach var="n" items="${infos }" varStatus="st">
+						      	${n}<c:if test="${!st.last}">,</c:if>
+						      </c:forEach>) 
+					    </c:if>
+				    	</h2>
 				      <a href="detail?no=${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
-				      <a href="detail?no=${rc.no }"><h3>${rc.productName }</h3></a>
-				     	<c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
+				      <h3>${rc.productName }</h3>
 				      
-				      <p>
-					      <c:forEach var="n" items="${infos }">
-					      	<span class="badge rounded-pill bg-warning text-dark">${n} </span>
-					      </c:forEach> 
-					      <br>
-					      <span class="fw-bold">${rc.releaseTime}</span>
-				      </p>
+				      <c:set var="infos" value="${fn:split(rc.additionalInfo,'  +')}"/>
+				      
+				      <div><span class="fw-bold"><i class="fa fa-calendar"></i> ${rc.releaseTime}</span></div>
+				      
+				      <div style="padding-bottom : 10px;"><a style="display: inline-block; width: 90%;" type="button" class="btn rounded-pill btn-dark" href="detail?no=${rc.no }">상세보기</a></div>
 				    </div>
 				   </c:forEach>
 			  </div>
