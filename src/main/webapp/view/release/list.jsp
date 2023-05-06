@@ -72,10 +72,7 @@
 				  <c:forEach var="rc" items="${list }" begin="${pageNum*8-8}" end="${pageNum*8-5 }" varStatus="st">
 				    <div class="w3-quarter">
 				    	<h2>${rc.agentsite }
-					    	<c:if test="${!empty infos }">
-					    	(<c:forEach var="n" items="${infos }" varStatus="st">
-						      	${n}<c:if test="${!st.last}">,</c:if>
-						      </c:forEach>) 
+					    	<c:if test="${!empty infos }">(<c:forEach var="n" items="${infos }" varStatus="st">${n}<c:if test="${!st.last}">,</c:if></c:forEach>) 
 					    </c:if>
 				    	</h2>
 				      <a href="detail?no=${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
@@ -95,9 +92,7 @@
 				    <div class="w3-quarter">
 				    	<h2>${rc.agentsite }
 					    	<c:if test="${!empty infos }">
-					    	(<c:forEach var="n" items="${infos }" varStatus="st">
-						      	${n}<c:if test="${!st.last}">,</c:if>
-						      </c:forEach>) 
+					    	(<c:forEach var="n" items="${infos }" varStatus="st">${n}<c:if test="${!st.last}">,</c:if></c:forEach>) 
 					    </c:if>
 				    	</h2>
 				      <a href="detail?no=${rc.no }"><img src="${rc.thumbnailUrl }" style="width:100%"></a>
