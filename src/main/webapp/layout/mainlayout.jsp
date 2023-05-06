@@ -56,11 +56,21 @@
     justify-content: center;
     align-items: center;
   }
+  /*  상단으로가는 버튼*/
+#myBtn123 {
+  position: fixed; 
+  bottom: 30px; 
+  right: 30px; 
+  z-index: 99;
+  cursor: pointer;
+  padding: 15px; 
+  border-radius: 10px; 
+}
 </style>
 <sitemesh:write property='head'/>
 </head>
-<body>
-
+<body style="position : relative">
+<button class="w3-btn w3-black" onclick="topFunction()" id="myBtn123"><i class="fa fa-chevron-up"></i></button>
 <!-- Sidebar (hidden by default) -->
 <nav class="w3-sidebar w3-bar-block w3-card w3-top w3-xlarge w3-animate-left" id="mySidebar">
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button"><i id="flip-horizontal" class="fa fa-sign-out"></i></a>
@@ -148,6 +158,20 @@
 	     
 	   })
   });
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      document.getElementById("myBtn123").classList.add("scroll");
+    } else {
+      document.getElementById("myBtn123").classList.remove("scroll");
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0; 
+    document.documentElement.scrollTop = 0;
+  }
 </script>
 
 </body>

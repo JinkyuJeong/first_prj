@@ -70,6 +70,7 @@
   }
   .info_1{
     padding: 5px;
+    font-size : 1.4em;
   }
   .info_2{
     display: flex;
@@ -382,10 +383,10 @@
 						    <div class="w3-col l2 s4">
 						      <div class="w3-display-container">
 						      	<c:if test="${imgSrc[st.index] != null}">
-						        	<a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 250px;"></a>
+						        	<a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 225px;"></a>
 						        </c:if>
 						        <c:if test="${imgSrc[st.index] == null}">
-						        	<a href="detail?no=${b.no }"><img src="${path }/images/basic-thumb.jpg" style="width:100%; height: 250px;"></a>
+						        	<a href="detail?no=${b.no }"><img src="${path }/images/basic-thumb.jpg" style="width:100%; height: 225px;"></a>
 						        </c:if>
 						        <c:if test="${imgCnt[st.index] > 0 }">
 						        	<span class="w3-tag w3-display-topright">+${imgCnt[st.index]}장의 사진</span>
@@ -453,10 +454,10 @@
 						       <div class="w3-col l2 s4">
 						      <div class="w3-display-container">
 						        <c:if test="${imgSrc[st.index] != null}">
-						        	<a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 250px;"></a>
+						        	<a href="detail?no=${b.no }"><img src="${imgSrc[st.index] }" style="width:100%; height: 225px;"></a>
 						        </c:if>
 						        <c:if test="${imgSrc[st.index] == null}">
-						        	<a href="detail?no=${b.no }"><img src="${path }/images/basic-thumb.jpg" style="width:100%; height: 250px;"></a>
+						        	<a href="detail?no=${b.no }"><img src="${path }/images/basic-thumb.jpg" style="width:100%; height: 225px;"></a>
 						        </c:if>
 						        <c:if test="${imgCnt[st.index] != 0 }">
 						        	<span class="w3-tag w3-display-topright">+${imgCnt[st.index]}장의 사진</span>
