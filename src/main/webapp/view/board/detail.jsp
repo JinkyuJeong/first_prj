@@ -283,7 +283,7 @@
     	}
     </script>
     
-    <c:if test="${!empty sessionScope.login}">
+    <c:if test="${!empty sessionScope.login && b.boardType != 4}">
 	    <form action="comment"  method="post" name="f" id="commForm">
 	    	<input type="hidden" name="no" value="${b.no }">
 				

@@ -21,7 +21,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     width: 100%;
-    height: 140vh;
+    height: 150vh;
     margin: 0 auto;
     display: flex;
     flex-direction: column;

@@ -532,11 +532,11 @@
       <!-- paging -->
 		  <div class="w3-center w3-padding-32">
 		    <div class="w3-bar">
-			    <c:if test="${startPage <= 1}">
+			    <c:if test="${pageNum<= 1}">
 						<a class="w3-bar-item w3-button w3-hover-black" onclick="alert('이전 페이지가 없습니다.');">&laquo;</a>
 					</c:if>
-					<c:if test="${startPage > 1}">
-						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${startPage-1}&f=${param.f}&q=${param.q}&excep_mode=${param.excep_mode}">&laquo;</a>
+					<c:if test="${pageNum > 1}">
+						<a class="w3-bar-item w3-button w3-hover-black" href="list?pageNum=${pageNum-1}&f=${param.f}&q=${param.q}&excep_mode=${param.excep_mode}">&laquo;</a>
 					</c:if>
 					
 					<c:forEach var="a" begin="${startPage}" end="${endPage}">

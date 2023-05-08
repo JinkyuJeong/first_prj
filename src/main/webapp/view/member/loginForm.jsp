@@ -37,9 +37,62 @@
 		}
 		
 		function win_open(page){		
-	    let op = "width=500, height=450, left=50, top=150";
-	    open(page,"",op);
-	  }
+	    	let op = "width=500, height=450, left=50, top=150";
+	    	open(page,"",op);
+	  	}
+
+		$(function() { //아이디저장 
+			let key = getCookie("key");
+			$("#usr").val(key);
+			
+			if($("#usr").val() != "") {
+				$("#rememberId").attr("checked",true);
+			}
+			
+			$("#rememberId").change(function() { //체크박스 변동
+				if($("#rememberId").is(":checked")) {
+					setCookie("key", $("#usr").val(), 7) 
+				} else {
+					deleteCookie("key")
+				}
+			})
+			
+			$("#usr").keyup(function() { //
+				if($("#rememberId").is(":checked")) {
+					setCookie("key", $("#usr").val(), 7)
+				}
+			})
+		})
+		
+		//쿠키값 set
+		function setCookie(cookieName, value, exdays){
+		    let exdate = new Date();
+		    exdate.setDate(exdate.getDate() + exdays);
+		    let cookieValue = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toGMTString());
+		    document.cookie = cookieName + "=" + cookieValue;
+		} //escape : 16진수로 변환. 쿠키문자열과 충돌 방지 / unescape : 다시 원래 문자로
+
+		//쿠키값 delete
+		function deleteCookie(cookieName){
+		    let expireDate = new Date();
+		    expireDate.setDate(expireDate.getDate() -1);
+		    document.cookie = cookieName + "= " + "; expires=" + expireDate.toGMTString();
+		}
+
+		//쿠키값 get
+		function getCookie(cookieName){
+		    cookieName = cookieName + "=";
+		    let cookieData = document.cookie;
+		    let start = cookieData.indexOf(cookieName);
+		    let cookieValue = '';
+		    if(start != -1){
+		        start += cookieName.length;
+		        let end = cookieData.indexOf(';', start);
+		        if(end == -1)end = cookieData.length;
+		        cookieValue = cookieData.substring(start, end);
+		    }
+		    return unescape(cookieValue); //unescape로 디코딩 후 값 리턴
+		}
 	</script>
 </head>
 <body>
@@ -52,6 +105,7 @@
   		<div class="form-group">
   			<label class="mb-1" for="usr">이메일</label><input placeholder="이메일" type="text" class="form-control mb-4" id="usr" name="id">
   			<label class="mb-1" for="pwd">비밀번호</label><input placeholder="비밀번호" type="password" class="form-control mb-3" id="pwd" name="pass">
+  			<div class="mb-3"><input class="form-check-input" type="checkbox" id="rememberId" name="rememberId"> 이메일 저장</div>
   		</div>
   		
   		<div>

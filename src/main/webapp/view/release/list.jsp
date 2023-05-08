@@ -16,8 +16,7 @@
 		height:530px;
 		width : 23%;
 		margin : 10px;
-		box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
-		border: 1px solid rgba(0,0,0,0.2);
+		box-shadow: 0px 4px 8.5px 0 rgba(0,0,0,0.4);
 		display : flex;
 		flex-direction: column;
 		justify-content: space-between;

@@ -35,10 +35,17 @@
 <script type="text/javascript">
 	function input_check(f){
 		if(f.pass.value.trim() === ""){
-	    alert("비밀번호를 입력하세요")
-	    f.pass.focus();
-	    return false;
+	    	alert("비밀번호를 입력하세요")
+	    	f.pass.focus();
+	    	return false;
 		}
+		if(f.nicknamechkchk.value != "nicknamechecked") {
+			alert("닉네임 중복검사를 해주세요.");
+			f.nickname.focus();
+			return false;
+		}
+		
+		return true;
 	}
 	
 	function win_passChg(){
@@ -58,17 +65,6 @@
 		let op = "width=600, height=500, left=50, top=150";
 		open("pictureForm","",op);
 	}
-	
-	function win_nickChk(){
-		const nickname = f.nickname.value.trim();
-	  if(nickname == ""){
-		    alert("닉네임을 입력하세요")
-		    f.nickname.focus();
-		    return false;
-		}
-		const op = "width=400, height=250, left=50, top=150";
-		open("nickChk?nickname="+nickname,"",op);
-	}
 	$(function() {
 		$.ajax({
 			url : "/first_prj/ajax/basicForm",
@@ -86,6 +82,27 @@
 			    f.pass.focus();
 			    return false;
 			}
+		})
+		$("#button-addon2").click(function() {
+			let param = {nickname:$("#nickname").val()};
+			$.ajax({
+				url : "/first_prj/ajax/nickchkUpdate",
+				type : "POST",
+				data : param,
+				success : function(result) {
+					$("#nickMsg").html(result)
+				},
+				error : function(e) {
+					alert("닉네임체크" + e.status)
+				}
+			})
+		})
+		
+		$("#nickname").keyup(function() {
+			$("#nickname").removeClass("is-invalid");
+			$("#nickname").removeClass("is-valid");
+			$("#nickMsg").html("");
+			$("#nicknamechkchk").val("nicknameunchecked");
 		})
 	})
 </script>
@@ -124,9 +141,11 @@
         <div class="form-group">
           <label class="mb-1" for="pwd">닉네임</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="nickname" id="nickname" value="${mem.nickname }">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="win_nickChk()">중복검사</button>
-            <span id="nickChkMsg"></span>
+            <input type="text" class="form-control" maxlength="7" name="nickname" id="nickname" value="${mem.nickname }">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">중복검사</button>
+            <div id="nickMsg" class="invalid-feedback">      		
+    		</div>
+    		<input type="hidden" name="nicknamechkchk" id="nicknamechkchk" value="nicknameunchecked">
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@
       <!-- 인증번호-->
       <div class="form-group">
         <label class="mb-1" for="authNum">인증번호</label>
-        <input type="text" class="form-control mb-4" id="autoNum" name="autoNum">
+        <input type="text" class="form-control mb-4" id="autoNum" name="autoNum" placeholder="인증번호를 입력해주세요.">
       </div>
       <div class="form-group">
       	<button type="submit" class="btn btn-dark">확인</button>

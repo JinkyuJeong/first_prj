@@ -74,11 +74,11 @@ public class MessengerController extends MskimRequestMapping {
 			request.setAttribute("senderInfoMap",senderInfoMap);
 			return "messenger/noMsgForm";
 		} else {
-			if(receiver.equals("운영자")) {
-				request.setAttribute("msg", "운영자에게는 쪽지를 보낼 수 없습니다.");
-				request.setAttribute("url", "msgForm");
-				return "alert";
-			}
+//			if(receiver.equals("운영자")) {
+//				request.setAttribute("msg", "운영자에게는 쪽지를 보낼 수 없습니다.");
+//				request.setAttribute("url", "msgForm");
+//				return "alert";
+//			}
 			dao.read(nickname,receiver); //isRead update
 			
 			msgs = dao.selectMsgs(receiver,nickname); //주고받은 메세지 정보
@@ -119,7 +119,11 @@ public class MessengerController extends MskimRequestMapping {
 		//메세지 보내는 부분
 		String nickname = (String)request.getSession().getAttribute("nickname");
 		String receiver = request.getParameter("receiver");
-		
+		if(receiver.equals("운영자")) {
+		request.setAttribute("msg", "운영자에게는 쪽지를 보낼 수 없습니다.");
+		request.setAttribute("url", "msgForm");
+		return "alert";
+	    }
 		String content = request.getParameter("content");
 		Messenger messenger = new Messenger();
 		messenger.setSender(nickname);

@@ -21,7 +21,7 @@
             <c:forEach var="comm" items="${commList }" varStatus="st">
             	<span id="id${comm.no}${comm.seq}"></span>
               <tr class="${comm.recommend >=5? 'table-secondary' : ''  }">
-                <td width="15%" style="position:relative" class="item">
+                <td width="20%" style="position:relative" class="item">
                 	<c:if test="${comm.grpLevel == 1}">&nbsp;&nbsp;&#10551;&nbsp;&nbsp;</c:if>
                 	<c:if test="${comm.picture == 'basic-profile.JPG'}">
 				           	<img id="prof" src="${path }/images/basic-profile.JPG">

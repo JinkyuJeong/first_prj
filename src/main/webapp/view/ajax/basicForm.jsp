@@ -18,5 +18,5 @@
     <div align="center">
        <font size="1"><a href="javascript:win_upload()">사진등록</a></font>
         <br>
-        <font size="1"><span id="basic" onclick="basicPicUpdate()">기본이미지로 변경</span></font>
+        <font size="1"><span id="basic" style="text-decoration:underline;" onclick="basicPicUpdate()">기본이미지로 변경</span></font>
     </div>

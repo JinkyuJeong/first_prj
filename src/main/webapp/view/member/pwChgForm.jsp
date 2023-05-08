@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <title>비밀번호 변경</title>
   <style>
     .container{margin: 30px auto; padding: 0 50px;}
@@ -41,39 +42,43 @@
 		}
 	    return true;
 	}
-	function correctPwChk() {
-		let password = document.getElementById("pwd").value;
-		let pwPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
-		let crPwMsg = document.getElementById("crPwMsg");
-		if(!pwPattern.test(password)) {
-			crPwMsg.innerHTML="유효하지 않은 비밀번호 입니다.";
-			crPwMsg.style.color = "red";
-			document.getElementById("corpwchk").value = "pwunchecked";
-		} else {
-			crPwMsg.innerHTML="사용가능한 비밀번호 입니다.";
-			crPwMsg.style.color = "blue";
-			document.getElementById("corpwchk").value = "pwchecked";
-		}
-	}
-	function checkPasswords() {
-		let password = document.getElementById("pwd").value;
-		let password2 = document.getElementById("pwd2").value;
-		let pwMsg = document.getElementById("pwMsg");
-		let corPw = document.getElementById("corpwchk").value;
-		if(corPw == "pwunchecked" || password==null || password=="") {
-			pwMsg.innerHTML="8~16자리 영대소문자/숫자 조합의 비밀번호를 입력해주세요.";
-			pwMsg.style.color = "red";
-		} else {
-			if(password == password2) {
-				pwMsg.innerHTML="비밀번호가 일치합니다.";
-				pwMsg.style.color = "blue";
-				document.getElementById("pwchkchk").value = "pwchecked";
-			} else {
-				pwMsg.innerHTML="비밀번호가 일치하지않습니다.";
-				pwMsg.style.color = "red";
-				document.getElementById("pwchkchk").value = "pwunchecked";
+	$(function() {
+		$("#pwd").keyup(function() {
+			corPwChk();
+			pwChk();
+		})
+		$("#pwd2").keyup(function() {
+			corPwChk();
+			pwChk();
+		})
+	})
+	function corPwChk() {
+		let param = {pass:$("#pwd").val(), pass2:$("#pwd2").val()};
+		$.ajax({
+			url : "/first_prj/ajax/corrPassChk",
+			type : "POST",
+			data : param,
+			success : function(result) {
+				$("#corPwMsg").html(result)
+			},
+			error : function(e) {
+				alert("비밀번호 입력" + e.status)
 			}
-		}		
+		})
+	}
+	function pwChk() {
+		let param = {pass:$("#pwd").val(), pass2:$("#pwd2").val()};
+		$.ajax({
+			url : "/first_prj/ajax/passChk",
+			type : "POST",
+			data : param,
+			success : function(result) {
+				$("#pwChkMsg").html(result)
+			},
+			error : function(e) {
+				alert("비밀번호 입력" + e.status)
+			}
+		})
 	}
 </script>
 </head>
@@ -85,17 +90,14 @@
        <!-- 비밀번호-->
        <div id="cor1" class="form-group">
          <label class="mb-1" for="pwd">변경 비밀번호</label>
-         <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가"  onkeyup="correctPwChk()">
-         <span id="crPwMsg"></span>
-         <input type="hidden" name="corpwchk" id="corpwchk" value="pwunchecked"> 
+         <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가">
+         <div class="invalid-feedback" id="corPwMsg"></div>
        </div>
        <!-- 비밀번호 재입력 -->
        <div id="cor2" class="form-group">
          <label class="mb-1" for="pwd">변경 비밀번호 재입력</label>
-         <input type="password" class="form-control mb-3" id="pwd2" name="pass2"  onkeyup="checkPasswords()">
-         <br>
-         <span id="pwMsg"></span>     
-         <input type="hidden" name="pwchkchk" id="pwchkchk" value="pwunchecked"> 
+         <input type="password" class="form-control mb-3" id="pwd2" name="pass2">
+         <div class="invalid-feedback" id="pwChkMsg"></div> 
        </div>
 
        <div class="form-group">

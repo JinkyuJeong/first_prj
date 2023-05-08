@@ -49,7 +49,7 @@
 </script>
 </head>
 <body>
-	 <form method="post" action="update" enctype="multipart/form-data" name="f" >
+	 <form method="post" action="update" name="f" >
 	 	<input type="hidden" name="no" value="${b.no }">
     <div class="container">
       <h2 id="title">${boardName} 게시글 수정</h2>

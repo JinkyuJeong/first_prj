@@ -228,8 +228,8 @@ a {text-decoration: none;}
               </c:forEach>
               
             </div>
-            
-              <form action="msg" method="post" name="f">
+            <c:if test="${receiver != '운영자' }">
+            	<form action="msg" method="post" name="f">
               <div class="answer-add">
                 <input placeholder="메세지를 입력하세요." id="wannaFix" name="content" size="60" style="width: 800px;">
                 
@@ -240,6 +240,14 @@ a {text-decoration: none;}
                    나가기
                </a>
                </form>
+            </c:if>
+            <c:if test="${receiver == '운영자' }">
+            	<form action="msg" method="post" name="f">
+              		<div class="answer-add">                
+                <input type="hidden" name="receiver" value="${receiver }" id="message">
+               </form>
+            </c:if>
+              
                <form action="out" name="outF">
                <input type="hidden" name="receiver" value="${receiver }">
                <!-- Modal -->

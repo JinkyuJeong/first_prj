@@ -254,7 +254,7 @@
 
     <!-- 회원가입 / 초기화 -->
     <div class="container mt-3" align="center">
-      <button type="submit" class="btn">회원가입</button>
+      <button type="submit" class="btn" id="join">회원가입</button>
       <button type="reset" class="btn ms-2">초기화</button>
     </div>
 

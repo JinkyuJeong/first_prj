@@ -29,26 +29,6 @@
       </div>
       <div class="form-group">
       	<button type="submit" class="btn btn-dark">확인</button>
-<!--     		<c:if test="${able }">
-      			<script>
-        			opener.document.f.emailchkchk.value="emailchecked";        		
-        			self.close();
-        			opener.document.getElementById("authMsg").innerHTML="인증 되었습니다.";
-        	</script>
-      		</c:if>  --> 
- <!--        <c:if test="${able }">
-        	<c:if test="${pwchg==pwchgAble && able }">
-        		<script>
-        			location.href="pwChgForm";
-        		</script>
-        	</c:if>
-        	<script>
-        		opener.document.f.emailchkchk.value="emailchecked";        		
-        		self.close();
-        		opener.document.getElementById("authMsg").innerHTML="인증 되었습니다.";
-        	</script>
-        </c:if>--> 
-        
       </div>
     </div>
 </form>

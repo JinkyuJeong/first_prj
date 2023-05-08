@@ -437,6 +437,12 @@ public class BoardController extends MskimRequestMapping{
 	
 	@RequestMapping("update")
 	public String update(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
 		Board b = new Board();
 		b.setNo(Integer.parseInt(request.getParameter("no")));
 		b.setTitle(request.getParameter("title"));
