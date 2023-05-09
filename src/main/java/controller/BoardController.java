@@ -167,7 +167,7 @@ public class BoardController extends MskimRequestMapping{
 		comm.setGrp(seq);
 		
 		if(cDao.insert(comm)) {
-			return "redirect:" + url; 
+			return "redirect:" + url ; 
 		}
 		request.setAttribute("msg", "댓글 등록실패");
 		request.setAttribute("url", url);
@@ -244,7 +244,7 @@ public class BoardController extends MskimRequestMapping{
 		if(excep_mode_!= null && !excep_mode_.equals("")) excep_mode = excep_mode_;
 		
 		String boardType = (String)request.getSession().getAttribute("boardType");
-		if(boardType == null) {
+		if(boardType == null || boardType.equals("")) {
 			boardType = "1";
 			request.getSession().setAttribute("boardType", boardType);
 		}

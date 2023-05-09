@@ -68,7 +68,7 @@
 <script type="text/javascript">
 	$(()=>{
 		 $.ajax({
-	     url : "commList?no=${b.no}",
+	     url : "commList?no=${b.no}&pageNum=1",
 	     success : function(html){
 	    	 $("#comment").html(html);
 	     },
@@ -96,13 +96,15 @@
 	     event.preventDefault(); // 기본 제출 동작을 막음
 	     const form = $(this);
 	     const formData = form.serialize(); // 폼 데이터 직렬화
+	     const lastPage = $("#lastPage").val()==0? 1:$("#lastPage").val();
+	     
 	     $.ajax({
          type: form.attr('method'), // 폼의 method 속성 값을 사용
          url: form.attr('action'), // 폼의 action 속성 값을 사용
          data: formData,
          success: function(response) {
              // 등록 성공 시 댓글 목록을 새로고침
-             $("#comment").load("commList?no=${b.no}&pageNum="+$("#lastPage").val());
+             $("#comment").load("commList?no=${b.no}&pageNum="+lastPage);
              $("#cont").val("");
          },
          error: function(jqXHR, textStatus, errorThrown) {

@@ -37,19 +37,30 @@ public class DrawController extends MskimRequestMapping {
 		int no = Integer.parseInt(request.getParameter("no"));	
 		Draw draw = dao.selectOne(no);
 		Date enddate = edao.selectLatest().getEnddate();
+		Date startdate = edao.selectLatest().getStartdate();
 		Date now = new Date();
-		if(now.getTime() > enddate.getTime()) {
+		if(edao.selectLatest().getWinner() != null) {
 			request.setAttribute("msg","이미 종료된 이벤트입니다. 다음 이벤트를 기대해주세요!");
 			request.setAttribute("url", "/first_prj/event/eventForm");
 			return "alert";
-		} else if(dao.insert(email, no)) {
-			request.setAttribute("msg","슈레이스 이벤트에 응모해주셔서 감사합니다. 좋은 결과 있으시길 바랍니다.");
+		} else if(now.getTime() > enddate.getTime()) {
+			request.setAttribute("msg","이미 종료된 이벤트입니다. 다음 이벤트를 기대해주세요!");
 			request.setAttribute("url", "/first_prj/event/eventForm");
-			return "alert";			
+			return "alert";
+		} else if(now.getTime() < startdate.getTime()) {
+			request.setAttribute("msg","이벤트 응모기간이 아닙니다. 응모기간을 확인해주세요!");
+			request.setAttribute("url", "/first_prj/event/eventForm");
+			return "alert";
 		} else {
-			request.setAttribute("msg","이미 응모되었습니다.");
-			request.setAttribute("url", "/first_prj/event/eventForm");
-			return "alert";		
-		}
+			if(dao.insert(email, no)) {
+				request.setAttribute("msg","슈레이스 이벤트에 응모해주셔서 감사합니다. 좋은 결과 있으시길 바랍니다.");
+				request.setAttribute("url", "/first_prj/event/eventForm");
+				return "alert";			
+			} else {
+				request.setAttribute("msg","이미 응모되었습니다.");
+				request.setAttribute("url", "/first_prj/event/eventForm");
+				return "alert";		
+			}
+		} 
 	}
 }
