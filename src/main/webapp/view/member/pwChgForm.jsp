@@ -16,8 +16,8 @@
     .container .form-group{position: relative;}
     #minMsg{position: absolute; bottom: 5vh; left: 0; color: red;}
     #cor1, #cor2{position:relative;}
-  	#crPwMsg{font-size:10px;position:absolute; bottom:-4vh; left:0;}
-  	#pwMsg{font-size:10px; position:absolute; bottom:4vh; left:0;}
+  	#corPwMsg{position:absolute; bottom:-40%; left:0;}
+  	#pwChkMsg{ position:absolute; bottom:-37%; left:0;}
   </style>
   <script>
 	function inchk(f){
@@ -90,13 +90,13 @@
        <!-- 비밀번호-->
        <div id="cor1" class="form-group">
          <label class="mb-1" for="pwd">변경 비밀번호</label>
-         <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영소문자/숫자 조합 특수문자 불가">
+         <input type="password" class="form-control mb-4" id="pwd" name="pass" placeholder="8~16자 영대소문자/숫자 조합 특수문자 불가">
          <div class="invalid-feedback" id="corPwMsg"></div>
        </div>
        <!-- 비밀번호 재입력 -->
-       <div id="cor2" class="form-group">
+       <div id="cor2" class="form-group mt-5">
          <label class="mb-1" for="pwd">변경 비밀번호 재입력</label>
-         <input type="password" class="form-control mb-3" id="pwd2" name="pass2">
+         <input type="password" class="form-control mb-5" id="pwd2" name="pass2">
          <div class="invalid-feedback" id="pwChkMsg"></div> 
        </div>
 

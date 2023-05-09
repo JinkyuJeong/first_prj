@@ -78,6 +78,7 @@ public class BoardController extends MskimRequestMapping{
 		request.setAttribute("endPage", endPage);
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("mem", mem);
+		request.setAttribute("today", new Date());
 		
 		return "board/commList";
 	}

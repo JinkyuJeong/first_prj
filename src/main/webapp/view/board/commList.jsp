@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+<fmt:formatDate value="${today }" pattern="yyyy-MM-dd" var="t"/>
   <div style="display: flex; justify-content: space-between; margin: 15px auto;">
           <div>
             전체 댓글 <span id="commCnt" style="color:red">${commCnt }</span>개

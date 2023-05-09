@@ -181,8 +181,8 @@ public class AjaxController extends MskimRequestMapping{
 	
 	@RequestMapping("basicForm")
 	public String basicForm(HttpServletRequest request, HttpServletResponse response) {
-		String login = (String)request.getSession().getAttribute("login");
-		Member mem = mbDao.selectOneEmail(login);
+		String email = request.getParameter("emailaddress");
+		Member mem = mbDao.selectOneEmail(email);
 		request.setAttribute("picture", mem.getPicture());
 		return "ajax/basicForm";
 	}

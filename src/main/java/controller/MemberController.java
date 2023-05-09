@@ -130,7 +130,7 @@ public class MemberController extends MskimRequestMapping{
 				System.out.println("inputedEmail : " + inputedEmail);
 				Properties prop = new Properties();
 				   try {
-					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 					   prop.load(fis);
 					   prop.put("mail.smtp.user", sender);
 					   System.out.println(prop);
@@ -206,7 +206,7 @@ public class MemberController extends MskimRequestMapping{
 				System.out.println("inputedEmail : " + inputedEmail);
 				Properties prop = new Properties();
 				   try {
-					   FileInputStream fis = new FileInputStream("D:\\jsp\\workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
+					   FileInputStream fis = new FileInputStream("D:\\java_gdu_workspace\\first_prj\\mail.properties"); //파일의 내용(mail.properties)을 읽기 위한 스트림
 					   prop.load(fis);
 					   prop.put("mail.smtp.user", sender);
 					   System.out.println(prop);
@@ -410,6 +410,11 @@ public class MemberController extends MskimRequestMapping{
 			e.printStackTrace();
 		}
 		   String email = request.getParameter("email");
+		   if(email==null || email.equals("")) {
+			   request.setAttribute("msg","잘못된 접근입니다.");
+			   request.setAttribute("url","/first_prj/index");
+			   return "alert";
+		   }
 		   Member mem = dao.selectOneEmail(email);
 		   request.setAttribute("mem", mem);
 		   return "member/updateForm";
@@ -454,7 +459,11 @@ public class MemberController extends MskimRequestMapping{
 	   public String deleteForm(HttpServletRequest request, HttpServletResponse response) {  
 		   String login = (String)request.getSession().getAttribute("login");
 		   String email = request.getParameter("email");
-		   if(email.equals("admin")) {
+		   if(email==null || email.equals("")) {
+			   request.setAttribute("msg","잘못된 접근입니다.");
+			   request.setAttribute("url","/first_prj/index");
+			   return "alert";
+		   } else if(email.equals("admin")) {
 			   request.setAttribute("msg", "관리자는 탈퇴가 불가능합니다.");
 			   request.setAttribute("url", "myPage?email="+email);
 			   return "alert";
@@ -583,9 +592,13 @@ public class MemberController extends MskimRequestMapping{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		   String email = request.getParameter("email");
 		   String nickname = request.getParameter("nickname");
-		   
+		   String sessionNick = (String)request.getSession().getAttribute("nickname");
+		   if(!sessionNick.equals("운영자") && !nickname.equals(sessionNick) ) {
+			   request.setAttribute("msg","접근 권한이 없습니다.");
+			   request.setAttribute("url","/first_prj/index");
+			   return "alert";
+		   }
 		   int myBoardCnt = dao.myBoardCnt(nickname);
 		   
 		   request.getSession().setAttribute("pageNum","1");
@@ -611,7 +624,6 @@ public class MemberController extends MskimRequestMapping{
 		   request.setAttribute("myBoardNum", myBoardNum);
 		   request.setAttribute("pageNum",pageNum);
 		   request.setAttribute("nickname", nickname);
-		   request.setAttribute("email", email);
 		   return "member/myBoardList";
 	   }
 	   
@@ -626,6 +638,12 @@ public class MemberController extends MskimRequestMapping{
 			}
 		   String email = request.getParameter("email");
 		   String nickname = request.getParameter("nickname");
+		   String sessionNick = (String)request.getSession().getAttribute("nickname");
+		   if(!sessionNick.equals("운영자") && !nickname.equals(sessionNick) ) {
+			   request.setAttribute("msg","접근 권한이 없습니다.");
+			   request.setAttribute("url","/first_prj/index");
+			   return "alert";
+		   }
 		   
 		   int myCommCnt = dao.myCommCnt(nickname);
 		   

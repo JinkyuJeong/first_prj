@@ -66,9 +66,11 @@
 		open("pictureForm","",op);
 	}
 	$(function() {
+		let param = {emailaddress:$("#email1").val() + "@" + $("#email2").val()};
 		$.ajax({
 			url : "/first_prj/ajax/basicForm",
 			type : "POST",
+			data : param,
 			success : function(result) {
 				$("#picUpdate").html(result)
 			},
@@ -125,9 +127,9 @@
           <div class="input-group mb-3">
           	<c:set var="email" value="${mem.emailaddress}" />
           	<c:set var="split" value="@" />
-            <input type="text" class="form-control" name="email1" readonly value="${fn:substringBefore(email,split) }">
+            <input type="text" class="form-control" id="email1" name="email1" readonly value="${fn:substringBefore(email,split) }">
             <span class="input-group-text">@</span>
-            <input type="text" class="form-control" name="email2" readonly value="${fn:substringAfter(email,split) }" >
+            <input type="text" class="form-control" id="email2" name="email2" readonly value="${fn:substringAfter(email,split) }" >
           </div>
         </div>
 
