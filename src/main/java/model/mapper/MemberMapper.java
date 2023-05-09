@@ -19,7 +19,7 @@ public interface MemberMapper {
 	@Select("select * from member where nickname=#{value}")
 	Member selectOneNick(String nickname);
 
-	@Select("select * from member where emailaddress=#{value}")
+	@Select("SELECT * FROM member WHERE BINARY emailaddress = #{value}")
 	Member selectOneEmail(String email);
 
 	@Update("update member set nickname=#{nickname}, picture=#{picture} where emailaddress=#{emailaddress}")
