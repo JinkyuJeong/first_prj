@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>제품 상세</title>
+<title>스니커 소식 상세</title>
 <style type="text/css">
 	.container{width: 75vw;}
   #info, strong, span, .btn.btn-dark, .mb-3.mt-3,.w3-button.mt-3{font-family: 'Dongle', sans-serif; font-size: 1.7em;}
