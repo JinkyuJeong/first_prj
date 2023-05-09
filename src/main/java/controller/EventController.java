@@ -58,9 +58,6 @@ public class EventController extends MskimRequestMapping{
 	@RequestMapping("event")
 	public String event(HttpServletRequest request, HttpServletResponse response) {
 		String login = (String)request.getSession().getAttribute("login");
-		if(login==null) {
-			
-		}
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date startdate=null;
 		Date enddate=null;
@@ -86,16 +83,21 @@ public class EventController extends MskimRequestMapping{
 		event.setStartdate(startdate);
 		event.setEnddate(calendar.getTime());
 		event.setPicture(picture);
-		System.out.println(enddate);
-		if(dao.insert(event)) {
-			request.setAttribute("msg", "이벤트 등록 완료");
+		if(dao.countNo() >= 1) {
+			request.setAttribute("msg", "기존 이벤트를 종료한 후 새로운 이벤트를 등록해주세요.");
 			request.setAttribute("url", "eventForm");
 			return "alert";
 		} else {
-			request.setAttribute("msg", "이벤트 등록 실패");
-			request.setAttribute("url", "eventForm");
-			return "alert";
-		}
+			if(dao.insert(event)) {
+				request.setAttribute("msg", "이벤트 등록 완료");
+				request.setAttribute("url", "eventForm");
+				return "alert";
+			} else {
+				request.setAttribute("msg", "이벤트 등록 실패");
+				request.setAttribute("url", "eventForm");
+				return "alert";
+			}
+		}	
 	}
 	
 	@MSLogin("loginAdminCheck")
@@ -124,11 +126,12 @@ public class EventController extends MskimRequestMapping{
 	@MSLogin("loginAdminCheck")
 	@RequestMapping("end")
 	public String end(HttpServletRequest request, HttpServletResponse response) {
-		Draw draw = ddao.selectWinner();
+		Event event = dao.selectLatest();
+		int latestEvent = event.getNo();
+		Draw draw = ddao.selectWinner(latestEvent);
 		request.setAttribute("draw", draw);
 		Member mem = mdao.selectOneEmail(draw.getEmailaddress());
 		request.setAttribute("mem", mem);
-		Event event = dao.selectLatest();
 		request.setAttribute("event",event);		
 		//테이블에서 해당 이벤트 삭제
 		int no = Integer.parseInt(request.getParameter("no"));

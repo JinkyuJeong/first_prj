@@ -22,10 +22,10 @@ public class DrawMybatisDao {
 	   	 }	
 	   	 return false;
 	}
-	public Draw selectWinner() {
+	public Draw selectWinner(int latestEvent) {
 		SqlSession session = MybatisConnection.getConnection();
 		try {
-			return session.getMapper(cls).selectWinner();
+			return session.getMapper(cls).selectWinner(latestEvent);
 		} catch(Exception e) {
 	   		 e.printStackTrace();
 	   	 } finally {

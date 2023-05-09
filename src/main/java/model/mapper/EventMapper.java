@@ -18,4 +18,7 @@ public interface EventMapper {
 
 	@Update("UPDATE event_ SET winner = #{param1} where no=#{param2}")
 	void update(String winner, int no);
+
+	@Select("select distinct count(no) from event_ where winner is null")
+	int counNo();
 }

@@ -47,5 +47,19 @@ public class EventMybatisDao {
 	   	 } finally {
 	   		 MybatisConnection.close(session);
 	   	 }		
+	}
+
+	public int countNo() {
+		SqlSession session = MybatisConnection.getConnection();
+		int cnt = 0;
+		try {
+			cnt = session.getMapper(cls).counNo();
+		} catch(Exception e) {
+	   		 e.printStackTrace();
+	   	 } finally {
+	   		 MybatisConnection.close(session);
+	   	 }
+		return cnt;
 	}	
+	
 }

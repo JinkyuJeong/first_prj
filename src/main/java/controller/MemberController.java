@@ -594,11 +594,15 @@ public class MemberController extends MskimRequestMapping{
 			}
 		   String nickname = request.getParameter("nickname");
 		   String sessionNick = (String)request.getSession().getAttribute("nickname");
-		   if(!sessionNick.equals("운영자") && !nickname.equals(sessionNick) ) {
+		   if(nickname == null || nickname.equals("")) {
+			   request.setAttribute("msg","잘못된 접근입니다.");
+			   request.setAttribute("url","/first_prj/index");
+			   return "alert";
+		   } else if(!sessionNick.equals("운영자") && !nickname.equals(sessionNick) ) {
 			   request.setAttribute("msg","접근 권한이 없습니다.");
 			   request.setAttribute("url","/first_prj/index");
 			   return "alert";
-		   }
+		   } 
 		   int myBoardCnt = dao.myBoardCnt(nickname);
 		   
 		   request.getSession().setAttribute("pageNum","1");
@@ -639,7 +643,11 @@ public class MemberController extends MskimRequestMapping{
 		   String email = request.getParameter("email");
 		   String nickname = request.getParameter("nickname");
 		   String sessionNick = (String)request.getSession().getAttribute("nickname");
-		   if(!sessionNick.equals("운영자") && !nickname.equals(sessionNick) ) {
+		   if(nickname == null || nickname.equals("")) {
+			   request.setAttribute("msg","잘못된 접근입니다.");
+			   request.setAttribute("url","/first_prj/index");
+			   return "alert";
+		   } else if(!sessionNick.equals("운영자") && !nickname.equals(sessionNick) ) {
 			   request.setAttribute("msg","접근 권한이 없습니다.");
 			   request.setAttribute("url","/first_prj/index");
 			   return "alert";
