@@ -53,18 +53,11 @@
       <div class="form-group mb-3">
         <label class="mb-1" for="email">이메일</label>
         <div class="input-group mb-3">
-        	<c:if test="${sessionScope.login == 'admin' }">
-        		<input type="text" class="form-control" name="email1" readonly value="admin">
-          <span class="input-group-text">@</span>
-          <input type="text" class="form-control" name="email2" readonly value="naver.com" >
-        	</c:if>
-        	<c:if test="${sessionScope.login != 'admin' }">
-	          <c:set var="email" value="${mem.emailaddress}" />
-	          <c:set var="split" value="@" />
-	          <input type="text" class="form-control" name="email1" readonly value="${fn:substringBefore(email,split) }">
-	          <span class="input-group-text">@</span>
-	          <input type="text" class="form-control" name="email2" readonly value="${fn:substringAfter(email,split) }" >
-          </c:if>
+        	<c:set var="email" value="${mem.emailaddress}" />
+          	<c:set var="split" value="@" />
+            <input type="text" class="form-control" id="email1" name="email1" readonly value="${fn:substringBefore(email,split) }">
+            <span class="input-group-text">@</span>
+            <input type="text" class="form-control" id="email2" name="email2" readonly value="${fn:substringAfter(email,split) }" >
         </div>
       </div>
       

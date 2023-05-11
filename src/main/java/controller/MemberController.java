@@ -468,6 +468,7 @@ public class MemberController extends MskimRequestMapping{
 			   request.setAttribute("url", "myPage?email="+email);
 			   return "alert";
 		   }
+		   
 		   return "member/deleteForm";
 	   }
 	   
@@ -479,26 +480,45 @@ public class MemberController extends MskimRequestMapping{
 		   String email = request.getParameter("email");
 		   System.out.println(email);
 		   Member dbMem = dao.selectOneEmail(email);
+		   Member adminMem = dao.selectOneEmail(login);
 		   if(email.equals("admin")) {
 			   request.setAttribute("msg", "관리자는 탈퇴가 불가능합니다.");
 			   request.setAttribute("url", "myPage?email="+email);
 			   return "alert";
 		   }
-		   if(!dbMem.getPassword().equals(pass)) {
-			   request.setAttribute("msg", "비밀번호가 다릅니다.");
-			   request.setAttribute("url", "deleteForm?email="+email);
-			   return "alert";
-		   } else {
-			   if(dao.delete(email)) {
-				   request.setAttribute("msg", "회원탈퇴 완료");
-				   request.setAttribute("url", "/first_prj/index");
+		   if(login.equals("admin")) {
+			   if(!adminMem.getPassword().equals(pass)) {
+				   request.setAttribute("msg", "비밀번호가 다릅니다.");
+				   request.setAttribute("url", "deleteForm?email="+email);
 				   return "alert";
 			   } else {
-				   request.setAttribute("msg", "회원탈퇴 실패");
-				   request.setAttribute("url", "/first_prj/index");
-				   return "alert";
+				   if(dao.delete(email)) {
+					   request.setAttribute("msg", "회원탈퇴 완료");
+					   request.setAttribute("url", "/first_prj/index");
+					   return "alert";
+				   } else {
+					   request.setAttribute("msg", "회원탈퇴 실패");
+					   request.setAttribute("url", "/first_prj/index");
+					   return "alert";
+				   }
 			   }
-		   }
+		   } else {
+			   if(!dbMem.getPassword().equals(pass)) {
+				   request.setAttribute("msg", "비밀번호가 다릅니다.");
+				   request.setAttribute("url", "deleteForm?email="+email);
+				   return "alert";
+			   } else {
+				   if(dao.delete(email)) {
+					   request.setAttribute("msg", "회원탈퇴 완료");
+					   request.setAttribute("url", "/first_prj/index");
+					   return "alert";
+				   } else {
+					   request.setAttribute("msg", "회원탈퇴 실패");
+					   request.setAttribute("url", "/first_prj/index");
+					   return "alert";
+				   }
+			   }
+		   }		  
 	   }
 	   
 	   //비밀번호 찾기 loginForm->pwChgForm->

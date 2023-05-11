@@ -27,17 +27,12 @@ public class MessengerController extends MskimRequestMapping {
 	
 	public String loginCheck(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { // @MSLogin annotation에 있는 거랑 이름 똑같아야함.
 		request.setCharacterEncoding("UTF-8");
-		String nicknameP = request.getParameter("nickname");
 		String nicknameS = (String)request.getSession().getAttribute("nickname");
 		if(nicknameS==null || nicknameS.equals("")) {
 			request.setAttribute("msg", "로그인하세요.");
 			request.setAttribute("url", "/first_prj/member/loginForm");
 			return "alert";
-		} else if(!nicknameP.equals("운영자") && !nicknameS.equals(nicknameP)) {
-			request.setAttribute("msg" , "본인만 접근 가능합니다.");
-			request.setAttribute("url", "/first_prj/index");
-			return "alert";
-		}
+		} 
 		return null;
 	}
 	
@@ -168,9 +163,10 @@ public class MessengerController extends MskimRequestMapping {
 		String nickname = (String)request.getSession().getAttribute("nickname");
 		String receiver = request.getParameter("receiver");
 		dao.delete(receiver, nickname);
-		request.setAttribute("receiver", receiver);
-		request.setAttribute("nickname",nickname);
-		return "send";
+		return "redirect:msgForm";
+//		request.setAttribute("receiver", receiver);
+//		request.setAttribute("nickname",nickname);
+//		return "send";
 	}
 	
 	@RequestMapping("search")
