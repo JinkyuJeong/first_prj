@@ -86,7 +86,7 @@
 			}
 		})
 		$("#button-addon2").click(function() {
-			let param = {nickname:$("#nickname").val()};
+			let param = {nickname:$("#nickname").val(), emailaddress:$("#email1").val() + "@" + $("#email2").val()};
 			$.ajax({
 				url : "/first_prj/ajax/nickchkUpdate",
 				type : "POST",

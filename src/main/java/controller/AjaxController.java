@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.catalina.users.SparseUserDatabase;
+
 import gdu.mskim.MskimRequestMapping;
 import gdu.mskim.RequestMapping;
 import model.BoardDetailView;
@@ -181,9 +183,17 @@ public class AjaxController extends MskimRequestMapping{
 	
 	@RequestMapping("basicForm")
 	public String basicForm(HttpServletRequest request, HttpServletResponse response) {
+		String login = (String)request.getSession().getAttribute("login");
 		String email = request.getParameter("emailaddress");
-		Member mem = mbDao.selectOneEmail(email);
-		request.setAttribute("picture", mem.getPicture());
+		String picture = "";
+		if(login.equals("admin") && email.equals("@")) {
+			Member adminM = mbDao.selectOneEmail("admin");
+			picture = adminM.getPicture();
+		} else {
+			Member mem = mbDao.selectOneEmail(email);			
+			picture = mem.getPicture();
+		}		
+		request.setAttribute("picture", picture);
 		return "ajax/basicForm";
 	}
 	
@@ -191,9 +201,14 @@ public class AjaxController extends MskimRequestMapping{
 	public String nickchkUpdate(HttpServletRequest request, HttpServletResponse response) {
 		String nickname = request.getParameter("nickname");
 		String myNickname = (String)request.getSession().getAttribute("nickname");
+		String emailaddress = request.getParameter("emailaddress");
 		Member mem = mbDao.selectOneNick(nickname);
+		Member member =mbDao.selectOneEmail(emailaddress);
 		boolean b = false;
 		String emptyChk = null;
+		if(myNickname.equals("운영자")) {
+			myNickname = member.getNickname();
+		}
 		if(nickname==null || nickname.equals("")) {
 			emptyChk = "emptyChk";
 		}

@@ -437,21 +437,41 @@ public class MemberController extends MskimRequestMapping{
 		   mem.setNickname(request.getParameter("nickname"));
 		   mem.setPicture(request.getParameter("picture"));
 		   mem.setPassword(request.getParameter("pass"));
-		   if(!mem.getPassword().equals(dbMem.getPassword())) {
-			   request.setAttribute("msg", "비밀번호가 틀립니다.");
-			   request.setAttribute("url", "updateForm?email="+mem.getEmailaddress());
-			   return "alert";
-		   } else {
-			   if(dao.update(mem)) {
-				   request.setAttribute("msg", "회원정보 수정 완료");
-				   request.setAttribute("url", "myPage?email="+mem.getEmailaddress());
-				   return "alert";
-			   } else {
-				   request.setAttribute("msg", "회원정보 수정 실패");
+		   Member member = dao.selectOneEmail(email1 + "@" + email2);
+		   if(login.equals("admin")) {
+		  	 mem.setPassword(dbMem.getPassword());
+		  	 if(!mem.getPassword().equals(dbMem.getPassword())) {
+				   request.setAttribute("msg", "비밀번호가 틀립니다.");
 				   request.setAttribute("url", "updateForm?email="+mem.getEmailaddress());
 				   return "alert";
+			   } else {
+				   if(dao.update(mem)) {
+					   request.setAttribute("msg", "회원정보 수정 완료");
+					   request.setAttribute("url", "myPage?email="+mem.getEmailaddress());
+					   return "alert";
+				   } else {
+					   request.setAttribute("msg", "회원정보 수정 실패");
+					   request.setAttribute("url", "updateForm?email="+mem.getEmailaddress());
+					   return "alert";
+				   }
 			   }
-		   }
+		   } else {
+		  	 if(!mem.getPassword().equals(dbMem.getPassword())) {
+				   request.setAttribute("msg", "비밀번호가 틀립니다.");
+				   request.setAttribute("url", "updateForm?email="+mem.getEmailaddress());
+				   return "alert";
+			   } else {
+				   if(dao.update(mem)) {
+					   request.setAttribute("msg", "회원정보 수정 완료");
+					   request.setAttribute("url", "myPage?email="+mem.getEmailaddress());
+					   return "alert";
+				   } else {
+					   request.setAttribute("msg", "회원정보 수정 실패");
+					   request.setAttribute("url", "updateForm?email="+mem.getEmailaddress());
+					   return "alert";
+				   }
+			   }
+		   }		   
 	   }
 	   
 	   @RequestMapping("deleteForm")
